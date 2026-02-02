@@ -1,0 +1,40 @@
+{
+  "id": "4126632a-935b-4a19-a898-c14a87d7ecbe",
+  "name": "Fattibilità ODP",
+  "publisher": "MM-CS",
+  "description": "App per sviluppo fattibilità ODP",
+  "brief": "App per sviluppo fattibilità ODP",
+  "version": "1.0.0.0",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {
+      "id": "638d9283-1257-4721-8210-d7373d70dbbd",
+      "name": "Flex Starter",
+      "publisher": "Divimast Srl",
+      "version": "1.1.34.0"
+    },
+    {
+      "id": "7a71f344-0d47-4548-9176-520e5ebcc2ed",
+      "name": "Flex Manufacturing",
+      "publisher": "Divimast Srl",
+      "version": "1.1.1.0"
+    }
+  ],
+  "screenshots": [],
+  "application": "24.0.0.0",
+  "platform": "24.0.0.0",
+  "target": "OnPrem",
+  "idRanges": [
+    {
+      "from": 50000,
+      "to": 99999
+    }
+  ],
+  "features": ["NoImplicitWith","TranslationFile"],
+  "preprocessorSymbols": [],
+  "runtime": "13.0"
+}
