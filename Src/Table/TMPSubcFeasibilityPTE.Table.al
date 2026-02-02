@@ -51,20 +51,20 @@ table 90146 "TMP Subc. Feasibility PTE"
             Caption = 'Unit of Measure Code';
             TableRelation = "Item Unit of Measure".Code where("Item No." = field("Item No."));
         }
-        field(81; "Quantity (Base)"; Decimal)
+        field(80081; "Operation Quantity (Base)"; Decimal)
         {
-            Caption = 'Quantity (Base)';
+            Caption = 'Operation Quantity (Base)';
             DecimalPlaces = 0 : 5;
         }
-        field(82; "Finished Qty. (Base)"; Decimal)
+        field(80082; "Operation Finished Qty. (Base)"; Decimal)
         {
-            Caption = 'Finished Qty. (Base)';
+            Caption = 'Operation Finished Qty. (Base)';
             DecimalPlaces = 0 : 5;
             Editable = false;
         }
-        field(83; "Remaining Qty. (Base)"; Decimal)
+        field(80083; "Operation Rem. Qty. (Base)"; Decimal)
         {
-            Caption = 'Remaining Qty. (Base)';
+            Caption = 'Operation Remaining Qty. (Base)';
             DecimalPlaces = 0 : 5;
             Editable = false;
         }

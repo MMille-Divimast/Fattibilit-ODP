@@ -237,17 +237,17 @@ page 99187 "Subcontactor Feasibility PTE"
                     Visible = false;
                     // StyleExpr = RecStyle;
                 }
-                field("Quantity (Base)"; Rec."Quantity (Base)")
+                field("Quantity (Base)"; Rec."Operation Quantity (Base)")
                 {
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
-                field("Remaining Qty. (Base)"; Rec."Remaining Qty. (Base)")
+                field("Remaining Qty. (Base)"; Rec."Operation Rem. Qty. (Base)")
                 {
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
-                field("Finished Qty. (Base)"; Rec."Finished Qty. (Base)")
+                field("Finished Qty. (Base)"; Rec."Operation Finished Qty. (Base)")
                 {
                     BlankZero = true;
                     // StyleExpr = RecStyle;
@@ -598,9 +598,9 @@ page 99187 "Subcontactor Feasibility PTE"
                                     // IF (L_RTmpFLEXWrkf.Date01 <> "Ending Date") THEN
                                     L_RProdOrdL.Validate("Ending Date", TempL_RFLEXWrkf.Date01);
                                     L_RProdOrdL.Modify(true);
-                                    Rec."Quantity (Base)" := L_RProdOrdL."Quantity (Base)";
-                                    Rec."Finished Qty. (Base)" := L_RProdOrdL."Finished Qty. (Base)";
-                                    Rec."Remaining Qty. (Base)" := L_RProdOrdL."Remaining Qty. (Base)";
+                                    Rec."Operation Quantity (Base)" := L_RProdOrdL."Quantity (Base)";
+                                    Rec."Operation Finished Qty. (Base)" := L_RProdOrdL."Finished Qty. (Base)";
+                                    Rec."Operation Rem. Qty. (Base)" := L_RProdOrdL."Remaining Qty. (Base)";
                                     Rec.Modify(false);
                                     Commit();
                                     // Aggiorno la quantità sui Componenti
@@ -1167,6 +1167,7 @@ page 99187 "Subcontactor Feasibility PTE"
         L_RProdOrdRoutL: Record "Prod. Order Routing Line";
         L_RWorkCenter: Record "Work Center";
         L_RVendor: Record Vendor;
+        L_RCapacityLedgerEntry: Record "Capacity Ledger Entry";
         L_OK: Boolean;
         L_ProgressWin: Dialog;
         L_Counter, L_Counter2 : Integer;
@@ -1223,117 +1224,136 @@ page 99187 "Subcontactor Feasibility PTE"
                 V_RTMPSubcFeas."Planning Group" := L_RItem."Planning Group FLE";
 
                 CGeneralManufacturing.FilterProdOrderRoutingLineFromProdOrderLine(L_RProdOrdRoutL, V_RProdOrderLine);
-                L_RProdOrdRoutL.SetRange("External Operation FLE", true);
+                L_RProdOrdRoutL.SetFilter("Routing Link Code", '<>%1', '');
+                //                 L_RProdOrdRoutL.SetRange("External Operation FLE", true);
                 if L_RProdOrdRoutL.FindFirst() then begin
-                    if GetSubcontractorLocationFromProdOrderRoutingLine(L_RProdOrdRoutL, L_RWorkCenter, L_SubcontractorLocationCode) then
-                        //TODO può essere che ci siano più di un terzista sul ciclo dell'ODP, quindi questo non può essere segnato sulla riga dell'ordine ma è da spostare
-                        V_RTMPSubcFeas."Subcontracting Location Code" := L_SubcontractorLocationCode;
-                    V_RTMPSubcFeas.Subcontractor := L_RProdOrdRoutL."Work Center No.";
-                    V_RTMPSubcFeas."Subcontractor Name" := L_RWorkCenter.Name;
-                end;
-                L_RProdOrdRoutL.SetRange("External Operation FLE");
+                    if L_RProdOrdRoutL."External Operation FLE" then begin
+                        if GetSubcontractorLocationFromProdOrderRoutingLine(L_RProdOrdRoutL, L_RWorkCenter, L_SubcontractorLocationCode) then
+                            //TODO può essere che ci siano più di un terzista sul ciclo dell'ODP, quindi questo non può essere segnato sulla riga dell'ordine ma è da spostare
+                            V_RTMPSubcFeas."Subcontracting Location Code" := L_SubcontractorLocationCode;
+                        V_RTMPSubcFeas.Subcontractor := L_RProdOrdRoutL."Work Center No.";
+                        V_RTMPSubcFeas."Subcontractor Name" := L_RWorkCenter.Name;
+                    end;
+                end else
+                    exit;
 
-                if V_RTMPSubcFeas."Subcontractor Order" <> '' then
-                    V_RTMPSubcFeas."Status Order" := '0'
+
+                // Imposto le quantità dell'operazione
+                V_RTMPSubcFeas."Operation Quantity (Base)" := L_RProdOrdRoutL."Input Quantity";
+                L_RCapacityLedgerEntry.SetFilterByProdOrderRoutingLine(V_RProdOrderLine."Prod. Order No.", V_RProdOrderLine."Line No.",
+                                                                       L_RProdOrdRoutL."Routing No.", L_RProdOrdRoutL."Routing Reference No.");
+                L_RCapacityLedgerEntry.CalcSums("Output Quantity", "Scrap Quantity");
+                V_RTMPSubcFeas."Operation Finished Qty. (Base)" := L_RCapacityLedgerEntry."Output Quantity";
+                if L_RProdOrdRoutL."Routing Status" = L_RProdOrdRoutL."Routing Status"::Finished then
+                    V_RTMPSubcFeas."Operation Rem. Qty. (Base)" := 0
                 else
-                    V_RTMPSubcFeas."Status Order" := Format(9 - V_RProdOrderLine.Status.AsInteger());
+                    V_RTMPSubcFeas."Operation Rem. Qty. (Base)" := V_RTMPSubcFeas."Operation Quantity (Base)" - V_RTMPSubcFeas."Operation Finished Qty. (Base)";
 
-                V_RTMPSubcFeas.Insert(false);
+                // Solo se ho del residuo
+                if V_RTMPSubcFeas."Operation Rem. Qty. (Base)" > 0 then begin
+                    // L_RProdOrdRoutL.SetRange("External Operation FLE");
 
-                // Inserisco i componenti
-                L_RProdOrdComp.SetRange(Status, V_RProdOrderLine.Status);
-                L_RProdOrdComp.SetRange("Prod. Order No.", V_RProdOrderLine."Prod. Order No.");
-                L_RProdOrdComp.SetRange("Prod. Order Line No.", V_RProdOrderLine."Line No.");
-                if L_RProdOrdComp.FindSet() then
-                    repeat
-                        // Escludo Item Category:
-                        //      IMBALLO
-                        if not L_RItem.Get(L_RProdOrdComp."Item No.") then
-                            Clear(L_RItem);
-                        //TODO capire se escludere comunque l'Item category code IMBALLO e nel caso mettere un campo a Setup
-                        if not (L_RItem."Item Category Code" in ['IMBALLO']) then begin
-                            V_RTMPSubcFeas1.Init();
-                            V_RTMPSubcFeas1.TransferFields(L_RProdOrdComp);
-                            V_RTMPSubcFeas1."Component Description" := L_RItem.Description;
-                            V_RTMPSubcFeas1."Planning Group" := L_RItem."Planning Group FLE";
-                            V_RTMPSubcFeas1."Internal Location" := V_RProdOrderLine."Location Code";
-                            //TODO External location potrebbe cambiare se i componenti vengono consumanti su 2 fasi del ciclo diverse e queste fasi sono esterne da terzisti diversi
-                            //TODO perciò questo campo valorizzato qui non va bene e di conseguenza anche il campo in testata non va bene  V_RTMPSubcFeas."Subcontracting Location Code"
-                            V_RTMPSubcFeas1."External Location" := V_RTMPSubcFeas."Subcontracting Location Code";
-                            V_RTMPSubcFeas1."Expected Receipt Qty. (Base)" := F_GetExpectedReceiptQty(V_RTMPSubcFeas1."Item No.", V_RTMPSubcFeas1."Variant Code", V_RTMPSubcFeas1."Internal Location");
-                            F_CalcTotalInternalAndExternalComponentInventory(V_RTMPSubcFeas, V_RTMPSubcFeas1);
-                            //Trovo la fase di prelievo del componente. 
-                            if (L_RProdOrdRoutL."Prod. Order No." <> V_RProdOrderLine."Prod. Order No.") or
-                               (L_RProdOrdRoutL."Routing Link Code" <> L_RProdOrdComp."Routing Link Code") then begin
-                                L_RProdOrdRoutL.SetRange("Routing Link Code", V_RTMPSubcFeas1."Routing Link Code");
-                                if not L_RProdOrdRoutL.FindFirst() then
-                                    Clear(L_RProdOrdRoutL);
+                    if V_RTMPSubcFeas."Subcontractor Order" <> '' then
+                        V_RTMPSubcFeas."Status Order" := '0'
+                    else
+                        V_RTMPSubcFeas."Status Order" := Format(9 - V_RProdOrderLine.Status.AsInteger());
+
+                    V_RTMPSubcFeas.Insert(false);
+
+                    // Inserisco i componenti
+                    L_RProdOrdComp.SetRange(Status, V_RProdOrderLine.Status);
+                    L_RProdOrdComp.SetRange("Prod. Order No.", V_RProdOrderLine."Prod. Order No.");
+                    L_RProdOrdComp.SetRange("Prod. Order Line No.", V_RProdOrderLine."Line No.");
+                    if L_RProdOrdComp.FindSet() then
+                        repeat
+                            // Escludo Item Category:
+                            //      IMBALLO
+                            if not L_RItem.Get(L_RProdOrdComp."Item No.") then
+                                Clear(L_RItem);
+                            //TODO capire se escludere comunque l'Item category code IMBALLO e nel caso mettere un campo a Setup
+                            if not (L_RItem."Item Category Code" in ['IMBALLO']) then begin
+                                V_RTMPSubcFeas1.Init();
+                                V_RTMPSubcFeas1.TransferFields(L_RProdOrdComp);
+                                V_RTMPSubcFeas1."Component Description" := L_RItem.Description;
+                                V_RTMPSubcFeas1."Planning Group" := L_RItem."Planning Group FLE";
+                                V_RTMPSubcFeas1."Internal Location" := V_RProdOrderLine."Location Code";
+                                //TODO External location potrebbe cambiare se i componenti vengono consumanti su 2 fasi del ciclo diverse e queste fasi sono esterne da terzisti diversi
+                                //TODO perciò questo campo valorizzato qui non va bene e di conseguenza anche il campo in testata non va bene  V_RTMPSubcFeas."Subcontracting Location Code"
+                                V_RTMPSubcFeas1."External Location" := V_RTMPSubcFeas."Subcontracting Location Code";
+                                V_RTMPSubcFeas1."Expected Receipt Qty. (Base)" := F_GetExpectedReceiptQty(V_RTMPSubcFeas1."Item No.", V_RTMPSubcFeas1."Variant Code", V_RTMPSubcFeas1."Internal Location");
+                                F_CalcTotalInternalAndExternalComponentInventory(V_RTMPSubcFeas, V_RTMPSubcFeas1);
+                                //Trovo la fase di prelievo del componente. 
+                                if (L_RProdOrdRoutL."Prod. Order No." <> V_RProdOrderLine."Prod. Order No.") or
+                                   (L_RProdOrdRoutL."Routing Link Code" <> L_RProdOrdComp."Routing Link Code") then begin
+                                    L_RProdOrdRoutL.SetRange("Routing Link Code", V_RTMPSubcFeas1."Routing Link Code");
+                                    if not L_RProdOrdRoutL.FindFirst() then
+                                        Clear(L_RProdOrdRoutL);
+                                end;
+                                // Calcolo le qtà di giacenza interna ed esterna già utilizzate e utilizzabili dal componente per l'ordine di produzione in modo da capire se le giacenze sono sufficienti per la realizzazione dell'ODP
+                                F_CalculateUsedAndUsableQuantitiesForComponent(V_RTMPSubcFeas1, L_RProdOrdRoutL, L_RProdOrdComp, V_RTMPSubcFeas);
+
+                                if (V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" = 0) and (V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" = 0) then
+                                    V_RTMPSubcFeas1."Not Feasible" := true;
+                                if ((V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" > 0) and (V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" < V_RTMPSubcFeas1."Remaining Qty. (Base)")) or
+                                   ((V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" > 0) and (V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" < V_RTMPSubcFeas1."Remaining Qty. (Base)")) then
+                                    V_RTMPSubcFeas1."Partially Feasible" := true;
+                                V_RTMPSubcFeas1.Insert(false);
+
+                                //L_ProdOrderComponentSubcontractorFeasableQty contiene quanti articoli finiti riesco a fare con il componente in base alla giacenza esterna
+                                // L_ProdOrderComponentSubcontractorFeasableQty := Round(V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" / (V_RTMPSubcFeas1."Quantity per" * V_RTMPSubcFeas1."Qty. per Unit of Measure"), 0.001, '>');
+                                L_ProdOrderComponentSubcontractorFeasableQty := F_ConvertComponentQtyToProdOrderFinishedQty(V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)",
+                                                                                                                            V_RTMPSubcFeas1."Quantity per",
+                                                                                                                            V_RTMPSubcFeas1."Qty. per Unit of Measure");
+                                //Se la qtà di articoli finiti che riesco a fare con quel componente è minore della qtà precedentemente salvata sovrascrivo quella presente in L_ProdOrderSubcontractorFeasableQty
+                                if L_ProdOrderComponentSubcontractorFeasableQty < L_ProdOrderSubcontractorFeasableQty then
+                                    //In L_ProdOrderSubcontractorFeasableQty è presente la qtà massima di articoli finiti che riesco a fare con i componenti che ho nella DB dell'ordine di produzione in base alla giacenza esterna
+                                    L_ProdOrderSubcontractorFeasableQty := L_ProdOrderComponentSubcontractorFeasableQty;
+
+                                //L_ProdOrderComponentInternalFeasableQty contiene quanti articoli finiti riesco a fare con il componente in base alla giacenza interna
+                                // L_ProdOrderComponentInternalFeasableQty := Round(V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" / (V_RTMPSubcFeas1."Quantity per" * V_RTMPSubcFeas1."Qty. per Unit of Measure"), 0.001, '>');
+                                L_ProdOrderComponentInternalFeasableQty := F_ConvertComponentQtyToProdOrderFinishedQty(V_RTMPSubcFeas1."Int. Reserved Quantity (Base)",
+                                                                                                                       V_RTMPSubcFeas1."Quantity per",
+                                                                                                                       V_RTMPSubcFeas1."Qty. per Unit of Measure");
+                                //Se la qtà di articoli finiti che riesco a fare con quel componente è minore della qtà precedentemente salvata sovrascrivo quella presente in L_ProdOrderInternalFeasableQty
+                                if L_ProdOrderComponentInternalFeasableQty < L_ProdOrderInternalFeasableQty then
+                                    //In L_ProdOrderInternalFeasableQty è presente la qtà massima di articoli finiti che riesco a fare con i componenti che ho nella DB dell'ordine di produzione in base alla giacenza interna
+                                    L_ProdOrderInternalFeasableQty := L_ProdOrderComponentInternalFeasableQty;
                             end;
-                            // Calcolo le qtà di giacenza interna ed esterna già utilizzate e utilizzabili dal componente per l'ordine di produzione in modo da capire se le giacenze sono sufficienti per la realizzazione dell'ODP
-                            F_CalculateUsedAndUsableQuantitiesForComponent(V_RTMPSubcFeas1, L_RProdOrdRoutL, L_RProdOrdComp, V_RTMPSubcFeas);
+                        until L_RProdOrdComp.Next() = 0;
+                    //Quantità fattibile in conto lavoro
+                    V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" := L_ProdOrderSubcontractorFeasableQty;
+                    //Quantità fattibile internamente
+                    V_RTMPSubcFeas."Int. Feasible Quantity (Base)" := L_ProdOrderInternalFeasableQty;
+                    //Booleano che dice se fattibile completamente esternamente
+                    V_RTMPSubcFeas."Full Feasible SubC" := V_RTMPSubcFeas."Operation Rem. Qty. (Base)" <= V_RTMPSubcFeas."Subc. Feasible Quantity (Base)";
+                    //Se "TS Feasible Quantity (Base)" è maggiore della Remaining qty allora pareggio le qtà diminuendo la qtà fattibile interna
+                    //Questo può essere dovuto dai tassi di conversione sui componenti che potrebbero far differire le qtà di qualche decimale
+                    if (V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" + V_RTMPSubcFeas."Int. Feasible Quantity (Base)") > V_RTMPSubcFeas."Operation Rem. Qty. (Base)" then
+                        V_RTMPSubcFeas."Int. Feasible Quantity (Base)" -= (V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" + V_RTMPSubcFeas."Int. Feasible Quantity (Base)") - V_RTMPSubcFeas."Operation Rem. Qty. (Base)";
+                    if (V_RTMPSubcFeas.Subcontractor <> '') and
+                       (not V_RTMPSubcFeas."Full Feasible SubC") and
+                       (V_RTMPSubcFeas."Int. Feasible Quantity (Base)" > 0) then
+                        //Indica la qtà totale fattibile tra quantità fattibile esternamente e internamente
+                        V_RTMPSubcFeas."TS Feasible Quantity (Base)" := V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" + V_RTMPSubcFeas."Int. Feasible Quantity (Base)";
+                    if V_RTMPSubcFeas."TS Feasible Quantity (Base)" > 0 then
+                        //Indica se conto lavoro è completamente fattibile tramite trasferimento di giacenza interna
+                        V_RTMPSubcFeas."Full Feasible Transfer" := V_RTMPSubcFeas."Operation Rem. Qty. (Base)" <= V_RTMPSubcFeas."TS Feasible Quantity (Base)";
+                    //Indica se completamente fattibile
+                    V_RTMPSubcFeas."Full Feasible" := (V_RTMPSubcFeas."Operation Rem. Qty. (Base)" <= V_RTMPSubcFeas."Int. Feasible Quantity (Base)") or
+                                                      (V_RTMPSubcFeas."Full Feasible SubC") or
+                                                      (V_RTMPSubcFeas."Full Feasible Transfer");
+                    //Mi salvo se l'ordine di produzione è parzialmente fattibile
+                    if (not V_RTMPSubcFeas."Full Feasible") and (not V_RTMPSubcFeas."Full Feasible SubC") and (not V_RTMPSubcFeas."Full Feasible Transfer") then
+                        if (V_RTMPSubcFeas."Int. Feasible Quantity (Base)" > 0) or (V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" > 0) then
+                            V_RTMPSubcFeas."Partially Feasible" := true;
+                    V_RTMPSubcFeas.Modify(false);//TODO vedere se qui fare il modify oppure spostare l'insert che c'è sopra e metterlo qui
 
-                            if (V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" = 0) and (V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" = 0) then
-                                V_RTMPSubcFeas1."Not Feasible" := true;
-                            if ((V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" > 0) and (V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" < V_RTMPSubcFeas1."Remaining Qty. (Base)")) or
-                               ((V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" > 0) and (V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" < V_RTMPSubcFeas1."Remaining Qty. (Base)")) then
-                                V_RTMPSubcFeas1."Partially Feasible" := true;
-                            V_RTMPSubcFeas1.Insert(false);
-
-                            //L_ProdOrderComponentSubcontractorFeasableQty contiene quanti articoli finiti riesco a fare con il componente in base alla giacenza esterna
-                            // L_ProdOrderComponentSubcontractorFeasableQty := Round(V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" / (V_RTMPSubcFeas1."Quantity per" * V_RTMPSubcFeas1."Qty. per Unit of Measure"), 0.001, '>');
-                            L_ProdOrderComponentSubcontractorFeasableQty := F_ConvertComponentQtyToProdOrderFinishedQty(V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)",
-                                                                                                                        V_RTMPSubcFeas1."Quantity per",
-                                                                                                                        V_RTMPSubcFeas1."Qty. per Unit of Measure");
-                            //Se la qtà di articoli finiti che riesco a fare con quel componente è minore della qtà precedentemente salvata sovrascrivo quella presente in L_ProdOrderSubcontractorFeasableQty
-                            if L_ProdOrderComponentSubcontractorFeasableQty < L_ProdOrderSubcontractorFeasableQty then
-                                //In L_ProdOrderSubcontractorFeasableQty è presente la qtà massima di articoli finiti che riesco a fare con i componenti che ho nella DB dell'ordine di produzione in base alla giacenza esterna
-                                L_ProdOrderSubcontractorFeasableQty := L_ProdOrderComponentSubcontractorFeasableQty;
-
-                            //L_ProdOrderComponentInternalFeasableQty contiene quanti articoli finiti riesco a fare con il componente in base alla giacenza interna
-                            // L_ProdOrderComponentInternalFeasableQty := Round(V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" / (V_RTMPSubcFeas1."Quantity per" * V_RTMPSubcFeas1."Qty. per Unit of Measure"), 0.001, '>');
-                            L_ProdOrderComponentInternalFeasableQty := F_ConvertComponentQtyToProdOrderFinishedQty(V_RTMPSubcFeas1."Int. Reserved Quantity (Base)",
-                                                                                                                   V_RTMPSubcFeas1."Quantity per",
-                                                                                                                   V_RTMPSubcFeas1."Qty. per Unit of Measure");
-                            //Se la qtà di articoli finiti che riesco a fare con quel componente è minore della qtà precedentemente salvata sovrascrivo quella presente in L_ProdOrderInternalFeasableQty
-                            if L_ProdOrderComponentInternalFeasableQty < L_ProdOrderInternalFeasableQty then
-                                //In L_ProdOrderInternalFeasableQty è presente la qtà massima di articoli finiti che riesco a fare con i componenti che ho nella DB dell'ordine di produzione in base alla giacenza interna
-                                L_ProdOrderInternalFeasableQty := L_ProdOrderComponentInternalFeasableQty;
-                        end;
-                    until L_RProdOrdComp.Next() = 0;
-                //Quantità fattibile in conto lavoro
-                V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" := L_ProdOrderSubcontractorFeasableQty;
-                //Quantità fattibile internamente
-                V_RTMPSubcFeas."Int. Feasible Quantity (Base)" := L_ProdOrderInternalFeasableQty;
-                //Booleano che dice se fattibile completamente esternamente
-                V_RTMPSubcFeas."Full Feasible SubC" := V_RTMPSubcFeas."Remaining Qty. (Base)" <= V_RTMPSubcFeas."Subc. Feasible Quantity (Base)";
-                //Se "TS Feasible Quantity (Base)" è maggiore della Remaining qty allora pareggio le qtà diminuendo la qtà fattibile interna
-                //Questo può essere dovuto dai tassi di conversione sui componenti che potrebbero far differire le qtà di qualche decimale
-                if (V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" + V_RTMPSubcFeas."Int. Feasible Quantity (Base)") > V_RTMPSubcFeas."Remaining Qty. (Base)" then
-                    V_RTMPSubcFeas."Int. Feasible Quantity (Base)" -= (V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" + V_RTMPSubcFeas."Int. Feasible Quantity (Base)") - V_RTMPSubcFeas."Remaining Qty. (Base)";
-                if (V_RTMPSubcFeas.Subcontractor <> '') and
-                   (not V_RTMPSubcFeas."Full Feasible SubC") and
-                   (V_RTMPSubcFeas."Int. Feasible Quantity (Base)" > 0) then
-                    //Indica la qtà totale fattibile tra quantità fattibile esternamente e internamente
-                    V_RTMPSubcFeas."TS Feasible Quantity (Base)" := V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" + V_RTMPSubcFeas."Int. Feasible Quantity (Base)";
-                if V_RTMPSubcFeas."TS Feasible Quantity (Base)" > 0 then
-                    //Indica se conto lavoro è completamente fattibile tramite trasferimento di giacenza interna
-                    V_RTMPSubcFeas."Full Feasible Transfer" := V_RTMPSubcFeas."Remaining Qty. (Base)" <= V_RTMPSubcFeas."TS Feasible Quantity (Base)";
-                //Indica se completamente fattibile
-                V_RTMPSubcFeas."Full Feasible" := (V_RTMPSubcFeas."Remaining Qty. (Base)" <= V_RTMPSubcFeas."Int. Feasible Quantity (Base)") or
-                                                  (V_RTMPSubcFeas."Full Feasible SubC") or
-                                                  (V_RTMPSubcFeas."Full Feasible Transfer");
-                //Mi salvo se l'ordine di produzione è parzialmente fattibile
-                if (not V_RTMPSubcFeas."Full Feasible") and (not V_RTMPSubcFeas."Full Feasible SubC") and (not V_RTMPSubcFeas."Full Feasible Transfer") then
-                    if (V_RTMPSubcFeas."Int. Feasible Quantity (Base)" > 0) or (V_RTMPSubcFeas."Subc. Feasible Quantity (Base)" > 0) then
-                        V_RTMPSubcFeas."Partially Feasible" := true;
-                V_RTMPSubcFeas.Modify(false);//TODO vedere se qui fare il modify oppure spostare l'insert che c'è sopra e metterlo qui
-
-                if (V_RTMPSubcFeas."Partially Feasible") or (not V_RTMPSubcFeas."Full Feasible") then
-                    if BCalcReservationBasedOnFeasibleQty then
-                        F_RecalcUsedAndUsableQuantitiesForComponentForNotFullyFeasbleOrder(V_RProdOrderLine,
-                                                                                           V_RTMPSubcFeas1,
-                                                                                           V_RTMPSubcFeas);
-
+                    if (V_RTMPSubcFeas."Partially Feasible") or (not V_RTMPSubcFeas."Full Feasible") then
+                        if BCalcReservationBasedOnFeasibleQty then
+                            F_RecalcUsedAndUsableQuantitiesForComponentForNotFullyFeasbleOrder(V_RProdOrderLine,
+                                                                                               V_RTMPSubcFeas1,
+                                                                                               V_RTMPSubcFeas);
+                end;
             until V_RProdOrderLine.Next() = 0;
             if GuiAllowed then
                 L_CConfigProgressBar.Close();

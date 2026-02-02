@@ -98,19 +98,19 @@ page 99189 "Subcontactor Feasibility 2 PTE"
                     Visible = false;
                     ApplicationArea = All;
                 }
-                field("RTMPSubcFeas.""Quantity (Base)"""; RTMPSubcFeas."Quantity (Base)")
+                field("RTMPSubcFeas.""Quantity (Base)"""; RTMPSubcFeas."Operation Quantity (Base)")
                 {
                     BlankZero = true;
                     Caption = 'Quantity (Base)';
                     ApplicationArea = All;
                 }
-                field("RTMPSubcFeas.""Finished Qty. (Base)"""; RTMPSubcFeas."Finished Qty. (Base)")
+                field("RTMPSubcFeas.""Finished Qty. (Base)"""; RTMPSubcFeas."Operation Finished Qty. (Base)")
                 {
                     BlankZero = true;
                     Caption = 'Finished Qty. (Base)';
                     ApplicationArea = All;
                 }
-                field("RTMPSubcFeas.""Remaining Qty. (Base)"""; RTMPSubcFeas."Remaining Qty. (Base)")
+                field("RTMPSubcFeas.""Remaining Qty. (Base)"""; RTMPSubcFeas."Operation Rem. Qty. (Base)")
                 {
                     BlankZero = true;
                     Caption = 'Remaining Qty. (Base)';
