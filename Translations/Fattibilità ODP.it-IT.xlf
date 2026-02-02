@@ -1,0 +1,1095 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="it-IT" original="Fattibilità ODP">
+    <body>
+      <group id="body">
+        <trans-unit id="Table 1416503093 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>TMP Subcontactor Feasibility 1</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 411531942 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Base Unit of Measure</source>
+          <target>Unità di misura base</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Base Unit of Measure - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 397210659 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Component Description</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Component Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 1944983368 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Critical Component</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Critical Component - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2035881076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Expected Qty. (Base)</source>
+          <target>Quantità prevista (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Expected Qty. (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 878599912 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Expected Receipt Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Expected Receipt Qty. (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2645076049 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>External Inventory</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field External Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 1180847764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>External Location</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field External Location - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2081809627 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Global Inventory</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Global Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 1538556036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Int. Qty. used Other (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Int. Qty. used Other (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 4138788866 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Int. Reserved Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Int. Reserved Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 4045179927 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Internal Inventory</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Internal Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 4290807377 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Internal Inventory Other Loc.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Internal Inventory Other Loc. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2432596142 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Internal Location</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Internal Location - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2037375551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inventory Posting Group</source>
+          <target>Cat. reg. magazzino</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Inventory Posting Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 568743302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <target>Nr. articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 65514489 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item Tracking Code</source>
+          <target>Codice tracciabilità articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Item Tracking Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <target>Nr. riga</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2161572060 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location Code</source>
+          <target>Cod. ubicazione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Location Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 1418092129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location Inventory</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Location Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2320632194 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Not Feasible</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Not Feasible - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2097040039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Partially Feasible</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Partially Feasible - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 1300957126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Planning Group</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Planning Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2138704244 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Prod. Order Line No.</source>
+          <target>Nr. riga ordine prod.</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Prod. Order Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 851830778 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Prod. Order No.</source>
+          <target>Nr. ordine produzione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Prod. Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2331568324 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Qty. in Transfer Order</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Qty. in Transfer Order - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 115150360 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Qty. on Int. Component Lines</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Qty. on Int. Component Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 806193894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Qty. per Unit of Measure</source>
+          <target>Qtà per unità di misura</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Qty. per Unit of Measure - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 3179217921 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Quantity (Base)</source>
+          <target>Quantità (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 3196119024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Quantity per</source>
+          <target>Quantità per</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Quantity per - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 3246430406 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remaining Qty. (Base)</source>
+          <target>Qtà residua (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Remaining Qty. (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 463590211 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Routing Link Code</source>
+          <target>Cod. collegamento tra ciclo e distinta base</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Routing Link Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status</source>
+          <target>Stato</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Status - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2453184656 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subc. Qty. used Other (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Subc. Qty. used Other (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 3320016150 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subc. Reserved Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Subc. Reserved Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 1896405907 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Total Subcontractor Remaining Qty. (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Total Subc. Rem. Qty. (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 2385270358 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit of Measure Code</source>
+          <target>Cod. unità di misura</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Unit of Measure Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1416503093 - Field 3450651614 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <target>Cod. variante</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility 1 PTE - Field Variant Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>TMP Subcontactor Feasibility</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1881435679 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Comp. Trans. Order Exists</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Comp. Trans. Order Exists - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 4190130733 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Customer No.</source>
+          <target>Nr. cliente</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Customer No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 4085727052 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Due Date</source>
+          <target>Data scadenza</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Due Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 458406397 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Date</source>
+          <target>Data fine</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Ending Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 708205856 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Finished Qty. (Base)</source>
+          <target>Quantità finita (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Finished Qty. (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1116500020 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Full Feasible</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Full Feasible - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3323095577 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Full Feasible SubC</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Full Feasible SubC - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1930285237 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Full Feasible with Transfer</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Full Feasible Transfer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1059856408 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Glob. Feasible Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Glob. Feasible Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 4111378299 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Int. Feasible Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Int. Feasible Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 2842094365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item Description</source>
+          <target>Descrizione articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Item Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 568743302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <target>Nr. articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <target>Nr. riga</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 2161572060 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location Code</source>
+          <target>Cod. ubicazione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Location Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 543172461 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Order Date 1</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Order Date 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 4200443140 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Order Date 2</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Order Date 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3562746523 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Order Date 3</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Order Date 3 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3021227494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Pallet Item No.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Pallet Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 2097040039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Partially Feasible</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Partially Feasible - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1300957126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Planning Group</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Planning Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 851830778 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Prod. Order No.</source>
+          <target>Nr. ordine produzione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Prod. Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1782476936 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase Order No.</source>
+          <target>Nr. ordine acquisto</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Purchase Order Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 2877945414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase Order No.</source>
+          <target>Nr. ordine acquisto</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Purchase Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3179217921 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Quantity (Base)</source>
+          <target>Quantità (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3246430406 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remaining Qty. (Base)</source>
+          <target>Qtà residua (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Remaining Qty. (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3254456809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Order Line No.</source>
+          <target>Nr. riga ordine vendita</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Sales Order Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1475490283 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Order No.</source>
+          <target>Nr. ordine di vendita</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Sales Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 662368029 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Standard Task Code</source>
+          <target>Cod. task standard</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Standard Task Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 460889064 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Date</source>
+          <target>Data inizio</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Starting Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1536385963 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Effective Starting Date</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Starting Effective Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1536385963 - Method 2126772001 - NamedType 3170465871" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Document %1 is not a Subcontractor Order</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Starting Effective Date - Method OnValidate - NamedType L_TErrNoSubcontracting</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3793464198 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Expected Starting Date</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Starting Expected Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3793464198 - Method 2126772001 - NamedType 3170465871" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Document %1 is not a Subcontractor Order</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Starting Expected Date - Method OnValidate - NamedType L_TErrNoSubcontracting</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status</source>
+          <target>Stato</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Status - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 4080709630 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status Order</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Status Order - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1805165991 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subc. Feasible Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Subc. Feasible Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3251638970 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontracting Location Code</source>
+          <target>Cod. ubicazione terzista</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Subcontracting Location Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 2239954909 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontractor</source>
+          <target>Terzista</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Subcontractor - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1107037736 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontractor Name</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Subcontractor Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1123516007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>1st Subcontractor Order</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Subcontractor Order - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 1791766669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>TS Feasible Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field TS Feasible Quantity (Base) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 2385270358 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit of Measure Code</source>
+          <target>Cod. unità di misura</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Unit of Measure Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3573194030 - Field 3450651614 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <target>Cod. variante</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TMP Subc. Feasibility PTE - Field Variant Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontactor Global Feasibility 1</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Method 3175418866 - NamedType 3883739367" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Order to post</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Method F_DrillDownInventory - NamedType L_NotPostedLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Control 878599912 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the total quantity expected to be received for the item from purchase, production, and assembly orders.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Control Expected Receipt Qty. (Base) - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Control 2081809627 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifica la somma tra la giacenza interna ed esterna.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Control Global Inventory - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Control 4290807377 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifica la quantità interna presente in altre ubicazioni rispetto a quella specificata sulla riga.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Control Internal Inventory Other Loc. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Control 115150360 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifica la somma della "quantità rimanente" di tutti i componenti uguali al componente presente sulla riga in tutti gli ordini di produzione RILASCIATI con la stessa ubicazione presente sulla riga.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Control Qty. on Int. Component Lines - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Control 1896405907 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifica la somma della "quantità rimanente" di tutti i componenti uguali al componente presente sulla riga in tutti gli ordini di produzione RILASCIATI con ubicazione uguale a quella del terzista presente sulla riga.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Control Total Subc. Rem. Qty. (Base) - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Action 2336152139 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability</source>
+          <target>Disponibilità</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Action Availability - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Action 2876958691 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item Card</source>
+          <target>Scheda articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Action ItemCard - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Action 2333914252 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>View All Components</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Action ViewAllComponents - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Action 11166687 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>View Not Fully Feasible Components</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Action ViewNotFullyFeasibleComponents - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1526362982 - Action 11166687 - Method 1377591017 - NamedType 1120690089" size-unit="char" translate="yes" xml:space="preserve">
+          <source>All components for production order %1 are fully feasible.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 1 PTE - Action ViewNotFullyFeasibleComponents - Method OnAction - NamedType L_AllComponentFeasibleMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontactor Global Feasibility 2</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 1397490541 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Due Date</source>
+          <target>Data scadenza</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Due Date" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 1982997116 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Date</source>
+          <target>Data fine</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Ending Date" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 3174495297 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Feasible Quantity (Base)</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Feasible Quantity (Base)" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 4037423809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Finished Qty. (Base)</source>
+          <target>Quantità finita (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Finished Qty. (Base)" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 2393343524 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item Description</source>
+          <target>Descrizione articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Item Description" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 3077007011 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <target>Nr. articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Item No." - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 440149971 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Planning Group</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Planning Group" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 2527555088 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Quantity (Base)</source>
+          <target>Quantità (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Quantity (Base)" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 2641230939 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remaining Qty. (Base)</source>
+          <target>Qtà residua (base)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Remaining Qty. (Base)" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 3752132001 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Date</source>
+          <target>Data inizio</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Starting Date" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 3014319369 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontractor Name</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Subcontractor Name" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 1909846634 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>1st Subcontractor Order</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Subcontractor Order" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 3376126355 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit of Measure Code</source>
+          <target>Cod. unità di misura</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Unit of Measure Code" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 1554570187 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <target>Cod. variante</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas."Variant Code" - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Control 2661129652 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontractor</source>
+          <target>Terzista</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Control RTMPSubcFeas.Subcontractor - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Action 3118175845 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability</source>
+          <target>Disponibilità</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Action A_Disponibilita - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Action 1722997681 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item Card</source>
+          <target>Scheda articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Action A_ItemCard - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Action 333943795 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Hide Completed</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Action HideComplete - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2339790091 - Action 578428734 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show Completed</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility 2 PTE - Action ShowComplete - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontactor Global Feasibility</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3394645697 - NamedType 3061131391" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Work in progress...</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CalcFeasibility - NamedType L_TextProg01</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3394645697 - NamedType 1665859144" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Feasibility Production Orders Processing...\\</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CalcFeasibility - NamedType L_TextProg01a</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3394645697 - NamedType 679253946" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Progress</source>
+          <target>Avanzamento</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CalcFeasibility - NamedType L_TextProg02</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3394645697 - NamedType 41557329" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processed</source>
+          <target>Elaborato</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CalcFeasibility - NamedType L_TextProg03</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3394645697 - NamedType 1954647180" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Of</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CalcFeasibility - NamedType L_TextProg04</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3394645697 - NamedType 1316950563" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Production Orders</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CalcFeasibility - NamedType L_TextProg05</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3792511716 - NamedType 2201617383" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Confirm transfer order creation for selected lines?</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CreateTransferOrder - NamedType L_TransferOrderCreationConfirm</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3792511716 - NamedType 518619450" size-unit="char" translate="yes" xml:space="preserve">
+          <source>For one or more selected components, available internal inventory is insufficient to fully cover the remaining quantity. Do you still want to create the transfer order?</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CreateTransferOrder - NamedType L_PartialTransferOrderLineInsertConfirm</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 3792511716 - NamedType 604605610" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No suitable components are available in production order %1 to create a transfer order.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_CreateTransferOrder - NamedType L_NoComponentForTransferOrderErr</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 1028013446 - NamedType 35067552" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Component %1 must not be processed by a subcontractor. Unable to proceed with transfer order creation.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_DoCheckForTransferLine - NamedType L_NoSubcontractorErr</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 1028013446 - NamedType 902377743" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No transfer is required for component %1, as the external inventory covers the required quantity.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_DoCheckForTransferLine - NamedType L_NoTransferRequiredErr</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 1028013446 - NamedType 4067151750" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No internal inventory is available for component %1. It is not possible to create the transfer order.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_DoCheckForTransferLine - NamedType L_NoInternalInventoryErr</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 1028013446 - NamedType 1325820353" size-unit="char" translate="yes" xml:space="preserve">
+          <source>There are no locations to use for the transit. The transfer order cannot be created.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_DoCheckForTransferLine - NamedType L_NoInTransitLocation</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 2083382124 - NamedType 3061131391" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Work in progress...</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_FillTable - NamedType L_TextProg01</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 2083382124 - NamedType 1665859144" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Feasibility Production Orders Processing...\\</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_FillTable - NamedType L_TextProg01a</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 2083382124 - NamedType 679253946" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Progress</source>
+          <target>Avanzamento</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_FillTable - NamedType L_TextProg02</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 2083382124 - NamedType 41557329" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processed</source>
+          <target>Elaborato</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_FillTable - NamedType L_TextProg03</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 2083382124 - NamedType 1954647180" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Of</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_FillTable - NamedType L_TextProg04</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 2083382124 - NamedType 1316950563" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Production Orders</source>
+          <target>Ordini di produzione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_FillTable - NamedType L_TextProg05</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Method 2083382124 - NamedType 3110003012" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The "Up To Starting Date" filter has not been set. Are you sure you want to load production orders? %1 production orders will be loaded.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Method F_FillTable - NamedType L_ConfirmLoadProdOrderWithoutDateFilter</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 3581107662 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Prod. Orders With Component</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control ComponentOrders - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 236920392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Prod. Order Components</source>
+          <target>Componenti ordine produzione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control Components - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 3319991880 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filters</source>
+          <target>Filtri</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control Control1000000028 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 1049096497 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Components</source>
+          <target>Componenti</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control ComponentsFilters - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 20515565 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <target>Nr. articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control ItemNoComponentFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 2855868239 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <target>Cod. variante</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control VariantCodeComponentFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 3203593785 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Production Orders</source>
+          <target>Ordini di produzione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control ProdOrdersFilters - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 810109192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <target>Nr. articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control ItemNoFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 553963197 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Standard Task Code</source>
+          <target>Cod. task standard</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control StandardTaskCodeFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 2707283006 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontractor No.</source>
+          <target>Nr. terzista</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control SubcontractorNoFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Control 879302589 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Up To Due Date</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Control DueDateToFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 3118175845 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability</source>
+          <target>Disponibilità</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action A_Disponibilita - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1722997681 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item Card</source>
+          <target>Scheda articolo</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action A_ItemCard - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 3762134342 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Prod. Ord. Card</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action A_ProdOrdCard - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 284195533 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filters</source>
+          <target>Filtri</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action Filters - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 940280504 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>All Orders</source>
+          <target>Tutti gli ordini</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action AllOrders - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1314411431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Feasibility Orders Only</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action FeasOnly - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 3694299223 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Components Filters</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action InventoryComponentsFilters - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 2042380403 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Allows you to identify the production orders that use the external inventory related to the currently selected component.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action FilterProdOrdersForComponentUsingExternalInventory - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 2042380403 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter Prod. Ord. For Component Using External Inventory</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action FilterProdOrdersForComponentUsingExternalInventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 2042380403 - Method 1377591017 - NamedType 2987037956" size-unit="char" translate="yes" xml:space="preserve">
+          <source>For the selected component there are no production orders that reserve external inventory.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action FilterProdOrdersForComponentUsingExternalInventory - Method OnAction - NamedType L_NoProdThatReserveInventory</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 50198317 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Allows you to identify the production orders that use the internal inventory related to the currently selected component.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action FilterProdOrdersForComponentUsingInternalInventory - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 50198317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter Prod. Ord. For Component Using Internal Inventory</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action FilterProdOrdersForComponentUsingInternalInventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 50198317 - Method 1377591017 - NamedType 2987037956" size-unit="char" translate="yes" xml:space="preserve">
+          <source>For the selected component there are no production orders that reserve internal inventory.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action FilterProdOrdersForComponentUsingInternalInventory - Method OnAction - NamedType L_NoProdThatReserveInventory</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 3077526337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Removes the filters currently applied that limit the view to production orders using the internal or external inventory of the selected component, in order to display all production orders.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action RemoveFilterOnProdOrderComponent - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 3077526337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove Filter on Prod. Ord. Component</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action RemoveFilterOnProdOrderComponent - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 317009882 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Load</source>
+          <target>Carico</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action LoadData - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1596678563 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Change Quantity and Date</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action QtyUpdateDate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1596678563 - Method 1377591017 - NamedType 1874354105" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Change Production Order Quantity</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action QtyUpdateDate - Method OnAction - NamedType L_Text001</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1596678563 - Method 1377591017 - NamedType 1236657488" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Order qty cannot be less then %1</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2">%1=qty</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action QtyUpdateDate - Method OnAction - NamedType L_Text002</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1596678563 - Method 1377591017 - NamedType 598960871" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontractor Order %1 updated</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2">%1=code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action QtyUpdateDate - Method OnAction - NamedType L_Text003</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1596678563 - Method 1377591017 - NamedType 767869894" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Order End Date cannot be empty</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action QtyUpdateDate - Method OnAction - NamedType L_Text004</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1596678563 - Method 1377591017 - NamedType 130173277" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Order End Date cannot be previuos then today</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action QtyUpdateDate - Method OnAction - NamedType L_Text005</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1932957076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Subcontractiong Orders Creation</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action SubcontractionOrder - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 2709291762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer Orders</source>
+          <target>Ordini di trasferimento</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action TransferOrders - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 2557988198 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>It allows you to create a transfer order from the internal location to the subcontractor's location for components with external stock that is insufficient to cover the remaining quantity.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action CreateTransferOrderForMissingComponents - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 2557988198 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Transfer Order for Missing Components</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action CreateTransferOrderForMissingComponents - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 4013873297 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>It allows you to create a transfer order from the internal location to the subcontractor's location for selected components.</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action CreateTransferOrderForSelectedComponents - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 4013873297 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Transfer Order For Selected Components</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action CreateTransferOrderForSelectedComponents - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 3027447331 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Current Subcontractor Orders</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action VendorOrders - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1333700088 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filters</source>
+          <target>Filtri</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action Category4 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1795650284 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Components Filters</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action InventoryComponentsFilters_Promoted - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 696003471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cards</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action Category5 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 2609093322 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Production Order</source>
+          <target>Ordine di produzione</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action Category6 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 1971396705 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Material Handling Document</source>
+          <target/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action Category7 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3650343133 - Action 722297085 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer Orders</source>
+          <target>Ordini di trasferimento</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Subcontactor Feasibility PTE - Action TransferOrders_Promoted - Property Caption</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
