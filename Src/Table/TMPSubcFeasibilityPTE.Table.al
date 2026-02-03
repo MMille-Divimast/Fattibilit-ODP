@@ -120,7 +120,7 @@ table 90146 "TMP Subc. Feasibility PTE"
         }
         field(2004; "TS Feasible Quantity (Base)"; Decimal)
         {
-            Caption = 'TS Feasible Quantity (Base)';
+            Caption = 'Feasible Quantity With Transfer (Base)';
             DecimalPlaces = 0 : 5;
         }
         field(2010; "Status Order"; Code[1])
