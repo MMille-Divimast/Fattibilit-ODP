@@ -1,4 +1,4 @@
-table 90146 "TMP Subc. Feasibility PTE"
+table 50040 "TMP Subc. Feasibility PTE"
 {
     Caption = 'TMP Subcontactor Feasibility';
     DataClassification = CustomerContent;

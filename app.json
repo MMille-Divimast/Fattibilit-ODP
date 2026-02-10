@@ -27,11 +27,11 @@
   "screenshots": [],
   "application": "24.0.0.0",
   "platform": "24.0.0.0",
-  "target": "OnPrem",
+  "target": "Cloud",
   "idRanges": [
     {
       "from": 50000,
-      "to": 99999
+      "to": 59999
     }
   ],
   "features": ["NoImplicitWith","TranslationFile"],

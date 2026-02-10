@@ -1,4 +1,4 @@
-page 99187 "Subcontactor Feasibility PTE"
+page 50110 "Subcontactor Feasibility PTE"
 {
     // TODO: Implementare azione  QtyUpdateDate Modifica Quantità e Data
     //          (azione resa per ora Visible FALSE)
