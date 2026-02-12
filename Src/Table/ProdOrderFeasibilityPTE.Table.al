@@ -1,7 +1,9 @@
-table 50040 "TMP Subc. Feasibility PTE"
+table 50040 "Prod. Order Feasibility PTE"
 {
-    Caption = 'TMP Subcontactor Feasibility';
+    Caption = 'Prod. Order Feasibility';
     DataClassification = CustomerContent;
+    TableType = Temporary;
+
     fields
     {
         field(1; Status; Enum "Production Order Status")

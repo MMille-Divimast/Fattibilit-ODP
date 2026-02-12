@@ -1,14 +1,11 @@
-page 50112 "Subcontactor Feasibility 2 PTE"
+page 50112 "Prod. Orders Feasibility 2 PTE"
 {
-    // PT20130157 20/12/2013 CS Creazione
-
-    Caption = 'Subcontactor Global Feasibility 2';
+    Caption = 'Prod. Orders Feasibility 2';
     DeleteAllowed = false;
     InsertAllowed = false;
     ModifyAllowed = false;
     PageType = ListPart;
-    // PromotedActionCategories = 'New,Process,Report,Filters,Cards';
-    SourceTable = "TMP Subc. Feasibility 1 PTE";
+    SourceTable = "Prod. Order Feasibility 1 PTE";
     SourceTableTemporary = true;
     SourceTableView = sorting(Status, "Prod. Order No.", "Prod. Order Line No.", "Line No.")
                       order(ascending);
@@ -205,7 +202,7 @@ page 50112 "Subcontactor Feasibility 2 PTE"
                 ApplicationArea = All;
                 trigger OnAction()
                 var
-                    L_RTMPSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+                    L_RTMPSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
                     L_Message: Text;
                 begin
                     L_RTMPSubcFeasibility1.Copy(Rec, true);
@@ -273,11 +270,11 @@ page 50112 "Subcontactor Feasibility 2 PTE"
     end;
 
     var
-        RTMPSubcFeas: Record "TMP Subc. Feasibility PTE" temporary;
+        RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary;
         ShowComplete: Boolean;
 
 
-    procedure GetTmpRec(var V_RTMPSubcFeas: Record "TMP Subc. Feasibility PTE"; var V_RTMPSubcFeas1: Record "TMP Subc. Feasibility 1 PTE")
+    procedure GetTmpRec(var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE"; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE")
     begin
         Rec.Copy(V_RTMPSubcFeas1, true);
         RTMPSubcFeas.Copy(V_RTMPSubcFeas, true);

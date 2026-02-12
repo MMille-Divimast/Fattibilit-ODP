@@ -1,11 +1,11 @@
-page 50111 "Subcontactor Feasibility 1 PTE"
+page 50111 "Prod. Orders Feasibility 1 PTE"
 {
-    Caption = 'Subcontactor Global Feasibility 1';
+    Caption = 'Prod. Orders Feasibility 1';
     DeleteAllowed = false;
     InsertAllowed = false;
     ModifyAllowed = false;
     PageType = ListPart;
-    SourceTable = "TMP Subc. Feasibility 1 PTE";
+    SourceTable = "Prod. Order Feasibility 1 PTE";
     SourceTableTemporary = true;
     SourceTableView = sorting(Status, "Prod. Order No.", "Prod. Order Line No.", "Line No.")
                       order(ascending);
@@ -268,7 +268,7 @@ page 50111 "Subcontactor Feasibility 1 PTE"
 
                 trigger OnAction()
                 var
-                    L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+                    L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
                     L_AllComponentFeasibleMsg: Label 'All components for production order %1 are fully feasible.';
                 begin
                     L_RTempSubcFeasibility1.Copy(Rec, true);
@@ -321,7 +321,7 @@ page 50111 "Subcontactor Feasibility 1 PTE"
 
     var
         RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE" temporary;
-        RTMPSubcFeas, RTMPSubcFeasSave : Record "TMP Subc. Feasibility PTE" temporary;
+        RTMPSubcFeas, RTMPSubcFeasSave : Record "Prod. Order Feasibility PTE" temporary;
         ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]];
         CompFeas: Decimal;
         ExternalLocation: Code[10];
@@ -329,7 +329,7 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         RecStyle: Text;
         BDrillDownDisabledForDueDateChange: Boolean;
 
-    procedure GetTmpRec(var V_RTMPSubcFeas: Record "TMP Subc. Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "TMP Subc. Feasibility 1 PTE"; var V_RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE")
+    procedure GetTmpRec(var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE"; var V_RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE")
     begin
         RTMPSubcFeas.Copy(V_RTMPSubcFeas, true);
         RTMPSubcFeas.Reset();
@@ -481,10 +481,10 @@ page 50111 "Subcontactor Feasibility 1 PTE"
     //TODO nome da cambiare quando e se cambierò il nome del campo
     local procedure F_DrillDownInternalQtyUsedByOther()
     var
-        L_FSubcontactorFeasibility2: Page "Subcontactor Feasibility 2 PTE";
-        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility1_2: Record "TMP Subc. Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary;
+        L_FSubcontactorFeasibility2: Page "Prod. Orders Feasibility 2 PTE";
+        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility1_2: Record "Prod. Order Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary;
         L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
         L_LocationDictionary: Dictionary of [Code[10], Text];
         L_ProdOrderNo: Code[20];
@@ -514,10 +514,10 @@ page 50111 "Subcontactor Feasibility 1 PTE"
     //TODO nome da cambiare quando e se cambierò il nome del campo
     local procedure F_DrillDownExternalQtyUsedByOther()
     var
-        L_FSubcontactorFeasibility2: Page "Subcontactor Feasibility 2 PTE";
-        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility1_2: Record "TMP Subc. Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary;
+        L_FSubcontactorFeasibility2: Page "Prod. Orders Feasibility 2 PTE";
+        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility1_2: Record "Prod. Order Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary;
         L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
         L_LocationDictionary: Dictionary of [Code[10], Text];
         L_ProdOrderNo: Code[20];
@@ -603,7 +603,7 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         L_RProdOrderLine: Record "Prod. Order Line";
         L_RPurchaseLine: Record "Purchase Line";
         L_RAssemblyHeader: Record "Assembly Header";
-        L_FSubcontactorFeasibility: Page "Subcontactor Feasibility PTE";
+        L_FSubcontactorFeasibility: Page "Prod. Orders Feasibility PTE";
     begin
         //Ordini di produzione
         L_FSubcontactorFeasibility.FilterProdOrderLineForExpectedReceiptQty(L_RProdOrderLine, Rec."Item No.", Rec."Variant Code", Rec."Internal Location");
@@ -660,9 +660,9 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         Rec.FilterGroup(0);
     end;
 
-    procedure DeleteComponentForProdOrder(P_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary)
+    procedure DeleteComponentForProdOrder(P_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary)
     var
-        L_RTempTMPSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+        L_RTempTMPSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
     begin
         L_RTempTMPSubcFeasibility1.Copy(Rec, true);
         L_RTempTMPSubcFeasibility1.Reset();

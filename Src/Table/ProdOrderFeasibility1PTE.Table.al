@@ -1,7 +1,9 @@
-table 50041 "TMP Subc. Feasibility 1 PTE"
+table 50041 "Prod. Order Feasibility 1 PTE"
 {
-    Caption = 'TMP Subcontactor Feasibility 1';
+    Caption = 'Prod. Order Feasibility 1';
     DataClassification = CustomerContent;
+    TableType = Temporary;
+
     fields
     {
         field(1; Status; Enum "Production Order Status")
@@ -233,12 +235,12 @@ table 50041 "TMP Subc. Feasibility 1 PTE"
     {
     }
 
-    procedure FilterComponentByProdOrder(P_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary)
+    procedure FilterComponentByProdOrder(P_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary)
     begin
         FilterComponentByProdOrder(P_RTempSubcFeasibility, Rec);
     end;
 
-    procedure FilterComponentByProdOrder(P_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary; var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE")
+    procedure FilterComponentByProdOrder(P_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary; var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE")
     begin
         V_RTempSubcFeasibility1.SetRange(Status, P_RTempSubcFeasibility.Status);
         V_RTempSubcFeasibility1.SetRange("Prod. Order No.", P_RTempSubcFeasibility."Prod. Order No.");

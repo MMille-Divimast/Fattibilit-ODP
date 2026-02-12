@@ -1,10 +1,10 @@
-page 50110 "Subcontactor Feasibility PTE"
+page 50110 "Prod. Orders Feasibility PTE"
 {
-    Caption = 'Subcontactor Global Feasibility';
+    Caption = 'Prod. Orders Feasibility';
     DeleteAllowed = false;
     InsertAllowed = false;
     PageType = ListPlus;
-    SourceTable = "TMP Subc. Feasibility PTE";
+    SourceTable = "Prod. Order Feasibility PTE";
     SourceTableTemporary = true;
     SourceTableView = sorting("Status Order", "Due Date", "Prod. Order No.", "Line No.") order(ascending);
     UsageCategory = Tasks;
@@ -349,7 +349,7 @@ page 50110 "Subcontactor Feasibility PTE"
             group(Components)
             {
                 Caption = 'Prod. Order Components';
-                part(ComponentsPart; "Subcontactor Feasibility 1 PTE")
+                part(ComponentsPart; "Prod. Orders Feasibility 1 PTE")
                 {
                     Caption = ' ', Locked = true;
                     SubPageLink = Status = field(Status),
@@ -361,7 +361,7 @@ page 50110 "Subcontactor Feasibility PTE"
             group(ComponentOrders)
             {
                 Caption = 'Prod. Orders With Component'; //ITA = "Ordini di prod. con componente"
-                part(ConflictPart; "Subcontactor Feasibility 2 PTE")
+                part(ConflictPart; "Prod. Orders Feasibility 2 PTE")
                 {
                     Caption = ' ', Locked = true;
                     Provider = ComponentsPart;
@@ -502,7 +502,7 @@ page 50110 "Subcontactor Feasibility PTE"
 
                     trigger OnAction()
                     var
-                        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+                        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
                     begin
                         F_CheckThatProdOrderIsExternal(Rec);
                         L_RTempSubcFeasibility1.Copy(TempRSubcFeas1, true);
@@ -520,7 +520,7 @@ page 50110 "Subcontactor Feasibility PTE"
 
                     trigger OnAction()
                     var
-                        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+                        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
                     begin
                         F_CheckThatProdOrderIsExternal(Rec);
                         L_RTempSubcFeasibility1.Copy(TempRSubcFeas1, true);
@@ -706,8 +706,8 @@ page 50110 "Subcontactor Feasibility PTE"
                     L_RProdOrdL: Record "Prod. Order Line";
                     TempL_RProdOrdL: Record "Prod. Order Line" temporary;
                     L_RProdOrd: Record "Production Order";
-                    TempL_RSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary;
-                    TempL_RSubcFeas: Record "TMP Subc. Feasibility PTE" temporary;
+                    TempL_RSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary;
+                    TempL_RSubcFeas: Record "Prod. Order Feasibility PTE" temporary;
                     L_CUProdOrdStatusMgt: Codeunit "Prod. Order Status Management";
                     L_CUProduction: Codeunit "Production Codeunit FLE";
                 begin
@@ -984,8 +984,8 @@ page 50110 "Subcontactor Feasibility PTE"
 
     var
         CConfirmManagement: Codeunit "Confirm Management";
-        TempRSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary;
-        TempRSubcFeas1_2: Record "TMP Subc. Feasibility 1 PTE" temporary;
+        TempRSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary;
+        TempRSubcFeas1_2: Record "Prod. Order Feasibility 1 PTE" temporary;
         TempRSubcFeas2: Record "TMP Subc. Feasibility 2 FLE" temporary;
         CSubcontractor: Codeunit "Subcontractor Codeunit FLE";
         CGeneralManufacturing: Codeunit "General Manufacturing FLE";
@@ -1238,7 +1238,7 @@ page 50110 "Subcontactor Feasibility PTE"
         Rec.Reset();
     end;
 
-    procedure F_CalcFeasibility(var V_RProdOrderLine: Record "Prod. Order Line"; var V_RTMPSubcFeas: Record "TMP Subc. Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary)
+    procedure F_CalcFeasibility(var V_RProdOrderLine: Record "Prod. Order Line"; var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary)
     var
         L_RItem: Record Item;
         L_RItem2: Record Item;
@@ -1461,7 +1461,7 @@ page 50110 "Subcontactor Feasibility PTE"
     /// - la quantità già utilizzata (interna ed esterna) (impegnata in altri ordini),
     /// - la quantità ancora utilizzabile (interna ed esterna) (disponibile a magazzino o presso fornitori).
     /// </summary>
-    local procedure F_CalculateUsedAndUsableQuantitiesForComponent(var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"; var V_RProdOrderComponent: Record "Prod. Order Component")
+    local procedure F_CalculateUsedAndUsableQuantitiesForComponent(var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"; var V_RProdOrderComponent: Record "Prod. Order Component")
     var
         L_ExternalInventoryAlreadyUsed: Decimal;
         L_ExternalInventoryCanBeUsed: Decimal;
@@ -1637,9 +1637,9 @@ page 50110 "Subcontactor Feasibility PTE"
         exit(Round(P_ProdOrderQtyQty * (P_QtyPer * P_QtyPerUnitOfMeasure), 0.001, '>'));
     end;
 
-    local procedure F_RecalcUsedAndUsableQuantitiesForComponentForNotFullyFeasbleOrder(P_RProdOrderLine: Record "Prod. Order Line"; var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary; P_RTMPSubcFeas: Record "TMP Subc. Feasibility PTE" temporary)
+    local procedure F_RecalcUsedAndUsableQuantitiesForComponentForNotFullyFeasbleOrder(P_RProdOrderLine: Record "Prod. Order Line"; var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary)
     var
-        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
         L_FeasibleQty: Decimal;
         L_ComponentFeasibleQty: Decimal;
         L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
@@ -1758,7 +1758,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     //TODO rivedere nome
-    local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE"; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
+    local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE"; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
     begin
         F_AddEntryInProdOrderDictionaryPerProdOrder(V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder, P_RTempSubcFeasibility1."Prod. Order No.", P_RTempSubcFeasibility1."Prod. Order Line No.", P_RTempSubcFeasibility1."Item No.", P_RTempSubcFeasibility1."Variant Code", P_ProdOrderNoList, P_LocationCode);
     end;
@@ -1797,7 +1797,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     //TODO rivedere nome
-    local procedure F_AddEntryInProdOrderDictionary(var V_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE"; P_LocationCode: Code[10])
+    local procedure F_AddEntryInProdOrderDictionary(var V_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE"; P_LocationCode: Code[10])
     begin
         F_AddEntryInProdOrderDictionary(V_ProdOrderNoForDrillDownIntQtyUsedByOther, P_RTempSubcFeasibility1."Item No.", P_RTempSubcFeasibility1."Variant Code", P_RTempSubcFeasibility1."Prod. Order No.", P_LocationCode);
     end;
@@ -1834,7 +1834,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     //TODO rivedere nome
-    local procedure F_GetEntryFromProdOrderDictionary(var V_ListOfProdOrder: Text; P_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE"; P_LocationCode: Code[10]): Boolean
+    local procedure F_GetEntryFromProdOrderDictionary(var V_ListOfProdOrder: Text; P_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE"; P_LocationCode: Code[10]): Boolean
     begin
         exit(F_GetEntryFromProdOrderDictionary(V_ListOfProdOrder, P_ProdOrderNoForDrillDownIntQtyUsedByOther, P_RTempSubcFeasibility1."Item No.", P_RTempSubcFeasibility1."Variant Code", P_LocationCode));
     end;
@@ -1912,7 +1912,7 @@ page 50110 "Subcontactor Feasibility PTE"
         exit(true);
     end;
 
-    local procedure F_AddEntryInDictionary(var V_ProdOrderDictionary: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary; P_Qty: Decimal)
+    local procedure F_AddEntryInDictionary(var V_ProdOrderDictionary: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; P_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_Qty: Decimal)
     begin
         F_AddEntryInDictionary(V_ProdOrderDictionary, P_RTempSubcFeasibility1."Prod. Order No.", P_RTempSubcFeasibility1."Item No.", P_RTempSubcFeasibility1."Variant Code", P_Qty);
     end;
@@ -1942,7 +1942,7 @@ page 50110 "Subcontactor Feasibility PTE"
         end;
     end;
 
-    local procedure F_GetEntryFromDictionary(P_ProdOrderDictionary: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary; var V_Qty: Decimal): Boolean
+    local procedure F_GetEntryFromDictionary(P_ProdOrderDictionary: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; P_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; var V_Qty: Decimal): Boolean
     begin
         exit(F_GetEntryFromDictionary(P_ProdOrderDictionary, P_RTempSubcFeasibility1."Prod. Order No.", P_RTempSubcFeasibility1."Item No.", P_RTempSubcFeasibility1."Variant Code", V_Qty));
     end;
@@ -1968,7 +1968,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     //TODO Provare che funzioni
-    local procedure F_CalcTotalInternalAndExternalComponentInventory(var V_RTMPSubcFeasibility: Record "TMP Subc. Feasibility PTE"; var V_RTMPSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE")
+    local procedure F_CalcTotalInternalAndExternalComponentInventory(var V_RTMPSubcFeasibility: Record "Prod. Order Feasibility PTE"; var V_RTMPSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE")
     var
         L_RItem: Record Item;
         L_RLocation: Record Location;
@@ -2109,7 +2109,7 @@ page 50110 "Subcontactor Feasibility PTE"
     local procedure F_HaveProdOrderComponentWithAvailableInventory(P_ProdOrderStatus: Enum "Production Order Status"; P_ProdOrderNo: Code[20];
                                                                                           P_ProdOrderLineNo: Integer): Boolean
     var
-        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
     begin
         L_RTempSubcFeasibility1.Copy(TempRSubcFeas1, true);
         L_RTempSubcFeasibility1.Reset();
@@ -2124,7 +2124,7 @@ page 50110 "Subcontactor Feasibility PTE"
         exit(not L_RTempSubcFeasibility1.IsEmpty);
     end;
 
-    local procedure F_CreateTransferOrder(var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary)
+    local procedure F_CreateTransferOrder(var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary)
     var
         L_InternalLocationList: List of [Code[10]];
         L_ExternalLocationList: List of [Code[10]];
@@ -2133,7 +2133,7 @@ page 50110 "Subcontactor Feasibility PTE"
         L_RTransferLine: Record "Transfer Line";
         L_RLocation: Record Location;
         L_InTransitLocationCode: Code[10];
-        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
         L_ExternalInventoryCanBeUsed, L_InternalInventoryCanBeUsed : Decimal;
         L_TransferOrderCreationConfirm: Label 'Do you confirm transfer order creation?';
         L_PartialTransferOrderLineInsertConfirm: Label 'For one or more selected components, available internal inventory is insufficient to fully cover the remaining quantity. Do you still want to create the transfer order?';
@@ -2200,9 +2200,9 @@ page 50110 "Subcontactor Feasibility PTE"
         Page.Run(Page::"Transfer Order", L_RTransferHeader);
     end;
 
-    local procedure F_DoCheckForTransferLine(var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary)
+    local procedure F_DoCheckForTransferLine(var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary)
     var
-        L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
         L_RTempErrorMessage: Record "Error Message" temporary;
         L_NoSubcontractorErr: Label 'Component %1 must not be processed by a subcontractor. Unable to proceed with transfer order creation.';
         L_NoTransferRequiredErr: Label 'No transfer is required for component %1, as the external inventory covers the required quantity.';
@@ -2320,7 +2320,7 @@ page 50110 "Subcontactor Feasibility PTE"
 
     local procedure F_ReloadPageToApplyOption()
     var
-        L_RTempRec: Record "TMP Subc. Feasibility PTE" temporary;
+        L_RTempRec: Record "Prod. Order Feasibility PTE" temporary;
         L_ReloadToApplyOptionConfirm: label 'The page must be reloaded to apply the selected option; you can do this later, but the option will not be active until the page is reloaded. Do you want to proceed?';
     //!IN italiano: È necessario ricaricare la pagina per applicare l’opzione impostata; in alternativa puoi farlo più tardi, ma l’opzione non sarà attiva fino al ricaricamento. Confermi?
     begin
@@ -2349,7 +2349,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     [TryFunction]
-    local procedure F_CheckThatProdOrderIsExternal(P_RTempTMPSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary)
+    local procedure F_CheckThatProdOrderIsExternal(P_RTempTMPSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary)
     var
         L_NoExternalOperation: Label 'The production order does not have external operations that consume components.';
     begin
@@ -2357,7 +2357,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     [TryFunction]
-    local procedure F_CheckThatProdOrderIsExternal(P_RTempTMPSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary; P_ErrorText: Text)
+    local procedure F_CheckThatProdOrderIsExternal(P_RTempTMPSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary; P_ErrorText: Text)
     begin
         if P_RTempTMPSubcFeasibility.Subcontractor = '' then
             Error(P_ErrorText);
@@ -2604,7 +2604,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeCalcFeasibilityOnAfterSetFilterOnProdOrderLine(var Rec: Record "TMP Subc. Feasibility PTE" temporary; var ProdOrderLine: Record "Prod. Order Line"; var TempRSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary; IncludeFirmPlannedProdOrder: Boolean; ItemComponentNoFilter: Code[20]; VariantComponentCode: Code[10]; var IsHandled: Boolean)
+    local procedure OnBeforeCalcFeasibilityOnAfterSetFilterOnProdOrderLine(var Rec: Record "Prod. Order Feasibility PTE" temporary; var ProdOrderLine: Record "Prod. Order Line"; var TempRSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary; IncludeFirmPlannedProdOrder: Boolean; ItemComponentNoFilter: Code[20]; VariantComponentCode: Code[10]; var IsHandled: Boolean)
     begin
     end;
 }
