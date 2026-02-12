@@ -232,4 +232,16 @@ table 50041 "TMP Subc. Feasibility 1 PTE"
     fieldgroups
     {
     }
+
+    procedure FilterComponentByProdOrder(P_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary)
+    begin
+        FilterComponentByProdOrder(P_RTempSubcFeasibility, Rec);
+    end;
+
+    procedure FilterComponentByProdOrder(P_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary; var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE")
+    begin
+        V_RTempSubcFeasibility1.SetRange(Status, P_RTempSubcFeasibility.Status);
+        V_RTempSubcFeasibility1.SetRange("Prod. Order No.", P_RTempSubcFeasibility."Prod. Order No.");
+        V_RTempSubcFeasibility1.SetRange("Prod. Order Line No.", P_RTempSubcFeasibility."Line No.");
+    end;
 }

@@ -1,5 +1,8 @@
 page 50110 "Subcontactor Feasibility PTE"
 {
+
+    //TODO Utilizzare CConfirmManagement al posto dei vari confirm
+
     // TODO: Implementare azione  QtyUpdateDate Modifica Quantità e Data
     //          (azione resa per ora Visible FALSE)
     // 
@@ -8,17 +11,13 @@ page 50110 "Subcontactor Feasibility PTE"
     Caption = 'Subcontactor Global Feasibility';
     DeleteAllowed = false;
     InsertAllowed = false;
-    ModifyAllowed = false;
     PageType = ListPlus;
     // SaveValues = true;
     SourceTable = "TMP Subc. Feasibility PTE";
     SourceTableTemporary = true;
-    SourceTableView = sorting("Status Order", "Due Date", "Prod. Order No.", "Line No.")
-                      order(ascending);
+    SourceTableView = sorting("Status Order", "Due Date", "Prod. Order No.", "Line No.") order(ascending);
     UsageCategory = Tasks;
     ApplicationArea = All;
-
-    //TODO rivedi nomi dei gruppi
 
     //TODO Fabio ha chiesto di fare una funzionalità dove per i fornitori gestiti a progetto, che quindi hanno sotto altri fornitori tipo Newmont
     // far si che loro vedano solo i fornitori figli e che quindi il calcolo della giacenza sia fatta solo su quelli.
@@ -28,16 +27,16 @@ page 50110 "Subcontactor Feasibility PTE"
     {
         area(Content)
         {
-            group(Control1000000028)
+            group(FiltersGroup)
             {
                 Caption = 'Filters';
-                grid(Control000001)
+                grid(Grid0000001)
                 {
                     ShowCaption = false;
-                    group(ProdOrdersFilters)
+                    group(ProdOrdersFiltersGroup)
                     {
                         Caption = 'Production Orders';
-                        grid(Control00000rwertwerew1)
+                        grid(Grid0000002)
                         {
                             ShowCaption = false;
                             field(SubcontractorNoFilter; SubcontractorNoFilter)
@@ -86,7 +85,7 @@ page 50110 "Subcontactor Feasibility PTE"
                                 end;
                             }
                         }
-                        grid(Control00000rwertwerewd1)
+                        grid(Grid0000003)
                         {
                             field(DueDateToFilter; DueDateToFilter)
                             {
@@ -97,29 +96,34 @@ page 50110 "Subcontactor Feasibility PTE"
                                     CurrPage.Update(false);
                                 end;
                             }
-                            //TODO Per ora commentato ma poi vedere se lasciarlo (STEVE ha detto di toglierlo)
-                            // field(IncludePlanned; BIncludePlanned)
-                            // {
-                            //     Caption = 'Planned Orders Included';
-                            // }
+                            field(IncludeFirmPlanned; BIncludeFirmPlanned)
+                            {
+                                Caption = 'Firm Planned Orders Included';
+                                ToolTip = 'Specifies whether firm planned production orders are included in the feasibility calculation.';
+
+                                trigger OnValidate()
+                                begin
+                                    F_ReloadPageToApplyOption();
+                                end;
+                            }
                             field(BCalcReservationBasedOnMaxFeasibleQty; BCalcReservationBasedOnMaxFeasibleQty)
                             {
                                 Caption = 'Limit Reservation by Min. Comp. Avail.';
                                 //!In italiano 'Limita impegno per disp. minima comp.'
-                                ToolTip = 'Specifies whether component reservation is limited by the lowest feasible quantity, instead of reserving the maximum possible quantity.';
-                                //! in italiano 'Specifica se l’impegno dei componenti viene calcolato in base alla quantità fattibile più bassa tra i componenti, anziché impegnare la quantità massima possibile.'
+                                ToolTip = 'Specifies whether component reservation is limited by the lowest feasible quantity in the production order, instead of reserving the maximum possible quantity.';
+                                //! in italiano 'Specifica se l’impegno dei componenti viene calcolato in base alla quantità fattibile più bassa tra i componenti dell'ordine di produzione, anziché impegnare la quantità massima possibile.'
+
                                 trigger OnValidate()
                                 begin
-                                    //TODO magari quando viene acceso il flag ricalcolare gli ordini. O se no dare un avviso.
-                                    CurrPage.Update(false);
+                                    F_ReloadPageToApplyOption();
                                 end;
                             }
                         }
                     }
-                    group(ComponentsFilters)
+                    group(ComponentsFiltersGroup)
                     {
                         Caption = 'Components';
-                        grid(Control00000erere1)
+                        grid(Grid0000004)
                         {
                             ShowCaption = false;
                             field(ItemNoComponentFilter; ItemNoComponentFilter)
@@ -131,8 +135,9 @@ page 50110 "Subcontactor Feasibility PTE"
                                     L_RItemVariant: Record "Item Variant";
                                     L_RItem: Record Item;
                                 begin
+                                    IsComponentFilterSet := ItemNoComponentFilter <> '';
                                     VariantCodeComponentFilter := '';
-                                    if ItemNoComponentFilter = '' then begin
+                                    if not IsComponentFilterSet then begin
                                         BEnableComponentVariantCodeFilter := false;
                                         exit;
                                     end;
@@ -169,17 +174,18 @@ page 50110 "Subcontactor Feasibility PTE"
                     }
                 }
             }
-            repeater(Group)
+            repeater(FieldList)
             {
-                Editable = false;
                 IndentationColumn = Rec."Line No."; //Proprietà definita solo per impedire l'ordinamento
 
                 field(Status; Rec.Status)
                 {
+                    Editable = false;
                     StyleExpr = RecStyle;
                 }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
+                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
                     Lookup = false;
@@ -187,6 +193,7 @@ page 50110 "Subcontactor Feasibility PTE"
                 }
                 field("Item No."; Rec."Item No.")
                 {
+                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
                     Lookup = false;
@@ -194,15 +201,18 @@ page 50110 "Subcontactor Feasibility PTE"
                 }
                 field("Variant Code"; Rec."Variant Code")
                 {
+                    Editable = false;
                     Visible = false;
                     StyleExpr = RecStyle;
                 }
                 field("Item Description"; Rec."Item Description")
                 {
+                    Editable = false;
                     StyleExpr = RecStyle;
                 }
                 field(Subcontractor; Rec.Subcontractor)
                 {
+                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
                     Lookup = false;
@@ -210,32 +220,77 @@ page 50110 "Subcontactor Feasibility PTE"
                 }
                 field("Subcontractor Name"; Rec."Subcontractor Name")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Line No."; Rec."Line No.")
                 {
+                    Editable = false;
                     Visible = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Planning Group"; Rec."Planning Group")
                 {
+                    Editable = false;
                     Visible = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Due Date"; Rec."Due Date")
                 {
                     // StyleExpr = RecStyle;
+                    trigger OnValidate()
+                    var
+                        L_RProductionOrder: Record "Production Order";
+                        L_ProdOrderNotExistErr: Label 'Unable to proceed with the modification of the due date. Production order %1 %2 does not exist.';
+                        // L_ProdOrderDueDateChangeConfirm: Label 'Do you confirm the change of the due date from %1 to %2?', Comment = '%1 = Data di scadenza originale, %2 = Nuova data di scadenza inserita';
+                        L_ReloadToDueDateChangesConfirm: Label 'The page must be reloaded to recalculate the feasibility of production orders. Alternatively, you can do this later, but component inventory commitments may be inaccurate and most of the page''s functionality will be disabled. Do you want to continue?';
+                    //! In italiano: È necessario ricaricare la pagina per ricalcolare la fattibilità degli ordini di produzione. In alternativa, puoi farlo in un secondo momento, ma gli impegni sulle giacenze dei componenti potrebbero non essere corretti e la maggior parte delle funzionalità della pagina saranno disattivate. Vuoi continuare?
+
+                    begin
+                        if xRec."Due Date" = Rec."Due Date" then
+                            exit;
+                        if not L_RProductionOrder.Get(Rec.Status, Rec."Prod. Order No.") then
+                            Error(L_ProdOrderNotExistErr, Rec.Status, Rec."Prod. Order No.");
+
+                        // if not CConfirmManagement.GetResponseOrDefault(StrSubstNo(L_ProdOrderDueDateChangeConfirm, xRec."Due Date", Rec."Due Date"), true) then begin
+                        //     Rec."Due Date" := xRec."Due Date";
+                        //     exit;
+                        // end;
+
+                        L_RProductionOrder.SetUpdateEndDate();
+                        L_RProductionOrder.Validate("Due Date", Rec."Due Date");
+                        L_RProductionOrder.Modify(true);
+
+                        if CConfirmManagement.GetResponseOrDefault(L_ReloadToDueDateChangesConfirm, false) then
+                            F_LoadData()
+                        else
+                            F_DisableActionAndDrillDownAtDueDateChange();
+                        CurrPage.Update(false);
+                    end;
                 }
                 field("Starting Date"; Rec."Starting Date")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
+                }
+                field("Starting Time"; Rec."Starting Time")
+                {
+                    Editable = false;
+                    visible = false;
                 }
                 field("Ending Date"; Rec."Ending Date")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
+                }
+                field("Ending Time"; Rec."Starting Time")
+                {
+                    Editable = false;
+                    visible = false;
                 }
                 field("Unit of Measure Code"; Rec."Unit of Measure Code")
                 {
+                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
                     Lookup = false;
@@ -244,52 +299,63 @@ page 50110 "Subcontactor Feasibility PTE"
                 }
                 field("Quantity (Base)"; Rec."Operation Quantity (Base)")
                 {
+                    Editable = false;
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
                 field("Remaining Qty. (Base)"; Rec."Operation Rem. Qty. (Base)")
                 {
+                    Editable = false;
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
                 field("Finished Qty. (Base)"; Rec."Operation Finished Qty. (Base)")
                 {
+                    Editable = false;
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
                 field("Int. Feasible Quantity (Base)"; Rec."Int. Feasible Quantity (Base)")
                 {
+                    Editable = false;
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
                 field("Subc. Feasible Quantity (Base)"; Rec."Subc. Feasible Quantity (Base)")
                 {
+                    Editable = false;
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
                 field("TS Feasible Quantity (Base)"; Rec."TS Feasible Quantity (Base)")
                 {
+                    Editable = false;
                     BlankZero = true;
                     // StyleExpr = RecStyle;
                 }
                 field("Subcontractor Order"; Rec."Subcontractor Order")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Full Feasible"; Rec."Full Feasible")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Full Feasible SubC"; Rec."Full Feasible SubC")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Full Feasible Transfer"; Rec."Full Feasible Transfer")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Partially Feasible"; Rec."Partially Feasible")
                 {
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
             }
@@ -331,12 +397,12 @@ page 50110 "Subcontactor Feasibility PTE"
                 ShortcutKey = 'Ctrl+F7';
 
                 trigger OnAction()
+                var
+                    L_LoadPageConfirm: label 'Load the page?';
                 begin
-                    F_FillTable();
-                    Rec.Reset();
-                    F_SetCurrentKeyOnRec();
-                    F_SetFilters();
-                    if Rec.FindFirst() then;
+                    if not CConfirmManagement.GetResponseOrDefault(L_LoadPageConfirm, false) then
+                        exit;
+                    F_LoadData();
                 end;
             }
             group(Filters)
@@ -373,27 +439,27 @@ page 50110 "Subcontactor Feasibility PTE"
                 action(AllOrders)
                 {
                     Caption = 'All Orders';
-                    Enabled = FeasOnly_S;
-                    Visible = FeasOnly_S;
+                    Enabled = BFeasibleOnly and BFeasibleFilterEnabled;
+                    Visible = BFeasibleOnly;
                     Image = OrderList;
 
                     trigger OnAction()
                     begin
-                        FeasOnly_S := false;
+                        BFeasibleOnly := false;
                         F_SetFilters();
                         CurrPage.Update();
                     end;
                 }
-                action(FeasOnly)
+                action(OnlyFeasibleOrders)
                 {
-                    Caption = 'Feasibility Orders Only';
-                    Enabled = not FeasOnly_S;
-                    Visible = not FeasOnly_S;
+                    Caption = 'Only Feasible Orders';
+                    Enabled = not BFeasibleOnly and BFeasibleFilterEnabled;
+                    Visible = not BFeasibleOnly;
                     Image = RegisterPick;
 
                     trigger OnAction()
                     begin
-                        FeasOnly_S := true;
+                        BFeasibleOnly := true;
                         F_SetFilters();
                         CurrPage.Update();
                     end;
@@ -406,7 +472,8 @@ page 50110 "Subcontactor Feasibility PTE"
                         ApplicationArea = All;
                         Caption = 'Filter Prod. Ord. For Component Using Internal Inventory';
                         Image = FilterLines;
-                        visible = (not BComponentUsingInternalInventoryFilterApplied) and (not BComponentUsingExternalInventoryFilterApplied);
+                        Enabled = BInternalInventoryComponentsFilterEnabled;
+                        visible = (not BComponentUsingInventoryFilterApplied);
                         ToolTip = 'Allows you to identify the production orders that use the internal inventory related to the currently selected component.';
                         //! Tooltip in italiano: Consente di individuare gli ordini di produzione che impiegano la giacenza interna relativa al componente attualmente selezionato.
 
@@ -418,15 +485,16 @@ page 50110 "Subcontactor Feasibility PTE"
                                 Message(L_NoProdThatReserveInventory);
                                 exit;
                             end;
-                            BComponentUsingInternalInventoryFilterApplied := true;
+                            BComponentUsingInventoryFilterApplied := true;
                         end;
                     }
                     action(FilterProdOrdersForComponentUsingExternalInventory)
                     {
                         ApplicationArea = All;
                         Caption = 'Filter Prod. Ord. For Component Using External Inventory';
+                        Enabled = BExternalInventoryComponentsFilterEnabled;
                         Image = FilterLines;
-                        Visible = (not BComponentUsingInternalInventoryFilterApplied) and (not BComponentUsingExternalInventoryFilterApplied);
+                        Visible = (not BComponentUsingInventoryFilterApplied);
                         ToolTip = 'Allows you to identify the production orders that use the external inventory related to the currently selected component.';
                         //! Tooltip in italiano: Consente di individuare gli ordini di produzione che impiegano la giacenza esterna relativa al componente attualmente selezionato.
 
@@ -438,7 +506,7 @@ page 50110 "Subcontactor Feasibility PTE"
                                 Message(L_NoProdThatReserveInventory);
                                 exit;
                             end;
-                            BComponentUsingExternalInventoryFilterApplied := true;
+                            BComponentUsingInventoryFilterApplied := true;
                         end;
                     }
                     action(RemoveFilterOnProdOrderComponent)
@@ -446,7 +514,7 @@ page 50110 "Subcontactor Feasibility PTE"
                         ApplicationArea = All;
                         Caption = 'Remove Filter on Prod. Ord. Component';
                         Image = ClearFilter;
-                        Visible = BComponentUsingInternalInventoryFilterApplied or BComponentUsingExternalInventoryFilterApplied;
+                        Visible = BComponentUsingInventoryFilterApplied;
                         ToolTip = 'Removes the filters currently applied that limit the view to production orders using the internal or external inventory of the selected component, in order to display all production orders.';
                         //! Tooltip in italiano: Rimuove i filtri attualmente applicati che limitano la visualizzazione agli ordini di produzione che utilizzano la giacenza interna o esterna del componente selezionato, in modo da mostrare tutti gli ordini di produzione.
 
@@ -457,8 +525,7 @@ page 50110 "Subcontactor Feasibility PTE"
                             Rec.FilterGroup(0);
                             if not IsComponentFilterSet then
                                 CurrPage.ComponentsPart.Page.SetFilterOnComponent('', '');
-                            BComponentUsingInternalInventoryFilterApplied := false;
-                            BComponentUsingExternalInventoryFilterApplied := false;
+                            BComponentUsingInventoryFilterApplied := false;
                         end;
                     }
                 }
@@ -472,11 +539,13 @@ page 50110 "Subcontactor Feasibility PTE"
                     Caption = 'Create Transfer Order For Selected Components';
                     ToolTip = 'It allows you to create a transfer order from the internal location to the subcontractor''s location for selected components.';
                     Image = NewTransferOrder;
+                    Enabled = BTransferOrderActionEnabled;
 
                     trigger OnAction()
                     var
                         L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
                     begin
+                        F_CheckThatProdOrderIsExternal(Rec);
                         L_RTempSubcFeasibility1.Copy(TempRSubcFeas1, true);
                         CurrPage.ComponentsPart.Page.SetSelectionFilter(L_RTempSubcFeasibility1);
                         F_CreateTransferOrder(L_RTempSubcFeasibility1);
@@ -488,12 +557,15 @@ page 50110 "Subcontactor Feasibility PTE"
                     Caption = 'Create Transfer Order for Missing Components';
                     ToolTip = 'It allows you to create a transfer order from the internal location to the subcontractor''s location for components with external stock that is insufficient to cover the remaining quantity.';
                     Image = NewTransferOrder;
+                    Enabled = BTransferOrderActionEnabled;
 
                     trigger OnAction()
                     var
                         L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
                     begin
+                        F_CheckThatProdOrderIsExternal(Rec);
                         L_RTempSubcFeasibility1.Copy(TempRSubcFeas1, true);
+                        L_RTempSubcFeasibility1.Reset();
                         L_RTempSubcFeasibility1.SetRange(Status, Rec.Status);
                         L_RTempSubcFeasibility1.SetRange("Prod. Order No.", Rec."Prod. Order No.");
                         L_RTempSubcFeasibility1.SetRange("Prod. Order Line No.", Rec."Line No.");
@@ -508,6 +580,7 @@ page 50110 "Subcontactor Feasibility PTE"
                 Caption = 'Change Quantity and Date';
                 Image = EditLines;
                 Visible = false;
+                Enabled = false;
 
                 trigger OnAction()
                 var
@@ -663,8 +736,11 @@ page 50110 "Subcontactor Feasibility PTE"
             action(SubcontractionOrder)
             {
                 Caption = 'Subcontractiong Orders Creation';
-                Enabled = SubOrders;
+                // Enabled = SubOrders;
+                Enabled = false;
                 Image = ImportExport;
+                //TODO per ora nascosto, vedere se mantenere l'azione di creazione dell'ordine di conto lavoro, l'azione di cambio data e qtà direi seccare
+                Visible = false;
 
                 trigger OnAction()
                 var
@@ -749,87 +825,70 @@ page 50110 "Subcontactor Feasibility PTE"
                     CurrPage.Update();
                 end;
             }
-            action(VendorOrders)
-            {
-                Caption = 'Current Subcontractor Orders';
-                Image = OrderTracking;
-
-                trigger OnAction()
-                var
-                    L_RPurchL: Record "Purchase Line";
-                    L_RWorkCenter: Record "Work Center";
-                    L_PGPurchL: Page "Purchase Lines";
-                    L_WorkCenter: Code[20];
-                begin
-                    L_RPurchL.Reset();
-                    L_RPurchL.SetCurrentKey("Document Type", "Buy-from Vendor No.");
-                    L_RPurchL.FilterGroup(20);
-                    L_RPurchL.SetRange("Document Type", L_RPurchL."Document Type"::Order);
-                    L_RPurchL.SetFilter("Prod. Order No.", '<>%1', '');
-                    L_RPurchL.SetFilter("Outstanding Quantity", '>0');
-                    L_RPurchL.FilterGroup(0);
-                    L_WorkCenter := Rec.Subcontractor;
-                    if L_WorkCenter <> '' then
-                        if L_RWorkCenter.Get(L_WorkCenter) then
-                            L_RPurchL.SetRange("Buy-from Vendor No.", L_RWorkCenter."Subcontractor No.");
-                    L_PGPurchL.SetTableView(L_RPurchL);
-                    L_PGPurchL.Run();
-                end;
-            }
-            // action(CreateTransferOrder)
-            // {
-            //     ApplicationArea = All;
-
-            //     trigger OnAction()
-            //     var
-            //         L_RTransferHeader: Record "Transfer Header";
-            //         L_RTransferLine: Record "Transfer Line";
-            //     begin
-            //         L_RTransferHeader.Init();
-            //         L_RTransferHeader."No." := '';
-            //         L_RTransferHeader.Insert(true);
-            //         L_RTransferHeader.VALIDATE("Transfer-from Code", L_TempFLEX.Code03);
-            //         L_RTransferHeader.VALIDATE("Transfer-to Code", L_TempFLEX.Code06);
-            //         L_RTransferHeader.MODIFY;
-            //     end;
-            // }
-
-            //TODO eliminare prima del commit
-            // group(AdditionalInfoGroup)
-            // {
-            //     Caption = 'Additional Informations';
-            //     action(HowMany)
-            //     {
-            //         Caption = 'Items Count';
-            //         Image = Export1099;
-            //         ShortcutKey = 'Shift+Ctrl+H';
-
-            //         trigger OnAction()
-            //         var
-            //             L_Text001: Label '%1 Orders Selected', Comment = '%1=nr. of orders';
-            //         begin
-            //             Message(L_Text001, Rec.Count);
-            //         end;
-            //     }
-            // }
         }
         area(Navigation)
         {
-            action(A_ItemCard)
+            group(ViewCard)
             {
-                Caption = 'Item Card';
-                Image = EditLines;
-                RunObject = page "Item Card";
-                RunPageLink = "No." = field("Item No.");
-                RunPageMode = View;
-                RunPageOnRec = false;
-                ShortcutKey = 'Shift+Ctrl+C';
+                action(ViewItem)
+                {
+                    Caption = 'Item';
+                    Image = EditLines;
+                    RunObject = page "Item Card";
+                    RunPageLink = "No." = field("Item No.");
+                    RunPageMode = View;
+                    RunPageOnRec = false;
+                    ShortcutKey = 'Shift+Ctrl+C';
+                    Enabled = BViewItemActionEnabled;
+                }
+                action(ViewProdOrder)
+                {
+                    Caption = 'Prod. Order';
+                    Image = SetupList;
+                    ShortcutKey = 'Return';
+                    Enabled = BViewProdOrderActionEnabled;
+
+                    trigger OnAction()
+                    var
+                        L_RProdOrd: Record "Production Order";
+                    begin
+                        CProduction.ShowProductionOrder(Rec."Prod. Order No.", true, false);
+                    end;
+                }
+                action(ViewSubcontractorOrders)
+                {
+                    caption = 'Subcontractor Orders';
+                    Image = OrderTracking;
+                    Enabled = BViewSubcontractorOrderActionEnabled;
+                    ToolTip = 'Shows all subcontracting orders that have not yet been completed.';
+
+                    trigger OnAction()
+                    var
+                        L_RPurchLine: Record "Purchase Line";
+                        L_RWorkCenter: Record "Work Center";
+                        L_WorkCenterCode: Code[20];
+                    begin
+                        L_RPurchLine.Reset();
+                        L_RPurchLine.SetCurrentKey("Document Type", "Buy-from Vendor No.");
+                        L_RPurchLine.FilterGroup(20);
+                        L_RPurchLine.SetRange("Document Type", L_RPurchLine."Document Type"::Order);
+                        L_RPurchLine.SetFilter("Prod. Order No.", '<>%1', '');
+                        L_RPurchLine.SetFilter("Outstanding Quantity", '>0');
+                        L_RPurchLine.FilterGroup(0);
+                        L_WorkCenterCode := Rec.Subcontractor;
+                        if L_WorkCenterCode <> '' then
+                            if L_RWorkCenter.Get(L_WorkCenterCode) then
+                                L_RPurchLine.SetRange("Buy-from Vendor No.", L_RWorkCenter."Subcontractor No.");
+                        Page.Run(Page::"Purchase Lines", L_RPurchLine);
+                    end;
+                }
             }
-            action(A_Disponibilita)
+            action(Availability)
             {
                 Caption = 'Availability';
                 Image = Trace;
                 ShortcutKey = 'Return';
+                Enabled = BAvailabilityActionEnabled;
 
                 trigger OnAction()
                 var
@@ -839,18 +898,32 @@ page 50110 "Subcontactor Feasibility PTE"
                         L_CProduction.ShowItemAvailability(Rec."Item No.", '', '');
                 end;
             }
-            action(A_ProdOrdCard)
+            //TODO Gruppo che sarà da spostare in Flex_Manufacturing_Interface perché la pagina è nella starter
+            group(BinContent)
             {
-                Caption = 'Prod. Ord. Card';
-                Image = SetupList;
-                ShortcutKey = 'Return';
+                Caption = 'Bin Content';
+                action(BinContentInternalLocation)
+                {
+                    Caption = 'Bin Content Internal Location';
+                    Image = BinContent;
+                    Enabled = BBinContentInternalLocationEnabled;
 
-                trigger OnAction()
-                var
-                    L_RProdOrd: Record "Production Order";
-                begin
-                    CProduction.ShowProductionOrder(Rec."Prod. Order No.", true, false);
-                end;
+                    trigger OnAction()
+                    begin
+                        F_ShowBinContent(Rec."Item No.", Rec."Variant Code", Rec."Location Code");
+                    end;
+                }
+                action(BinContentExternalLocation)
+                {
+                    Caption = 'Bin Content External Location';
+                    Image = GetBinContent;
+                    Enabled = BBinContentExternalLocationEnabled;
+
+                    trigger OnAction()
+                    begin
+                        F_ShowBinContent(Rec."Item No.", Rec."Variant Code", Rec."Subcontracting Location Code");
+                    end;
+                }
             }
         }
         area(Promoted)
@@ -858,6 +931,26 @@ page 50110 "Subcontactor Feasibility PTE"
             group(Category_Process)
             {
                 actionref(LoadData_Promoted; LoadData)
+                {
+                }
+                actionref(AllOrders_Promoted; AllOrders)
+                {
+                }
+                actionref(OnlyFeasibleOrders_Promoted; OnlyFeasibleOrders)
+                {
+                }
+                group(InventoryComponentsFilters_Promoted)
+                {
+                    Caption = 'Components Filters';
+                    Visible = (not BComponentUsingInventoryFilterApplied);
+                    actionref(FilterProdOrdersForComponentUsingInternalInventory_Promoted; FilterProdOrdersForComponentUsingInternalInventory)
+                    {
+                    }
+                    actionref(FilterProdOrdersForComponentUsingExternalInventory_Promoted; FilterProdOrdersForComponentUsingExternalInventory)
+                    {
+                    }
+                }
+                actionref(RemoveFilterOnProdOrderComponent_Promoted; RemoveFilterOnProdOrderComponent)
                 {
                 }
                 group(TransferOrders_Promoted)
@@ -873,51 +966,31 @@ page 50110 "Subcontactor Feasibility PTE"
             }
             group(Category4)
             {
-                Caption = 'Filters';
-                // actionref(ShowComplete_Promoted; ShowComplete)
-                // {
-                // }
-                // actionref(HideComplete_Promoted; HideComplete)
-                // {
-                // }
-                actionref(AllOrders_Promoted; AllOrders)
+                Caption = 'View';
+                actionref(ViewItem_Promoted; ViewItem)
                 {
                 }
-                actionref(FeasOnly_Promoted; FeasOnly)
+                actionref(ViewProdOrder_Promoted; ViewProdOrder)
                 {
                 }
-                // actionref(HowMany_Promoted; HowMany)//TODO eliminare prima del commit
-                // {
-                // }
-                group(InventoryComponentsFilters_Promoted)
+                actionref(ViewSubcontractorOrders_Promoted; ViewSubcontractorOrders)
                 {
-                    Caption = 'Components Filters';
-                    Visible = (not BComponentUsingInternalInventoryFilterApplied) and (not BComponentUsingExternalInventoryFilterApplied);
-                    actionref(FilterProdOrdersForComponentUsingInternalInventory_Promoted; FilterProdOrdersForComponentUsingInternalInventory)
+                }
+                actionref(Availability_Promoted; Availability)
+                {
+                }
+                group(BinContent_Promoted)
+                {
+                    Caption = 'Bin Content';
+                    actionref(BinContentInternalLocation_Promoted; BinContentInternalLocation)
                     {
                     }
-                    actionref(FilterProdOrdersForComponentUsingExternalInventory_Promoted; FilterProdOrdersForComponentUsingExternalInventory)
+                    actionref(BinContentExternalLocation_Promoted; BinContentExternalLocation)
                     {
                     }
-                }
-                actionref(RemoveFilterOnProdOrderComponent_Promoted; RemoveFilterOnProdOrderComponent)
-                {
                 }
             }
             group(Category5)
-            {
-                Caption = 'Cards';
-                actionref(A_ItemCard_Promoted; A_ItemCard)
-                {
-                }
-                actionref(A_ProdOrdCard_Promoted; A_ProdOrdCard)
-                {
-                }
-                actionref(A_Disponibilita_Promoted; A_Disponibilita)
-                {
-                }
-            }
-            group(Category6)
             {
                 Caption = 'Production Order';
                 actionref(QtyUpdateDate_Promoted; QtyUpdateDate)
@@ -927,19 +1000,12 @@ page 50110 "Subcontactor Feasibility PTE"
                 {
                 }
             }
-            group(Category7)
-            {
-                Caption = 'Material Handling Document';
-                actionref(VendorOrders_Promoted; VendorOrders)
-                {
-                }
-            }
         }
     }
 
     trigger OnAfterGetRecord()
     begin
-        F_SetControls();
+        F_SetStyle();
     end;
 
     trigger OnOpenPage()
@@ -947,29 +1013,42 @@ page 50110 "Subcontactor Feasibility PTE"
         SubcontractorNoFilter := '';
         CurrPage.ComponentsPart.Page.GetTmpRec(Rec, TempRSubcFeas1, TempRSubcFeas2);
         CurrPage.ConflictPart.Page.GetTmpRec(Rec, TempRSubcFeas1);
+        TempRSubcFeas1_2.Copy(TempRSubcFeas1, true);
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    var
+        L_RLocation: Record Location;
+    begin
+        F_SetControls();
     end;
 
     var
+        CConfirmManagement: Codeunit "Confirm Management";
         TempRSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+        TempRSubcFeas1_2: Record "TMP Subc. Feasibility 1 PTE" temporary;
         TempRSubcFeas2: Record "TMP Subc. Feasibility 2 FLE" temporary;
         CSubcontractor: Codeunit "Subcontractor Codeunit FLE";
         CGeneralManufacturing: Codeunit "General Manufacturing FLE";
         CProduction: Codeunit "Production Codeunit FLE";
         CSelectionFilterMgt: Codeunit SelectionFilterManagement;
-        FeasOnly_S: Boolean;
-        BIncludePlanned: Boolean;
+        BFeasibleOnly: Boolean;
+        BIncludeFirmPlanned: Boolean;
         ShowComplete_S: Boolean;
         SubOrders: Boolean;
         SubcontractorNoFilter, ItemNoFilter, StandardTaskCodeFilter : Text;
         ItemNoComponentFilter: Code[20];
         VariantCodeComponentFilter: Code[10];
         DueDateToFilter: Date;
-        LocationFilter: Text;
+        InternalLocationFilter: Text;
         RecStyle: Text;
         BEnableComponentVariantCodeFilter: Boolean;
         IsComponentFilterSet: Boolean;
         BCalcReservationBasedOnMaxFeasibleQty: Boolean;
-        BComponentUsingInternalInventoryFilterApplied, BComponentUsingExternalInventoryFilterApplied : Boolean;
+        BComponentUsingInventoryFilterApplied: Boolean;
+        BBinContentInternalLocationEnabled, BBinContentExternalLocationEnabled, BTransferOrderActionEnabled, BFeasibleFilterEnabled, BInternalInventoryComponentsFilterEnabled, BExternalInventoryComponentsFilterEnabled : Boolean;
+        BViewItemActionEnabled, BViewProdOrderActionEnabled, BViewSubcontractorOrderActionEnabled, BAvailabilityActionEnabled : Boolean;
+        BDisableActionAndDrillDownAtDueDateChange: Boolean;
         ExpectedReceiptQtyForComponent: Dictionary of [Code[30], Decimal]; // Nr. articolo + Cod. variante, Qtà
         GlobalQtyInTransferOrderPerInternalLocationAndComponent: Dictionary of [Code[10], Dictionary of [Code[30], Decimal]]; // Cod. ubicazione interna, Nr. articolo + Cod. variante, Qtà in ordine di trasferimento
         TransferredQtyPerComponent: Dictionary of [Code[10], Dictionary of [Code[10], Dictionary of [Code[30], Decimal]]]; // Cod. ubicazione interna, Cod. ubicazione esterna, Nr. articolo + Cod. variante, Qtà in ordine di trasferimento
@@ -977,6 +1056,15 @@ page 50110 "Subcontactor Feasibility PTE"
         TotalExternalInventoryAlreadyUsed: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; // Nr. terzista, Nr. articolo + Cod. variante, Giacenza esterna già utilizzata
         ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; // Nr. ODP, Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
         ProdOrderNoForDrillDownInternalQtyUsedByOther, ProdOrderNoForDrillDownExternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
+
+    local procedure F_LoadData()
+    begin
+        F_FillTable();
+        Rec.Reset();
+        F_SetCurrentKeyOnRec();
+        F_SetFilters();
+        if Rec.FindFirst() then;
+    end;
 
     local procedure F_SetFilters()
     begin
@@ -997,14 +1085,14 @@ page 50110 "Subcontactor Feasibility PTE"
             Rec.SetRange("Subcontractor Order")
         else
             Rec.SetRange("Subcontractor Order", '');
-        if FeasOnly_S then
+        if BFeasibleOnly then
             Rec.SetRange("Full Feasible", true)
         else
             Rec.SetRange("Full Feasible");
         Rec.FilterGroup(0);
     end;
 
-    local procedure F_SetControls()
+    local procedure F_SetStyle()
     begin
         case true of
             Rec."Full Feasible":
@@ -1014,10 +1102,60 @@ page 50110 "Subcontactor Feasibility PTE"
             else
                 RecStyle := '';
         end;
-        if Rec."Subcontractor Order" = '' then
-            SubOrders := true
-        else
-            SubOrders := false;
+    end;
+
+    local procedure F_DisableAction()
+    begin
+        SubOrders := false;
+        BBinContentInternalLocationEnabled := false;
+        BBinContentExternalLocationEnabled := false;
+        BTransferOrderActionEnabled := false;
+        BFeasibleFilterEnabled := false;
+        BViewItemActionEnabled := false;
+        BViewProdOrderActionEnabled := false;
+        BViewSubcontractorOrderActionEnabled := false;
+        BAvailabilityActionEnabled := false;
+        BInternalInventoryComponentsFilterEnabled := false;
+        BExternalInventoryComponentsFilterEnabled := false;
+    end;
+
+    local procedure F_SetControls()
+    var
+        L_RLocation: Record Location;
+        L_BIsProdOrderExternal: Boolean;
+    begin
+        F_SetStyle();
+        F_DisableAction();
+
+        if Rec.IsEmpty then
+            exit;
+
+        BViewItemActionEnabled := true;
+        BViewProdOrderActionEnabled := true;
+        BAvailabilityActionEnabled := true;
+
+        if BDisableActionAndDrillDownAtDueDateChange then
+            exit;
+
+        //TODO vedere se tenere questo controllo e in generale l'azione nella quale è chiamata
+        SubOrders := Rec."Subcontractor Order" = '';
+
+        BBinContentInternalLocationEnabled := Rec."Location Code" <> '';
+        BBinContentExternalLocationEnabled := Rec."Subcontracting Location Code" <> '';
+        L_BIsProdOrderExternal := F_CheckThatProdOrderIsExternal(Rec);
+        if L_BIsProdOrderExternal then begin
+            BTransferOrderActionEnabled := true;
+            BViewSubcontractorOrderActionEnabled := true;
+        end;
+        BFeasibleFilterEnabled := true;
+
+        TempRSubcFeas1_2.reset;
+        TempRSubcFeas1_2.FilterComponentByProdOrder(Rec);
+        if not TempRSubcFeas1_2.IsEmpty then begin
+            BInternalInventoryComponentsFilterEnabled := true;
+            if L_BIsProdOrderExternal then
+                BExternalInventoryComponentsFilterEnabled := true;
+        end;
     end;
 
     local procedure F_ClearGlobalVar()
@@ -1030,7 +1168,36 @@ page 50110 "Subcontactor Feasibility PTE"
         Clear(ProdOrderNoForDrillDownExternalQtyUsedByOther);
         Clear(GlobalQtyInTransferOrderPerInternalLocationAndComponent);
         Clear(TransferredQtyPerComponent);
-        IsComponentFilterSet := false;
+        BDisableActionAndDrillDownAtDueDateChange := false;
+    end;
+
+    local procedure F_FilterProdOrderLineToCalcFeasibility(var V_RProdOrderLine: Record "Prod. Order Line"; P_BSetComponentFilter: Boolean; P_BSetDueDateFilter: Boolean)
+    var
+        L_ProdOrderNoFilter: Text;
+    begin
+        //TODO vedere se definire questa chiave
+        V_RProdOrderLine.SetCurrentKey(Status, "Due Date", "Prod. Order No.", "Line No.");
+        V_RProdOrderLine.SetFilter("Remaining Qty. (Base)", '>0');
+        if P_BSetComponentFilter then begin
+            F_CreateProdOrderFilterFromComponentFilter(L_ProdOrderNoFilter);
+            V_RProdOrderLine.SetFilter("Prod. Order No.", L_ProdOrderNoFilter);
+        end;
+        if P_BSetDueDateFilter then
+            V_RProdOrderLine.SetRange("Due Date", 0D, DueDateToFilter);
+    end;
+
+    local procedure F_CreateInternalLocationFilter()
+    var
+        L_RLocation: Record Location;
+    begin
+        if InternalLocationFilter = '' then
+            exit;
+        L_RLocation.SetRange("Vendor Subcontracting FLE", false);
+        L_RLocation.SetRange("Customer Subcontracting FLE", false);
+        L_RLocation.SetRange("Third Party Properties FLE", false);
+        L_RLocation.SetRange("Excluded From MRP FLE", false);
+        InternalLocationFilter := L_RLocation.FLE_MakeLocationFilter();
+        CurrPage.ComponentsPart.Page.SetInternalLocationFilter(InternalLocationFilter);
     end;
 
     local procedure F_FillTable()
@@ -1064,20 +1231,9 @@ page 50110 "Subcontactor Feasibility PTE"
         L_IsHandled: Boolean;
         L_DateTime: DateTime;
     begin
-        // L_DateTime := CurrentDateTime;
-
-
-
-
         F_ClearGlobalVar();
 
-        L_RLocation.SetRange("Vendor Subcontracting FLE", false);
-        L_RLocation.SetRange("Customer Subcontracting FLE", false);
-        L_RLocation.SetRange("Third Party Properties FLE", false);
-        L_RLocation.SetRange("Excluded From MRP FLE", false);
-        LocationFilter := L_RLocation.FLE_MakeLocationFilter();
-        CurrPage.ComponentsPart.Page.SetLocationFilter(LocationFilter);
-
+        F_CreateInternalLocationFilter();
 
         Rec.Reset();
         Rec.DeleteAll(false);
@@ -1087,54 +1243,15 @@ page 50110 "Subcontactor Feasibility PTE"
         TempRSubcFeas2.DeleteAll(false);
         Commit();
 
-
         L_RProdOrdL.Reset();
+        F_FilterProdOrderLineToCalcFeasibility(L_RProdOrdL, IsComponentFilterSet, (DueDateToFilter <> 0D));
 
-        //TODO vedere se definire questa chiave
-        //Utilizzo questa chiave per il calcolo delle qtà
-        L_RProdOrdL.SetCurrentKey(Status, "Due Date", "Prod. Order No.", "Line No.");
-
-        IsComponentFilterSet := ItemNoComponentFilter <> '';
-        if IsComponentFilterSet then
-            F_CreateProdOrderFilterFromComponentFilter(L_ProdOrderNoFilter);
-
-        L_RProdOrdL.SetFilter("Prod. Order No.", L_ProdOrderNoFilter);
-
-        //TODO filtro da eliminare, messo solo per test
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO25010338|WO25009991');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO25005149|WO25012811|WO73004697');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO25007045|WO25007046|WO25007047|WO25015584|WO25015587');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO25000001|WO21041156|WO22012267|WO22028271|WO22028273|WO22035491|WO22035998|WO23008601|WO23008602|WO23008603|WO23008604');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO20013416|WO20017391|WO22038606|WO23007994|WO24030689|WO24031378|WO25003825|WO25004010|WO25004660|WO25006583|WO25007229|WO25008572|WO25009363|WO25013585|WO25013737|WO25014138|WO25015183|WO25015940|WO25018170|WO25018839');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO22014335|WO25000585|WO25008905|WO25009337|WO25012086|WO25012366|WO25012483|WO25012985|WO25013003|WO25013005|WO25013708|WO25013795|WO25013809|WO25014654|WO25014972|WO25015037|WO25015086|WO25015119|WO25015121|WO25015123|WO25015130|WO25015134|WO25015528|WO25016090|WO25016916|WO25016942|WO25016954|WO25016965|WO25016971|WO25017002|WO25017003|WO25017005|WO25017020|WO25017039|WO25017056|WO25017064|WO25017068|WO25017630|WO25017912|WO25017915|WO25017920|WO25018562');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO22014335|WO25000585|WO25008905|WO25009337|WO25012086|WO25012366|WO25012483|WO25012985|WO25013003|WO25013005|WO25013708|WO25013795|WO25013809|WO25014654|WO25014972|WO25015037|WO25015086|WO25015119|WO25015121|WO25015123|WO25015130|WO25015134|WO25015528|WO25016090|WO25016916|WO25016942|WO25016954|WO25016965|WO25016971|WO25017002|WO25017003|WO25017005|WO25017020|WO25017039|WO25017056|WO25017064|WO25017068|WO25017630|WO25017912|WO25017915|WO25017920|WO25018562');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO23008601|WO23012244|WO24001148|WO24001149|WO24017030|WO24017031|WO24017032|WO24017033|WO24019129|WO24020861|WO24023004|WO24024491|WO24024882|WO24024942|WO24024948|WO24025150|WO24025151|WO24025152|WO24025296|WO24025297|WO24025298|WO24025299|WO24026561|WO24027438|WO24027451|WO24027465|WO24027466|WO24028793|WO24028794|WO24028798|WO24030454|WO24030786|WO24030787|WO24030819|WO24030820|WO24031014|WO24031025|WO24031028|WO25000372|WO25000670|WO25000997|WO25000998|WO25000999|WO25001510|WO25001516|WO25001523|WO25001538|WO25001545|WO25001546|WO25001565|WO25001828|WO25001839|WO25001852|WO25001873|WO25001883|WO25001905|WO25002047|WO25002176|WO25003022|WO25003390|WO25003454|WO25003796|WO25003829|WO25005122|WO25005238|WO25005460|WO25005545|WO25005557|WO25005639|WO25005740|WO25005841|WO25006076|WO25006197|WO25006542|WO25006543|WO25006548|WO25006549|WO25006781|WO25006796|WO25006816|WO25006897|WO25006898|WO25007009|WO25007045|WO25007046|WO25007047|WO25007264|WO25007379|WO25007401|WO25007414|WO25007424|WO25007487|WO25007494|WO25007500|WO25007503|WO25007642|WO25008141|WO25008143|WO25008178|WO25008186|WO25008221|WO25008320|WO25008401|WO25008477|WO25008616|WO25008621|WO25008663|WO25008903|WO25008904|WO25008985|WO25009008|WO25009019|WO25009078|WO25009083|WO25009107|WO25009114|WO25009129|WO25009253|WO25009349|WO25009441|WO25009473|WO25009474|WO25009479|WO25009555|WO25009556|WO25009569|WO25009658|WO25009822|WO25009937|WO25009962|WO25010016|WO25010017|WO25010018|WO25010029|WO25010103|WO25010113|WO25010163|WO25010176|WO25010205|WO25010206|WO25010232|WO25010259|WO25010293|WO25010314|WO25010339|WO25010388|WO25010408|WO25010416|WO25010418|WO25010419|WO25010420|WO25010427|WO25010447|WO25010515|WO25010531|WO25010542|WO25010566|WO25010567|WO25010581|WO25010594|WO25010616|WO25010619|WO25010620|WO25010621|WO25010623|WO25010648|WO25010650|WO25010720|WO25010725|WO25010735|WO25010736|WO25010737|WO25010760|WO25010784|WO25010800|WO25010803|WO25010835|WO25010837|WO25010841|WO25010865|WO25010924|WO25010925|WO25010936|WO25010937|WO25010940|WO25010961|WO25010962|WO25010967|WO25010986|WO25011016|WO25011017|WO25011020|WO25011028|WO25011069|WO25011074|WO25011174|WO25011278|WO25011374|WO25011375|WO25011480|WO25011534|WO25011536|WO25011539|WO25011544|WO25011585|WO25011586|WO25011587|WO25011639|WO25011671|WO25011692|WO25011712|WO25011737|WO25011753|WO25011754|WO25011757|WO25011882|WO25011884|WO25011895|WO25011904|WO25011921|WO25011922|WO25011926|WO25011927|WO25011943|WO25011951|WO25011952|WO25011964|WO25011965|WO25011996|WO25012025|WO25012048|WO25012081|WO25012082|WO25012084|WO25012108|WO25012120|WO25012121|WO25012161|WO25012173|WO25012175|WO25012176|WO25012212|WO25012217|WO25012223|WO25012261|WO25012275|WO25012284|WO25012286|WO25012287|WO25012289|WO25012364|WO25012382|WO25012406|WO25012411|WO25012424|WO25012425|WO25012429|WO25012446|WO25012448|WO25012451|WO25012453|WO25012457|WO25012472|WO25012489|WO25012490|WO25012491|WO25012492|WO25012493|WO25012494|WO25012495|WO25012500|WO25012503|WO25012506|WO25012511|WO25012512|WO25012513|WO25012514|WO25012516|WO25012517|WO25012519|WO25012574|WO25012601|WO25012655|WO25012693|WO25012694|WO25012699|WO25012734|WO25012784|WO25012792|WO25012827|WO25012832|WO25012842|WO25012844|WO25012866|WO25012878|WO25012890|WO25012905|WO25013017|WO25013018|WO25013021|WO25013022|WO25013034|WO25013037|WO25013044|WO25013055|WO25013057|WO25013065|WO25013094|WO25013097|WO25013115|WO25013116|WO25013117|WO25013132|WO25013133|WO25013134|WO25013135|WO25013161|WO25013165|WO25013168|WO25013169|WO25013170|WO25013173|WO25013174|WO25013189|WO25013190|WO25013191|WO25013223|WO25013246|WO25013261|WO25013267|WO25013306|WO25013307|WO25013314|WO25013324|WO25013350|WO25013358|WO25013359|WO25013369|WO25013371|WO25013372|WO25013425|WO25013426|WO25013428|WO25013429|WO25013430|WO25013431|WO25013432|WO25013433|WO25013436|WO25013437|WO25013439|WO25013440|WO25013441|WO25013458|WO25013472|WO25013477|WO25013486|WO25013488|WO25013489|WO25013506|WO25013507|WO25013515|WO25013529|WO25013544|WO25013552|WO25013588|WO25013687|WO25013757|WO25013778|WO25013779|WO25013814|WO25013836|WO25013838|WO25013856|WO25013857|WO25013863|WO25013864|WO25013898|WO25013899|WO25013956|WO25013961|WO25013982|WO25013984|WO25013992|WO25013993|WO25013994|WO25013995|WO25014020|WO25014046|WO25014102|WO25014115|WO25014117|WO25014125|WO25014132|WO25014174|WO25014194|WO25014273|WO25014274|WO25014281|WO25014282|WO25014300|WO25014302|WO25014339|WO25014365|WO25014368|WO25014369|WO25014370|WO25014372|WO25014386|WO25014393|WO25014404|WO25014410|WO25014424|WO25014426|WO25014427|WO25014429|WO25014436|WO25014445|WO25014480|WO25014481|WO25014510|WO25014536|WO25014540|WO25014541|WO25014542|WO25014543|WO25014544|WO25014545|WO25014556|WO25014560|WO25014561|WO25014564|WO25014656|WO25014682|WO25014694|WO25014697|WO25014703|WO25014705|WO25014716|WO25014758|WO25014759|WO25014767|WO25014768|WO25014779|WO25014787|WO25014835|WO25014836|WO25014907|WO25014920|WO25014922|WO25014932|WO25014949|WO25014957|WO25014974|WO25014975|WO25014980|WO25015016|WO25015017|WO25015018|WO25015034|WO25015035|WO25015036|WO25015049|WO25015050|WO25015054|WO25015055|WO25015068|WO25015145|WO25015148|WO25015167|WO25015169|WO25015201|WO25015224|WO25015257|WO25015273|WO25015275|WO25015276|WO25015277|WO25015279|WO25015280|WO25015281|WO25015282|WO25015283|WO25015284|WO25015285|WO25015286|WO25015287|WO25015288|WO25015289|WO25015290|WO25015291|WO25015292|WO25015328|WO25015335|WO25015357|WO25015365|WO25015366|WO25015371|WO25015378|WO25015381|WO25015394|WO25015395|WO25015396|WO25015416|WO25015431|WO25015433|WO25015434|WO25015436|WO25015440|WO25015441|WO25015448|WO25015454|WO25015455|WO25015457|WO25015467|WO25015479|WO25015484|WO25015487|WO25015502|WO25015513|WO25015515|WO25015519|WO25015524|WO25015584|WO25015587|WO25015589|WO25015594|WO25015610|WO25015701|WO25015775|WO25015815|WO25015877|WO25015911|WO25015915|WO25015920|WO25015946|WO25016132|WO25016145|WO25016151|WO25016215|WO25016225|WO25016232|WO25016240|WO25016247|WO25016248|WO25016254|WO25016255|WO25016297|WO25016306|WO25016325|WO25016348|WO25016350|WO25016355|WO25016392|WO25016396|WO25016399|WO25016402|WO25016417|WO25016445|WO25016452|WO25016557|WO25016678|WO25016680|WO25016755|WO25016995|WO25017031|WO25017126|WO25017187|WO25017191|WO25017192|WO25017195|WO25017196|WO25017234|WO25017347|WO25017348|WO25017398|WO25017440|WO25017603|WO25017627|WO25017867|WO25017904|WO25018031|WO25018049|WO25018071|WO25018119|WO25018120|WO25018230|WO25018451|WO25018572|WO25018601|WO25018807|WO25018882');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO24022876|WO25000605|WO25008179');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO25018119|WO25016858|WO25027186|WO25020474');
-        // L_RProdOrdL.SetFilter("Prod. Order No.", 'WO24009838|WO24009839|WO24009840|WO24009841|WO24009842|WO24023072|WO24023073|WO24023074|WO24026563|WO25007855|WO25018120|WO25020313|WO25021534|WO25022165|WO25022331|WO25022346|WO25022410|WO25022476|WO25022482|WO25024784|WO25025091|WO25025144|WO25025584|WO25025587|WO25025588|WO25025589|WO25025590|WO25025591|WO25025592|WO25025642|WO25025921|WO25026015|WO25026064|WO25026119|WO25026175|WO25026274|WO25026595|WO25026683|WO25026796|WO25026797|WO25026835|WO25026836|WO25026837|WO25026838|WO25026839|WO25026840|WO25026970|WO25026971|WO25027089|WO25027631|WO25028333|WO25028335|WO25028581|WO25028582|WO25028811|WO25029375|WO25029376|WO25030422|WO25030714');
-
-
-        L_RProdOrdL.SetFilter("Remaining Qty. (Base)", '>0');
-
-        if DueDateToFilter = 0D then begin
-            if BIncludePlanned then
-                L_RProdOrdL.SetRange(Status, L_RProdOrdL.Status::Planned, L_RProdOrdL.Status::Released)
-            else
-                // L_RProdOrdL.SetRange(Status, L_RProdOrdL.Status::"Firm Planned", L_RProdOrdL.Status::Released);
-                L_RProdOrdL.SetRange(Status, L_RProdOrdL.Status::Released);
-            if not Confirm(L_ConfirmLoadProdOrderWithoutDateFilter, false, L_RProdOrdL.Count()) then
-                exit;
-            L_RProdOrdL.SetRange(Status);
-        end;
-
-        if DueDateToFilter <> 0D then
-            L_RProdOrdL.SetRange("Due Date", 0D, DueDateToFilter);
-
+        //TODO da valutare se mettere IsHandled. Più che altro se mi mettono IsHandled a true vuol dire che viene saltato tutto il calcolo. Quindi mi sembra un po' forte.
         L_IsHandled := false;
         OnBeforeCalcFeasibilityOnAfterSetFilterOnProdOrderLine(Rec,
                                                                L_RProdOrdL,
                                                                TempRSubcFeas1,
-                                                               BIncludePlanned,
+                                                               BIncludeFirmPlanned,
                                                                ItemNoComponentFilter,
                                                                VariantCodeComponentFilter,
                                                                L_IsHandled);
@@ -1144,24 +1261,22 @@ page 50110 "Subcontactor Feasibility PTE"
         L_RProdOrdL.SetRange(Status, L_RProdOrdL.Status::Released);
         F_CalcFeasibility(L_RProdOrdL, Rec, TempRSubcFeas1);
 
-
-        //TODO Per ora carico solo i rilasciati, vedere con STEVE se tenere i confermati, i planned toglierli proprio
-        // L_RProdOrdL.SetRange(Status, L_RProdOrdL.Status::"Firm Planned");
-        // F_CalcFeasibility(L_RProdOrdL, Rec, TempRSubcFeas1);
-
-        // if BIncludePlanned then begin
-        //     L_RProdOrdL.SetRange(Status, L_RProdOrdL.Status::Planned);
-        //     F_CalcFeasibility(L_RProdOrdL, Rec, TempRSubcFeas1);
-        // end;
+        if BIncludeFirmPlanned then begin
+            L_RProdOrdL.SetRange(Status, L_RProdOrdL.Status::"Firm Planned");
+            F_CalcFeasibility(L_RProdOrdL, Rec, TempRSubcFeas1);
+        end;
 
         //TODO se blocco il caricamento prima che finisca non vanno i drilldown
         //Capire se lasciare comunque qua il passaggio dei dizionari alla subpage oppure spostarlo
+        //Nel caso sarebbe da passare per ogni ordine di produzione che viene calcolato. Quindi sono un botto di chiamate in più
+
+
+        //Se blocco il caricamento prima che finisca non vanno i drilldown
         CurrPage.ComponentsPart.Page.GetProdOrderDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder);
+        //Abilito il drill down qui in modo che siano disattivati se il caricamento viene bloccato prima
+        CurrPage.ComponentsPart.Page.EnableDrillDownOnInventoryUsedByOther();
 
         Rec.Reset();
-
-
-        // Message(Format(CurrentDateTime - L_DateTime));
     end;
 
     procedure F_CalcFeasibility(var V_RProdOrderLine: Record "Prod. Order Line"; var V_RTMPSubcFeas: Record "TMP Subc. Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary)
@@ -1181,9 +1296,11 @@ page 50110 "Subcontactor Feasibility PTE"
         L_TextProg01: Label 'Work in progress...';
         L_TextProg01a: Label 'Feasibility Production Orders Processing...\\';
         L_TextProg02: Label 'Progress';
-        L_TextProg03: Label 'Processed';
+        L_TextProg03: Label 'Processed %1 of %2';
         L_TextProg04: Label 'Of';
         L_TextProg05: Label '%1 Production Orders';
+        L_ReleasedLbl: Label 'Released';
+        L_FirmPlannedLbl: Label 'Firm Planned';
         L_Filter1: Text;
         L_Filter2: Text;
         L_RLocation: Record Location;
@@ -1203,11 +1320,11 @@ page 50110 "Subcontactor Feasibility PTE"
                 L_CConfigProgressBar.Init(L_NoOfRecords, 1, L_TextProg01);
                 case V_RProdOrderLine.Status of
                     V_RProdOrderLine.Status::Released:
-                        L_OrderStatusText := 'Rialsciati'; //TODO fare label
+                        L_OrderStatusText := L_ReleasedLbl;
                     V_RProdOrderLine.Status::"Firm Planned":
-                        L_OrderStatusText := 'Confermati'; //TODO fare label
-                    V_RProdOrderLine.Status::Planned:
-                        L_OrderStatusText := 'Pianificati'; //TODO fare label
+                        L_OrderStatusText := L_FirmPlannedLbl;
+                    else
+                //TODO evento
                 end;
             end;
             repeat
@@ -1215,7 +1332,7 @@ page 50110 "Subcontactor Feasibility PTE"
                     L_Counter += 1;
                     L_Counter2 += 1;
                     if (L_Counter2 = L_WindowsUpdateCount) or (L_Counter = L_NoOfRecords) then begin
-                        L_CConfigProgressBar.Update(StrSubstNo('%1 %2 %3 %4 %5', L_TextProg03, L_Counter, L_TextProg04, L_NoOfRecords, StrSubstNo(L_TextProg05, L_OrderStatusText)));
+                        L_CConfigProgressBar.Update(StrSubstNo('%1 %2', StrSubstNo(L_TextProg03, L_Counter, L_NoOfRecords), StrSubstNo(L_TextProg05, L_OrderStatusText)));
                         L_Counter2 := 0;
                     end;
                 end;
@@ -1229,7 +1346,9 @@ page 50110 "Subcontactor Feasibility PTE"
 
                 CGeneralManufacturing.FilterProdOrderRoutingLineFromProdOrderLine(L_RProdOrdRoutL, V_RProdOrderLine);
                 L_RProdOrdRoutL.SetFilter("Routing Link Code", '<>%1', '');
-                if L_RProdOrdRoutL.FindFirst() then begin //TODO sarebbe da fare findset e per ogni routing line dello stesso ODP che trova duplicare la riga
+                //TODO sarebbe da fare findset e per ogni routing line dello stesso ODP che trova duplicare la riga
+                //TODO Magari fare visualizzazione ad albero nel caso di ordini che hanno più fasi che prelevano
+                if L_RProdOrdRoutL.FindFirst() then begin
                     if L_RProdOrdRoutL."External Operation FLE" then begin
                         if GetSubcontractorLocationFromProdOrderRoutingLine(L_RProdOrdRoutL, L_RWorkCenter, L_SubcontractorLocationCode) then
                             //TODO può essere che ci siano più di un terzista sul ciclo dell'ODP, quindi questo non può essere segnato sulla riga dell'ordine ma è da spostare
@@ -1297,7 +1416,7 @@ page 50110 "Subcontactor Feasibility PTE"
                                             Clear(L_RProdOrdRoutL);
                                     end;
                                     // Calcolo le qtà di giacenza interna ed esterna già utilizzate e utilizzabili dal componente per l'ordine di produzione in modo da capire se le giacenze sono sufficienti per la realizzazione dell'ODP
-                                    F_CalculateUsedAndUsableQuantitiesForComponent(V_RTMPSubcFeas1, L_RProdOrdRoutL, L_RProdOrdComp, V_RTMPSubcFeas);
+                                    F_CalculateUsedAndUsableQuantitiesForComponent(V_RTMPSubcFeas1, L_RProdOrdRoutL, L_RProdOrdComp);
 
                                     if (V_RTMPSubcFeas1."Int. Reserved Quantity (Base)" = 0) and (V_RTMPSubcFeas1."Subc. Reserved Quantity (Base)" = 0) then
                                         V_RTMPSubcFeas1."Not Feasible" := true;
@@ -1380,10 +1499,10 @@ page 50110 "Subcontactor Feasibility PTE"
     /// <summary>
     /// Calcola le quantità di giacenza interna ed esterna relative al componente di un ordine di produzione.
     /// Per ogni componente viene determinata:
-    /// - la quantità già utilizzata (impegnata in altri ordini),
-    /// - la quantità ancora utilizzabile (disponibile a magazzino o presso fornitori).
+    /// - la quantità già utilizzata (interna ed esterna) (impegnata in altri ordini),
+    /// - la quantità ancora utilizzabile (interna ed esterna) (disponibile a magazzino o presso fornitori).
     /// </summary>
-    local procedure F_CalculateUsedAndUsableQuantitiesForComponent(var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"; var V_RProdOrderComponent: Record "Prod. Order Component"; P_RTMPSubcFeas: Record "TMP Subc. Feasibility PTE" temporary)
+    local procedure F_CalculateUsedAndUsableQuantitiesForComponent(var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"; var V_RProdOrderComponent: Record "Prod. Order Component")
     var
         L_ExternalInventoryAlreadyUsed: Decimal;
         L_ExternalInventoryCanBeUsed: Decimal;
@@ -1409,14 +1528,6 @@ page 50110 "Subcontactor Feasibility PTE"
 
         //Salvo la qtà rimanente perché nel campo V_RTempSubcFeasibility1."Remaining Qty. (Base)", se il componente è esterno, inserisco la qtà che la giacenza esterna del fornitore non riesce a coprire
         L_OriginalRemainingQty := V_RTempSubcFeasibility1."Remaining Qty. (Base)";
-
-        // if BCalcReservationBasedOnFeasibleQty then begin
-        //     L_MaxProdOrderFeasibleQty := F_CalcFeasibleQtyForProdOrder(P_RTMPSubcFeas."Remaining Qty. (Base)", L_VendorNo, V_RTempSubcFeasibility1, V_RProdOrderComponent);
-        //     if L_MaxProdOrderFeasibleQty <> P_RTMPSubcFeas."Remaining Qty. (Base)" then
-        //         V_RTempSubcFeasibility1."Remaining Qty. (Base)" := F_ConvertProdOrderFinishedQtyToComponentQty(L_MaxProdOrderFeasibleQty,
-        //                                                                                                        V_RTempSubcFeasibility1."Quantity per",
-        //                                                                                                        V_RTempSubcFeasibility1."Qty. per Unit of Measure");
-        // end;
 
         //Se la fase del ciclo è esterna utilizzo prima la giacenza esterna
         if P_RProdOrderRoutingLine."External Operation FLE" then begin
@@ -1621,7 +1732,7 @@ page 50110 "Subcontactor Feasibility PTE"
                     L_RTempSubcFeasibility1."Int. Reserved Quantity (Base)" := 0;
                 end else begin
 
-                    // //TODO Teoricamente ora funziona tutto, fare prove ma dovrebbe essere ok (ODP WO24023073) (fatto un pò di controlli e sembra andare bene)
+                    //TODO Teoricamente ora funziona tutto, fare prove ma dovrebbe essere ok (ODP WO24023073) (fatto un pò di controlli e sembra andare bene)
                     //TODO Fare come in plastiape che si può inserire una data sull'ordine di produzione e te lo sposta o prima o dopo
                     //TODO sistemare campo nella sezione filtri + vedi altre azioni e campi da sistemare + TODO sotto
 
@@ -1759,13 +1870,13 @@ page 50110 "Subcontactor Feasibility PTE"
     // end;
 
     //TODO rivedere nome
-    local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE"; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
+    local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE"; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
     begin
-        F_AddEntryInProdOrderDictionaryPerProdOrder(V_ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder, P_RTempSubcFeasibility1."Prod. Order No.", P_RTempSubcFeasibility1."Prod. Order Line No.", P_RTempSubcFeasibility1."Item No.", P_RTempSubcFeasibility1."Variant Code", P_ProdOrderNoList, P_LocationCode);
+        F_AddEntryInProdOrderDictionaryPerProdOrder(V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder, P_RTempSubcFeasibility1."Prod. Order No.", P_RTempSubcFeasibility1."Prod. Order Line No.", P_RTempSubcFeasibility1."Item No.", P_RTempSubcFeasibility1."Variant Code", P_ProdOrderNoList, P_LocationCode);
     end;
 
     //TODO rivedere nome
-    local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_ParentProdOrderNo: Code[20]; P_ParentProdOrderLineNo: Integer; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
+    local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_ParentProdOrderNo: Code[20]; P_ParentProdOrderLineNo: Integer; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
     var
         L_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
         L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation: Dictionary of [Code[10], Text];
@@ -1777,7 +1888,7 @@ page 50110 "Subcontactor Feasibility PTE"
         L_ComponentDictionaryKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
 
         //TODO Vedere se questa funzione serve: funzione che serve per riempire il dizionario ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder
-        if V_ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder.Get(L_ProdOrderKey, L_ProdOrderNoForDrillDownIntQtyUsedByOther) then begin
+        if V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder.Get(L_ProdOrderKey, L_ProdOrderNoForDrillDownIntQtyUsedByOther) then begin
             if L_ProdOrderNoForDrillDownIntQtyUsedByOther.Get(L_ComponentDictionaryKey, L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation) then begin
                 if L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Get(P_LocationCode, L_DummyProdOrderNoList) then begin
                     L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Set(P_LocationCode, P_ProdOrderNoList);
@@ -1789,11 +1900,11 @@ page 50110 "Subcontactor Feasibility PTE"
                 L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Add(P_LocationCode, P_ProdOrderNoList);
                 L_ProdOrderNoForDrillDownIntQtyUsedByOther.Add(L_ComponentDictionaryKey, L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation);
             end;
-            V_ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder.Set(L_ProdOrderKey, L_ProdOrderNoForDrillDownIntQtyUsedByOther);
+            V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder.Set(L_ProdOrderKey, L_ProdOrderNoForDrillDownIntQtyUsedByOther);
         end else begin
             L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Add(P_LocationCode, P_ProdOrderNoList);
             L_ProdOrderNoForDrillDownIntQtyUsedByOther.Add(L_ComponentDictionaryKey, L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation);
-            V_ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder.Add(L_ProdOrderKey, L_ProdOrderNoForDrillDownIntQtyUsedByOther);
+            V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder.Add(L_ProdOrderKey, L_ProdOrderNoForDrillDownIntQtyUsedByOther);
         end;
     end;
 
@@ -2031,7 +2142,7 @@ page 50110 "Subcontactor Feasibility PTE"
             //     end;
         end;
 
-        //Trovo la giacenza in ordine di transferimento del componente
+        //Trovo la giacenza in ordine di transferimento del componente che successivamente andrò a togliere in quanto questa verrà trasferita in un'altra ubicazione.
         L_ComponentInventoryByInternalLocation := F_GetQtyInTransferOrder(V_RTMPSubcFeasibility1."Internal Location", V_RTMPSubcFeasibility1."Item No.", V_RTMPSubcFeasibility1."Variant Code");
         L_ComponentInventoryByInternalAndExternalLocation := F_GetQtyInTransferOrder(V_RTMPSubcFeasibility1."Internal Location", V_RTMPSubcFeasibility1."External Location", V_RTMPSubcFeasibility1."Item No.", V_RTMPSubcFeasibility1."Variant Code");
 
@@ -2044,7 +2155,7 @@ page 50110 "Subcontactor Feasibility PTE"
             V_RTMPSubcFeasibility1."Internal Inventory" := 0;
 
         //Giacenza interna altre ubicazioni
-        L_RItem.SetFilter("Location Filter", LocationFilter);
+        L_RItem.SetFilter("Location Filter", InternalLocationFilter);
         L_RItem.FilterGroup(20);
         L_RItem.SetFilter("Location Filter", '<>%1', V_RTMPSubcFeasibility."Location Code");
         L_RItem.FilterGroup(0);
@@ -2066,7 +2177,7 @@ page 50110 "Subcontactor Feasibility PTE"
         V_RTMPSubcFeasibility1."Global Inventory" := V_RTMPSubcFeasibility1."Internal Inventory" + V_RTMPSubcFeasibility1."External Inventory" + V_RTMPSubcFeasibility1."Qty. in Transfer Order";
 
         //Totale della quantità che il terzista deve ancora utilizzare per lo specifico componente
-        //Esempio: 5 ordini che vanno al terzista PIPPO, per un totale di 100 pezzi da usare, di cui 60 già usati, 40 ancora da usare, ecco questa quantità riporterà 40, poi non so se questi li ha già lui o devono ancora essere portati
+        //Esempio: 5 ordini che vanno al terzista PIPPO, per un totale di 100 pezzi da usare, di cui 60 già usati, 40 ancora da usare, ecco questa quantità riporterà 40
         L_RProdOrderComponent.SetCurrentKey("Item No.", "Variant Code", "Location Code", Status, "Due Date");
         L_RProdOrderComponent.SetRange("Item No.", V_RTMPSubcFeasibility1."Item No.");
         L_RProdOrderComponent.SetRange("Variant Code", V_RTMPSubcFeasibility1."Variant Code");
@@ -2170,7 +2281,7 @@ page 50110 "Subcontactor Feasibility PTE"
         L_InTransitLocationCode: Code[10];
         L_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
         L_ExternalInventoryCanBeUsed, L_InternalInventoryCanBeUsed : Decimal;
-        L_TransferOrderCreationConfirm: Label 'Confirm transfer order creation for selected lines?';
+        L_TransferOrderCreationConfirm: Label 'Do you confirm transfer order creation?';
         L_PartialTransferOrderLineInsertConfirm: Label 'For one or more selected components, available internal inventory is insufficient to fully cover the remaining quantity. Do you still want to create the transfer order?';
         L_NoComponentForTransferOrderErr: Label 'No suitable components are available in production order %1 to create a transfer order.';
     begin
@@ -2267,8 +2378,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     /// <summary>
-    /// Recupera la quantità totale del componente presente nelle righe degli ordini di trasferimento, 
-    /// filtrando per ubicazione di partenza e ubicazione di destinazione.
+    /// Recupera la quantità totale del componente presente nelle righe degli ordini di trasferimento, filtrando per ubicazione di partenza e ubicazione di destinazione.
     /// </summary>    
     local procedure F_GetQtyInTransferOrder(P_FromLocationCode: Code[10]; P_ToLocationCode: Code[10]; P_ItemNo: Code[20]; P_VariantCode: Code[10]): Decimal
     var
@@ -2307,8 +2417,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     /// <summary>
-    /// Recupera la quantità totale del componente presente nelle righe degli ordini di trasferimento, 
-    /// filtrando per ubicazione di partenza.
+    /// Recupera la quantità totale del componente presente nelle righe degli ordini di trasferimento, filtrando per ubicazione di partenza.
     /// </summary>    
     local procedure F_GetQtyInTransferOrder(P_FromLocationCode: Code[10]; P_ItemNo: Code[20]; P_VariantCode: Code[10]): Decimal
     var
@@ -2336,8 +2445,6 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     local procedure F_CalcQtyInTransferOrderPerLocationAndComponent(P_FromLocationCode: Code[10]; P_ItemNo: Code[20]; P_VariantCode: Code[10]): Decimal
-    var
-        L_RTransferLine: Record "Transfer Line";
     begin
         exit(F_CalcQtyInTransferOrderPerLocationAndComponent(P_FromLocationCode, '', P_ItemNo, P_VariantCode));
     end;
@@ -2356,6 +2463,321 @@ page 50110 "Subcontactor Feasibility PTE"
         L_RTransferLine.CalcSums("Quantity (Base)", "Qty. in Transit (Base)", "Qty. Received (Base)");
         exit(L_RTransferLine."Quantity (Base)" + L_RTransferLine."Qty. in Transit (Base)" - L_RTransferLine."Qty. Received (Base)");
     end;
+
+    // local procedure F_ReloadPageToApplyOption() BReloaded: Boolean
+    // var
+    //     L_ReloadToApplyOptionConfirm: label 'The page must be reloaded to apply the selected option; you can do this later, but the option will not be active until the page is reloaded. Do you want to proceed?';
+    // //!IN italiano: È necessario ricaricare la pagina per applicare l’opzione impostata; in alternativa puoi farlo più tardi, ma l’opzione non sarà attiva fino al ricaricamento. Confermi?
+    // begin
+    //     exit(F_ReloadPage(L_ReloadToApplyOptionConfirm));
+    // end;
+
+    // local procedure F_ReloadPageToApplyDueDateChange() BReloaded: Boolean
+    // var
+    //     L_ReloadToDueDateChangesConfirm: Label 'The page must be reloaded to recalculate the feasibility of production orders. Alternatively, you can do it later, but component inventory commitments may be incorrect and some features may be disabled. Do you want to continue?';
+    // //! In italiano È necessario ricaricare la pagina per ricalcolare la fattibilità degli ordini di produzione. In alternativa puoi farlo più tardi, ma gli impegni sulle giacenze dei componenti potrebbero non essere corretti e alcune funzionalità potrebbero risultare disattivate. Vuoi continuare?
+    // begin
+    //     exit(F_ReloadPage(L_ReloadToDueDateChangesConfirm));
+    // end;
+
+    // local procedure F_ReloadPage(P_ConfirmTxt: Text) BReloaded: Boolean
+    // var
+    //     L_RTempRec: Record "TMP Subc. Feasibility PTE" temporary;
+    // begin
+    //     L_RTempRec.Copy(Rec, true);
+    //     L_RTempRec.Reset();
+    //     if L_RTempRec.IsEmpty then
+    //         exit(false);
+    //     if not CConfirmManagement.GetResponseOrDefault(P_ConfirmTxt, true) then
+    //         exit(false);
+    //     F_LoadData();
+    // end;
+
+    local procedure F_ReloadPageToApplyOption()
+    var
+        L_RTempRec: Record "TMP Subc. Feasibility PTE" temporary;
+        L_ReloadToApplyOptionConfirm: label 'The page must be reloaded to apply the selected option; you can do this later, but the option will not be active until the page is reloaded. Do you want to proceed?';
+    //!IN italiano: È necessario ricaricare la pagina per applicare l’opzione impostata; in alternativa puoi farlo più tardi, ma l’opzione non sarà attiva fino al ricaricamento. Confermi?
+    begin
+        L_RTempRec.Copy(Rec, true);
+        L_RTempRec.Reset();
+        if L_RTempRec.IsEmpty then
+            exit;
+        if not CConfirmManagement.GetResponseOrDefault(L_ReloadToApplyOptionConfirm, true) then
+            exit;
+        F_LoadData();
+    end;
+
+    //TODO Procedure che sarà da spostare in Flex_Manufacturing_Interface perché la pagina è nella starter
+    local procedure F_ShowBinContent(P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_LocationCode: Code[10])
+    var
+        L_RLocation: Record Location;
+        L_RBinContentTracking: Record "Bin Content Tracking FLE";
+    begin
+        L_RLocation.Get(P_LocationCode);
+        L_RLocation.TestField("Bin Mandatory", true);
+
+        L_RBinContentTracking.SetRange("Item No.", P_ItemNo);
+        L_RBinContentTracking.SetRange("Variant Code", P_VariantCode);
+        L_RBinContentTracking.SetRange("Location Code", P_LocationCode);
+        Page.Run(Page::"Bin Contents Tracking FLE", L_RBinContentTracking);
+    end;
+
+    [TryFunction]
+    local procedure F_CheckThatProdOrderIsExternal(P_RTempTMPSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary)
+    var
+        L_NoExternalOperation: Label 'The production order does not have external operations that consume components.';
+    begin
+        F_CheckThatProdOrderIsExternal(P_RTempTMPSubcFeasibility, L_NoExternalOperation);
+    end;
+
+    [TryFunction]
+    local procedure F_CheckThatProdOrderIsExternal(P_RTempTMPSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary; P_ErrorText: Text)
+    begin
+        if P_RTempTMPSubcFeasibility.Subcontractor = '' then
+            Error(P_ErrorText);
+    end;
+
+    local procedure F_DisableActionAndDrillDownAtDueDateChange()
+    begin
+        BDisableActionAndDrillDownAtDueDateChange := true;
+        CurrPage.ComponentsPart.Page.DisableDrillDownOnInventoryUsedByOther();
+    end;
+
+    // /// <summary>
+    // /// Procedure che ricalcola la fattibilità per gli ordini di produzione interessati dal cambio di data di scadenza.
+    // /// Gli ordini interessati sono quelli compresi tra la data di scadenza originale e quella nuova.
+    // /// </summary>
+    // local procedure F_RecalcProdOrderFeasibilityForDueDateChanges(P_OriginalDueDate: Date; P_NewDueDate: Date)
+    // var
+    //     L_FromDate, L_ToDate : Date;
+    //     L_RProdOrderLine: Record "Prod. Order Line";
+    //     L_RTempRec, L_RTempRec2 : Record "TMP Subc. Feasibility PTE" temporary;
+    //     L_RTempRSubcFeas1, L_RTempRSubcFeas1_2 : Record "TMP Subc. Feasibility 1 PTE" temporary;
+    //     L_ComponentKey: Code[30];
+    //     L_InternalInventoryAlreadyUsed, L_ExternalInventoryAlreadyUsed : Decimal;
+    //     L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
+    //     L_RProdOrderRoutingLine: Record "Prod. Order Routing Line";
+    //     L_VendorNo: Code[20];
+
+
+    //     L_ProdOrderListDrillDown: List of [Text];
+    //     L_ProdOrderDrillDown: Text;
+    //     L_ProdOrderNoForDrillDownInternalQtyUsedByOther, L_ProdOrderNoForDrillDownExternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Copiati dalle variabili globali
+    //     L_ProdOrder: Text;
+    //     L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation: Dictionary of [Code[10], Text];
+    //     L_BMyOrder: Boolean;//TODO cambiare nome a questa variabile
+
+
+    //     L_ProdOrderListBefore, L_ProdOrderListAfter : List of [Text];
+    //     L_ProdOrderNoForDrillDownExternalBefore, L_ProdOrderNoForDrillDownExternalAfter : Dictionary of [Code[30], Dictionary of [Code[10], Text]];
+    //     L_ProdOrderNoForDrillDownExternalByLocationBefore, L_ProdOrderNoForDrillDownExternalByLocationAfter : Dictionary of [Code[10], Text];
+    //     L_ProdOrderString: Text;
+    // begin
+    //     case true of
+    //         P_OriginalDueDate = P_NewDueDate:
+    //             exit;
+    //         P_OriginalDueDate < P_NewDueDate:
+    //             begin
+    //                 L_FromDate := P_OriginalDueDate;
+    //                 L_ToDate := P_NewDueDate;
+    //             end;
+    //         P_NewDueDate < P_OriginalDueDate:
+    //             begin
+    //                 L_FromDate := P_NewDueDate;
+    //                 L_ToDate := P_OriginalDueDate;
+    //             end;
+    //     end;
+
+    //     L_RTempRec2.Copy(Rec, true);
+    //     L_RTempRec2.Reset;
+    //     L_RTempRSubcFeas1_2.Copy(TempRSubcFeas1, true);
+    //     L_RTempRSubcFeas1_2.Reset;
+
+    //     //Filtro gli ordini di produzione da ricalcolare
+    //     F_CreateLocationFilter();
+    //     F_FilterProdOrderLineToCalcFeasibility(L_RProdOrderLine, false, false);
+    //     L_RProdOrderLine.SetRange("Due Date", L_FromDate, L_ToDate);
+
+    //     //Elimino quali sono gli ordini di produzione che devo ricalcolare
+    //     L_RTempRec2.SetRange("Due Date", L_FromDate, L_ToDate);
+    //     if L_RTempRec2.FindSet() then
+    //         repeat
+    //             //Elimino la giacenza interna ed esterna impegnata dai componenti contenuta nei dizionari di totalizzazione
+    //             L_RTempRSubcFeas1_2.FilterComponentByProdOrder(L_RTempRec2);
+    //             if L_RTempRSubcFeas1_2.FindSet() then
+    //                 repeat
+
+    //                     //TODO capire anche se il ricalcolo parziale ha senso farlo (più veloce ma "pericoloso") oppure a sto punto fanculo ricalcolo tutto (più lento ma sicuro)
+
+    //                     //TODO C'è qualcosa che non funziona capire cos'è, nel senso che il ricalcolo non calcola la qtà impegnata da altri in maniera corretta. Debuggare per capire perché. IN più fare poi anche dizionari Drilldown (TODO qui sotto)
+
+    //                     //Rimuovo la giacenza interna impegnata da ogni compenente dell'ordine di produzione, in modo che al ricalcolo della fattibilità  non sia già impegnata.
+    //                     L_ComponentKey := F_GetComponentKey(L_RTempRSubcFeas1_2."Item No.", L_RTempRSubcFeas1_2."Variant Code");
+    //                     if L_RTempRSubcFeas1_2."Int. Reserved Quantity (Base)" > 0 then begin
+    //                         if TotalInternalInventoryAlreadyUsed.Get(L_RTempRSubcFeas1_2."Internal Location", L_InternalComponentInventoryAlreadyUsed) then
+    //                             if L_InternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_InternalInventoryAlreadyUsed) then begin
+    //                                 L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, L_InternalInventoryAlreadyUsed - L_RTempRSubcFeas1_2."Int. Reserved Quantity (Base)");
+    //                                 TotalInternalInventoryAlreadyUsed.Set(L_RTempRSubcFeas1_2."Internal Location", L_InternalComponentInventoryAlreadyUsed);
+    //                             end;
+    //                     end;
+    //                     //Rimuovo giacenza esterna impegnata da ogni compenente dell'ordine di produzione, in modo che al ricalcolo della fattibilità non sia già impegnata.
+    //                     if L_RTempRSubcFeas1_2."Subc. Reserved Quantity (Base)" > 0 then begin
+    //                         L_RProdOrderLine.get(L_RTempRec2.Status, L_RTempRec2."Prod. Order No.", L_RTempRec2."Line No.");
+    //                         CGeneralManufacturing.FilterProdOrderRoutingLineFromProdOrderLine(L_RProdOrderRoutingLine, L_RProdOrderLine);
+    //                         L_RProdOrderRoutingLine.SetRange("Routing Link Code", L_RTempRSubcFeas1_2."Routing Link Code");
+    //                         if L_RProdOrderRoutingLine.FindFirst() then begin
+    //                             L_VendorNo := F_GetVendorFromProdOrderRoutingLine(L_RProdOrderRoutingLine);
+    //                             if TotalExternalInventoryAlreadyUsed.Get(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed) then
+    //                                 if L_ExternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_ExternalInventoryAlreadyUsed) then begin
+    //                                     L_ExternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, L_ExternalInventoryAlreadyUsed - L_RTempRSubcFeas1_2."Subc. Reserved Quantity (Base)");
+    //                                     TotalExternalInventoryAlreadyUsed.Set(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed);
+    //                                 end;
+    //                         end;
+    //                     end;
+    //                 until L_RTempRSubcFeas1_2.next = 0;
+    //             //Elimino i componenti dell'ordine di produzione
+    //             CurrPage.ComponentsPart.Page.DeleteComponentForProdOrder(L_RTempRec2);
+    //             L_RTempRec2.Delete(false);
+    //         until L_RTempRec2.Next() = 0;
+
+
+    //     L_RProdOrderLine.SetRange(Status, L_RProdOrderLine.Status::Released);
+    //     F_CalcFeasibility(L_RProdOrderLine, L_RTempRec, L_RTempRSubcFeas1);
+
+    //     if BIncludeFirmPlanned then begin
+    //         L_RProdOrderLine.SetRange(Status, L_RProdOrderLine.Status::"Firm Planned");
+    //         F_CalcFeasibility(L_RProdOrderLine, L_RTempRec, L_RTempRSubcFeas1);
+    //     end;
+
+    //     //Inserisco gli ordini di produzione che ho ricalcolato
+    //     L_RTempRec.Reset();
+    //     if L_RTempRec.FindSet() then
+    //         repeat
+    //             L_RTempRec2 := L_RTempRec;
+    //             L_RTempRec2.Insert();
+    //             //Inserisco i componenti dell'ordine di produzione
+    //             L_RTempRSubcFeas1.FilterComponentByProdOrder(L_RTempRec);
+    //             if L_RTempRSubcFeas1.FindSet() then
+    //                 repeat
+    //                     L_RTempRSubcFeas1_2 := L_RTempRSubcFeas1;
+    //                     L_RTempRSubcFeas1_2.Insert();
+    //                 until L_RTempRSubcFeas1.Next() = 0;
+    //         until L_RTempRec.Next() = 0;
+
+    //     //TODO fare eliminazione delle informazioni contenute dei dizionari di drill down
+    //     // ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; // Nr. ODP, Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
+    //     // ProdOrderNoForDrillDownInternalQtyUsedByOther, ProdOrderNoForDrillDownExternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
+
+    //     Clear(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder);
+    //     Clear(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder);
+    //     Clear(ProdOrderNoForDrillDownInternalQtyUsedByOther);
+    //     Clear(ProdOrderNoForDrillDownExternalQtyUsedByOther);
+    //     L_RTempRec2.Reset();
+    //     L_RTempRSubcFeas1_2.reset;
+    //     L_RTempRec2.SetCurrentKey("Status Order", "Due Date", "Prod. Order No.", "Line No.");
+    //     if L_RTempRec2.FindSet() then
+    //         repeat
+    //             L_RTempRSubcFeas1_2.FilterComponentByProdOrder(L_RTempRec2);
+    //             if L_RTempRSubcFeas1_2.FindSet() then
+    //                 repeat
+    //                     L_ProdOrderString := '';
+    //                     if L_RTempRSubcFeas1_2."Subc. Qty. used Other (Base)" > 0 then
+    //                         if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownExternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."External Location") then
+    //                             F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, L_RTempRSubcFeas1_2, L_ProdOrderString, L_RTempRSubcFeas1_2."External Location");
+    //                     if (L_RTempRSubcFeas1_2."Remaining Qty. (Base)" > 0) and (L_RTempRSubcFeas1_2."External Inventory" > L_RTempRSubcFeas1_2."Subc. Qty. used Other (Base)") then
+    //                         F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownExternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."External Location");
+
+    //                     L_ProdOrderString := '';
+    //                     if L_RTempRSubcFeas1_2."Int. Qty. used Other (Base)" > 0 then
+    //                         if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownInternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."Internal Location") then
+    //                             F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, L_RTempRSubcFeas1_2, L_ProdOrderString, L_RTempRSubcFeas1_2."Internal Location");
+    //                     if (L_RTempRSubcFeas1_2."Remaining Qty. (Base)" > 0) and (L_RTempRSubcFeas1_2."Internal Inventory" > L_RTempRSubcFeas1_2."Int. Qty. used Other (Base)") then
+    //                         F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."Internal Location");
+    //                 until L_RTempRSubcFeas1_2.Next() = 0;
+    //         until L_RTempRec2.Next() = 0;
+
+    //     // L_ProdOrderString := '';
+    //     // if V_RTempSubcFeasibility1."Subc. Qty. used Other (Base)" > 0 then
+    //     //     if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownExternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."External Location") then
+    //     //         F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, V_RTempSubcFeasibility1, L_ProdOrderString, V_RTempSubcFeasibility1."External Location");
+    //     // if (V_RTempSubcFeasibility1."Remaining Qty. (Base)" > 0) and (V_RTempSubcFeasibility1."External Inventory" > V_RTempSubcFeasibility1."Subc. Qty. used Other (Base)") then
+    //     //     F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownExternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."External Location");
+
+
+
+
+    //     // L_ProdOrderString := '';
+    //     // if V_RTempSubcFeasibility1."Int. Qty. used Other (Base)" > 0 then
+    //     //     if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownInternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."Internal Location") then
+    //     //         F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, V_RTempSubcFeasibility1, L_ProdOrderString, V_RTempSubcFeasibility1."Internal Location");
+    //     // if (V_RTempSubcFeasibility1."Remaining Qty. (Base)" > 0) and (V_RTempSubcFeasibility1."Internal Inventory" > V_RTempSubcFeasibility1."Int. Qty. used Other (Base)") then
+    //     //     F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."Internal Location");
+
+    //     // L_RTempRec.SetCurrentKey("Status Order", "Due Date", "Prod. Order No.", "Line No.");
+    //     // if L_RTempRec.FindSet() then
+    //     //     repeat
+    //     //         L_RTempRSubcFeas1.FilterComponentByProdOrder(L_RTempRec);
+    //     //         if L_RTempRSubcFeas1.FindSet() then
+    //     //             repeat
+    //     //                 L_ComponentKey := F_GetComponentKey(L_RTempRSubcFeas1."Item No.", L_RTempRSubcFeas1."Variant Code");
+    //     //                 if (L_RTempRec.Status = Rec.Status) and (L_RTempRec."Prod. Order No." = Rec."Prod. Order No.") and (L_RTempRec."Line No." = Rec."Line No.") then begin
+    //     //                     L_BMyOrder := true;
+    //     //                     //Se sono sul record al quale ho cambiato la "Due Date" devo inserire o rimuovere gli ordini che occupano giacenza in base a se la "Due Date" impostata è maggiore o minore della precedente
+    //     //                     L_ProdOrderKey := Rec."Prod. Order No." + Format(Rec."Line No.");
+    //     //                     if ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder.Get(L_ProdOrderKey, L_ProdOrderNoForDrillDownExternalQtyUsedByOther) then
+    //     //                         if L_ProdOrderNoForDrillDownExternalQtyUsedByOther.Get(L_ComponentKey, L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation) then
+    //     //                             if L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation.Get(L_RTempRSubcFeas1."External Location", L_ProdOrderDrillDown) then begin
+    //     //                                 case true of
+    //     //                                     P_OriginalDueDate < P_NewDueDate:
+    //     //                                         //Qui vuol dire che l'ODP è stato spostato avanti
+    //     //                                         ;
+    //     //                                     P_OriginalDueDate > P_NewDueDate:
+    //     //                                         //Qui vuol dire che l'ODP è stato spostato indietro
+    //     //                                         ;
+    //     //                                 end;
+
+
+
+    //     //                             end;
+    //     //                 end else begin
+    //     //                     L_ProdOrderKey := L_RTempRSubcFeas1."Prod. Order No." + Format(L_RTempRSubcFeas1."Prod. Order Line No.");
+    //     //                     //Se NON sono sul record al quale ho cambiato la "Due Date" devo inserire o rimuovere dagli ordini che occupano giacenza l'ordine a cui ho modifica "Due Date".
+    //     //                     if ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder.Get(L_ProdOrderKey, L_ProdOrderNoForDrillDownExternalQtyUsedByOther) then
+    //     //                         if L_ProdOrderNoForDrillDownExternalQtyUsedByOther.Get(L_ComponentKey, L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation) then
+    //     //                             if L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation.Get(L_RTempRSubcFeas1."External Location", L_ProdOrderDrillDown) then begin
+    //     //                                 L_ProdOrderListDrillDown := L_ProdOrderDrillDown.Split('|');
+    //     //                                 if not L_BMyOrder then begin
+    //     //                                     if L_ProdOrderListDrillDown.Contains(Rec."Prod. Order No.") then begin
+    //     //                                         L_ProdOrderListDrillDown.Remove(Rec."Prod. Order No.");
+    //     //                                         L_ProdOrderDrillDown := '';
+    //     //                                         foreach L_ProdOrder in L_ProdOrderListDrillDown do begin
+    //     //                                             if L_ProdOrderDrillDown = '' then
+    //     //                                                 L_ProdOrderDrillDown := L_ProdOrder
+    //     //                                             else
+    //     //                                                 L_ProdOrderDrillDown += '|' + L_ProdOrder;
+    //     //                                         end;
+    //     //                                     end;
+
+
+
+    //     //                                 end else begin
+    //     //                                     if not L_ProdOrderListDrillDown.Contains(Rec."Prod. Order No.") then begin
+    //     //                                         //TODO Qui metto il mio ODP come ultimo, capire se è meglio metterlo nell'ordine giusto
+    //     //                                         if L_ProdOrderDrillDown = '' then
+    //     //                                             L_ProdOrderDrillDown := Rec."Prod. Order No."
+    //     //                                         else
+    //     //                                             L_ProdOrderDrillDown += '|' + Rec."Prod. Order No.";
+    //     //                                     end;
+    //     //                                 end;
+    //     //                                 L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation.Set(L_RTempRSubcFeas1_2."External Location", L_ProdOrderDrillDown);
+    //     //                                 L_ProdOrderNoForDrillDownExternalQtyUsedByOther.Set(L_ComponentKey, L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation);
+    //     //                                 ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder.Set(L_ProdOrderKey, L_ProdOrderNoForDrillDownExternalQtyUsedByOther);
+    //     //                             end;
+    //     //                 end;
+    //     //             until L_RTempRSubcFeas1.Next() = 0;
+    //     //     until L_Rtemprec.next = 0;
+    // end;
 
     #region Lookup
     local procedure F_LookupItemNo(var V_Text: Text) O_BResult: Boolean
@@ -2486,10 +2908,10 @@ page 50110 "Subcontactor Feasibility PTE"
         L_RecRef: RecordRef;
     begin
         V_ProdOrderNoFilter := '';
-        if BIncludePlanned then
-            L_RProdOrdComp.SetRange(Status, L_RProdOrdComp.Status::Planned, L_RProdOrdComp.Status::Released)
+        if BIncludeFirmPlanned then
+            L_RProdOrdComp.SetRange(Status, L_RProdOrdComp.Status::"Firm Planned", L_RProdOrdComp.Status::Released)
         else
-            L_RProdOrdComp.SetRange(Status, L_RProdOrdComp.Status::"Firm Planned", L_RProdOrdComp.Status::Released);
+            L_RProdOrdComp.SetRange(Status, L_RProdOrdComp.Status::Released);
         L_RProdOrdComp.SetRange("Item No.", ItemNoComponentFilter);
         if VariantCodeComponentFilter <> '' then
             L_RProdOrdComp.SetRange("Variant Code", VariantCodeComponentFilter);
@@ -2592,7 +3014,7 @@ page 50110 "Subcontactor Feasibility PTE"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeCalcFeasibilityOnAfterSetFilterOnProdOrderLine(var Rec: Record "TMP Subc. Feasibility PTE" temporary; var ProdOrderLine: Record "Prod. Order Line"; var TempRSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary; IncludePlannedProdOrder: Boolean; ItemComponentNoFilter: Code[20]; VariantComponentCode: Code[10]; var IsHandled: Boolean)
+    local procedure OnBeforeCalcFeasibilityOnAfterSetFilterOnProdOrderLine(var Rec: Record "TMP Subc. Feasibility PTE" temporary; var ProdOrderLine: Record "Prod. Order Line"; var TempRSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary; IncludeFirmPlannedProdOrder: Boolean; ItemComponentNoFilter: Code[20]; VariantComponentCode: Code[10]; var IsHandled: Boolean)
     begin
     end;
 

@@ -36,15 +36,22 @@ table 50040 "TMP Subc. Feasibility PTE"
         field(47; "Due Date"; Date)
         {
             Caption = 'Due Date';
-            Editable = false;
         }
         field(48; "Starting Date"; Date)
         {
             Caption = 'Starting Date';
         }
+        field(49; "Starting Time"; Time)
+        {
+            Caption = 'Starting Time';
+        }
         field(50; "Ending Date"; Date)
         {
             Caption = 'Ending Date';
+        }
+        field(51; "Ending Time"; Time)
+        {
+            Caption = 'Ending Time';
         }
         field(80; "Unit of Measure Code"; Code[10])
         {
@@ -253,5 +260,3 @@ table 50040 "TMP Subc. Feasibility PTE"
     {
     }
 }
-
-

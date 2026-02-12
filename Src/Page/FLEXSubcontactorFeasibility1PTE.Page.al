@@ -12,7 +12,6 @@ page 50111 "Subcontactor Feasibility 1 PTE"
     SourceTableTemporary = true;
     SourceTableView = sorting(Status, "Prod. Order No.", "Prod. Order Line No.", "Line No.")
                       order(ascending);
-
     layout
     {
         area(Content)
@@ -411,8 +410,9 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]];
         CompFeas: Decimal;
         ExternalLocation: Code[10];
-        LocationFilter: Text;
+        InternalLocationFilter: Text;
         RecStyle: Text;
+        BDrillDownDisabledForDueDateChange: Boolean;
 
     procedure GetTmpRec(var V_RTMPSubcFeas: Record "TMP Subc. Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "TMP Subc. Feasibility 1 PTE"; var V_RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE")
     begin
@@ -434,9 +434,9 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder := V_ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder;
     end;
 
-    procedure SetLocationFilter(P_LocationFilter: Text)
+    procedure SetInternalLocationFilter(P_LocationFilter: Text)
     begin
-        LocationFilter := P_LocationFilter;
+        InternalLocationFilter := P_LocationFilter;
     end;
 
     local procedure F_SetControls()
@@ -472,6 +472,16 @@ page 50111 "Subcontactor Feasibility 1 PTE"
     end;
 
     #region Funzioni DrillDown
+    procedure EnableDrillDownOnInventoryUsedByOther()
+    begin
+        BDrillDownDisabledForDueDateChange := false;
+    end;
+
+    procedure DisableDrillDownOnInventoryUsedByOther()
+    begin
+        BDrillDownDisabledForDueDateChange := true;
+    end;
+
     local procedure F_DrillDownInternalInventory()
     begin
         F_DrillDownInventory(Rec."Internal Location",
@@ -569,6 +579,8 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         L_RProdOrderComponent: Record "Prod. Order Component";
         L_ProdOrderFilter: Text;
     begin
+        if BDrillDownDisabledForDueDateChange then
+            exit;
         F_GetProdOrderFilterFromDictionaryForQty(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder,
                                                  L_ProdOrderFilter,
                                                  Rec."Prod. Order No.",
@@ -600,6 +612,8 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         L_RProdOrderComponent: Record "Prod. Order Component";
         L_ProdOrderFilter: Text;
     begin
+        if BDrillDownDisabledForDueDateChange then
+            exit;
         F_GetProdOrderFilterFromDictionaryForQty(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder,
                                                  L_ProdOrderFilter,
                                                  Rec."Prod. Order No.",
@@ -622,7 +636,7 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         L_RItemLedgerEntry.FilterGroup(20);
         L_RItemLedgerEntry.SetRange("Item No.", Rec."Item No.");
         L_RItemLedgerEntry.SetRange("Variant Code", Rec."Variant Code");
-        L_RItemLedgerEntry.SetFilter("Location Code", LocationFilter);
+        L_RItemLedgerEntry.SetFilter("Location Code", InternalLocationFilter);
         L_RItemLedgerEntry.FilterGroup(21);
         L_RItemLedgerEntry.SetFilter("Location Code", '<>%1', Rec."Internal Location");
         L_RItemLedgerEntry.FilterGroup(0);
@@ -729,5 +743,17 @@ page 50111 "Subcontactor Feasibility 1 PTE"
         else
             Rec.SetFilter("Variant Code", P_VariantCodeFilter);
         Rec.FilterGroup(0);
+    end;
+
+    procedure DeleteComponentForProdOrder(P_RTempSubcFeasibility: Record "TMP Subc. Feasibility PTE" temporary)
+    var
+        L_RTempTMPSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary;
+    begin
+        L_RTempTMPSubcFeasibility1.Copy(Rec, true);
+        L_RTempTMPSubcFeasibility1.Reset();
+        L_RTempTMPSubcFeasibility1.SetRange(Status, P_RTempSubcFeasibility.Status);
+        L_RTempTMPSubcFeasibility1.SetRange("Prod. Order No.", P_RTempSubcFeasibility."Prod. Order No.");
+        L_RTempTMPSubcFeasibility1.SetRange("Prod. Order Line No.", P_RTempSubcFeasibility."Line No.");
+        L_RTempTMPSubcFeasibility1.DeleteAll(false);
     end;
 }
