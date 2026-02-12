@@ -18,44 +18,44 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                 Editable = false;
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
+                    ApplicationArea = All;
                     AssistEdit = false;
                     DrillDown = false;
                     Lookup = false;
-                    Visible = false;
-                    ApplicationArea = All;
                     StyleExpr = RecStyle;
+                    Visible = false;
                 }
                 field(Status; Rec.Status)
                 {
-                    Visible = false;
                     ApplicationArea = All;
                     StyleExpr = RecStyle;
+                    Visible = false;
                 }
                 field("Prod. Order Line No."; Rec."Prod. Order Line No.")
                 {
-                    Visible = false;
                     ApplicationArea = All;
                     StyleExpr = RecStyle;
+                    Visible = false;
                 }
                 field("Line No."; Rec."Line No.")
                 {
-                    Visible = false;
                     ApplicationArea = All;
                     StyleExpr = RecStyle;
+                    Visible = false;
                 }
                 field("Item No."; Rec."Item No.")
                 {
+                    ApplicationArea = All;
                     AssistEdit = false;
                     DrillDown = false;
                     Lookup = false;
-                    ApplicationArea = All;
                     StyleExpr = RecStyle;
                 }
                 field("Variant Code"; Rec."Variant Code")
                 {
-                    Visible = false;
                     ApplicationArea = All;
                     StyleExpr = RecStyle;
+                    Visible = false;
                 }
                 field("Component Description"; Rec."Component Description")
                 {
@@ -68,8 +68,8 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                 }
                 field("Planning Group"; Rec."Planning Group")
                 {
-                    Visible = false;
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Remaining Qty. (Base)"; Rec."Remaining Qty. (Base)")
                 {
@@ -154,7 +154,6 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                             F_DrillDownExternalQtyUsedByOther();
                     end;
                 }
-
                 field("Qty. in Transfer Order"; Rec."Qty. in Transfer Order")
                 {
                     ApplicationArea = Basic;
@@ -220,7 +219,6 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                             F_DrillDownExpectedReceiptQty();
                     end;
                 }
-
                 field("Not Feasible"; Rec."Not Feasible")
                 {
                     ApplicationArea = All;
@@ -239,18 +237,18 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
         {
             action(ItemCard)
             {
+                ApplicationArea = All;
                 Caption = 'Item Card';
                 Image = EditLines;
                 RunObject = page "Item Card";
                 RunPageLink = "No." = field("Item No.");
                 RunPageMode = View;
-                ApplicationArea = All;
             }
             action(Availability)
             {
+                ApplicationArea = All;
                 Caption = 'Availability';
                 Image = Trace;
-                ApplicationArea = All;
 
                 trigger OnAction()
                 var
@@ -262,8 +260,8 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
             }
             action(ViewNotFullyFeasibleComponents)
             {
-                Caption = 'View Not Fully Feasible Components';
                 ApplicationArea = All;
+                Caption = 'View Not Fully Feasible Components';
                 Image = ViewDocumentLine;
 
                 trigger OnAction()
@@ -276,7 +274,7 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                     L_RTempSubcFeasibility1.SetRange("Not Feasible", true);
                     L_RTempSubcFeasibility1.SetRange("Partially Feasible", true);
                     L_RTempSubcFeasibility1.FilterGroup(0);
-                    If L_RTempSubcFeasibility1.IsEmpty then begin
+                    if L_RTempSubcFeasibility1.IsEmpty then begin
                         Message(L_AllComponentFeasibleMsg, Rec."Prod. Order No.");
                         exit;
                     end;
@@ -293,8 +291,8 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
             }
             action(ViewAllComponents)
             {
-                Caption = 'View All Components';
                 ApplicationArea = All;
+                Caption = 'View All Components';
                 Image = ReviewWorksheet;
 
                 trigger OnAction()
@@ -320,14 +318,13 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
     end;
 
     var
-        RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE" temporary;
         RTMPSubcFeas, RTMPSubcFeasSave : Record "Prod. Order Feasibility PTE" temporary;
-        ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]];
+        RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE" temporary;
+        BDrillDownDisabledForDueDateChange: Boolean;
         CompFeas: Decimal;
-        ExternalLocation: Code[10];
+        ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]];
         InternalLocationFilter: Text;
         RecStyle: Text;
-        BDrillDownDisabledForDueDateChange: Boolean;
 
     procedure GetTmpRec(var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE"; var V_RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE")
     begin
@@ -369,10 +366,10 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
     //DUPLICATED c'è anche in page "FLEXSubcontactorFeasibilityPTE"
     local procedure F_GetProdOrderFilterFromDictionaryForQty(P_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; var V_ProdNoFilter: Text; P_ProdOrerNo: Code[20]; P_ProdOrderLineNo: Integer; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_LocationCode: Code[10]): Boolean
     var
-        L_ProdOrderDictionaryKey: Text;
         L_ItemVariantDictionaryKey: Code[30];
-        L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
         L_LocationDictionary: Dictionary of [Code[10], Text];
+        L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
+        L_ProdOrderDictionaryKey: Text;
     begin
         V_ProdNoFilter := '';
         L_ProdOrderDictionaryKey := P_ProdOrerNo + Format(P_ProdOrderLineNo);
@@ -481,16 +478,6 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
     //TODO nome da cambiare quando e se cambierò il nome del campo
     local procedure F_DrillDownInternalQtyUsedByOther()
     var
-        L_FSubcontactorFeasibility2: Page "Prod. Orders Feasibility 2 PTE";
-        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility1_2: Record "Prod. Order Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary;
-        L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
-        L_LocationDictionary: Dictionary of [Code[10], Text];
-        L_ProdOrderNo: Code[20];
-        L_ProdOrderDictionaryKey: Text;
-        L_ItemVariantDictionaryKey: Code[30];
-        L_RProductionOrder: Record "Production Order";
         L_RProdOrderComponent: Record "Prod. Order Component";
         L_ProdOrderFilter: Text;
     begin
@@ -514,16 +501,6 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
     //TODO nome da cambiare quando e se cambierò il nome del campo
     local procedure F_DrillDownExternalQtyUsedByOther()
     var
-        L_FSubcontactorFeasibility2: Page "Prod. Orders Feasibility 2 PTE";
-        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility1_2: Record "Prod. Order Feasibility 1 PTE" temporary;
-        L_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary;
-        L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
-        L_LocationDictionary: Dictionary of [Code[10], Text];
-        L_ProdOrderNo: Code[20];
-        L_ProdOrderDictionaryKey: Text;
-        L_ItemVariantDictionaryKey: Code[30];
-        L_RProductionOrder: Record "Production Order";
         L_RProdOrderComponent: Record "Prod. Order Component";
         L_ProdOrderFilter: Text;
     begin
@@ -563,10 +540,10 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
         L_RProdOrderComponent: Record "Prod. Order Component";
     begin
         L_RProdOrderComponent.FilterGroup(20);
-        L_RProdOrderComponent.SETRANGE("Item No.", Rec."Item No.");
-        L_RProdOrderComponent.SETRANGE("Variant Code", Rec."Variant Code");
-        L_RProdOrderComponent.SETRANGE("Location Code", Rec."External Location");
-        L_RProdOrderComponent.SETRANGE(Status, L_RProdOrderComponent.Status::Released);
+        L_RProdOrderComponent.SetRange("Item No.", Rec."Item No.");
+        L_RProdOrderComponent.SetRange("Variant Code", Rec."Variant Code");
+        L_RProdOrderComponent.SetRange("Location Code", Rec."External Location");
+        L_RProdOrderComponent.SetRange(Status, L_RProdOrderComponent.Status::Released);
         L_RProdOrderComponent.FilterGroup(0);
         Page.Run(0, L_RProdOrderComponent);
     end;
@@ -576,10 +553,10 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
         L_RProdOrderComponent: Record "Prod. Order Component";
     begin
         L_RProdOrderComponent.FilterGroup(20);
-        L_RProdOrderComponent.SETRANGE("Item No.", Rec."Item No.");
-        L_RProdOrderComponent.SETRANGE("Variant Code", Rec."Variant Code");
-        L_RProdOrderComponent.SETRANGE("Location Code", Rec."Internal Location");
-        L_RProdOrderComponent.SETRANGE(Status, L_RProdOrderComponent.Status::Released);
+        L_RProdOrderComponent.SetRange("Item No.", Rec."Item No.");
+        L_RProdOrderComponent.SetRange("Variant Code", Rec."Variant Code");
+        L_RProdOrderComponent.SetRange("Location Code", Rec."Internal Location");
+        L_RProdOrderComponent.SetRange(Status, L_RProdOrderComponent.Status::Released);
         L_RProdOrderComponent.FilterGroup(0);
         Page.Run(0, L_RProdOrderComponent);
     end;
@@ -600,21 +577,20 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
 
     local procedure F_DrillDownExpectedReceiptQty()
     var
+        L_RAssemblyHeader: Record "Assembly Header";
         L_RProdOrderLine: Record "Prod. Order Line";
         L_RPurchaseLine: Record "Purchase Line";
-        L_RAssemblyHeader: Record "Assembly Header";
         L_FSubcontactorFeasibility: Page "Prod. Orders Feasibility PTE";
     begin
         //Ordini di produzione
         L_FSubcontactorFeasibility.FilterProdOrderLineForExpectedReceiptQty(L_RProdOrderLine, Rec."Item No.", Rec."Variant Code", Rec."Internal Location");
         if not L_RProdOrderLine.IsEmpty() then
-            page.Run(Page::"Prod. Order Line List", L_RProdOrderLine);
-
+            Page.Run(Page::"Prod. Order Line List", L_RProdOrderLine);
 
         //Ordini di acquisto
         L_FSubcontactorFeasibility.FilterPurchaseLineForExpectedReceiptQty(L_RPurchaseLine, Rec."Item No.", Rec."Variant Code", Rec."Internal Location");
         if not L_RPurchaseLine.IsEmpty() then
-            page.Run(Page::"Purchase Lines", L_RPurchaseLine);
+            Page.Run(Page::"Purchase Lines", L_RPurchaseLine);
 
         //Ordini di assemblaggio
         L_FSubcontactorFeasibility.FilterProdOrderLineForExpectedReceiptQty(L_RAssemblyHeader, Rec."Item No.", Rec."Variant Code", Rec."Internal Location");
@@ -626,11 +602,11 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
     local procedure F_FilterTransferLine(var V_RTransferLine: Record "Transfer Line"; P_FromLocationCode: Code[10]; P_ToLocationCode: Code[10]; P_ItemNo: Code[20]; P_VariantCode: Code[10])
     begin
         if P_FromLocationCode <> '' then
-            V_RTransferLine.SETRANGE("Transfer-from Code", P_FromLocationCode);
+            V_RTransferLine.SetRange("Transfer-from Code", P_FromLocationCode);
         if P_ToLocationCode <> '' then
-            V_RTransferLine.SETRANGE("Transfer-to Code", P_ToLocationCode);
-        V_RTransferLine.SETRANGE("Item No.", P_ItemNo);
-        V_RTransferLine.SETRANGE("Variant Code", P_VariantCode);
+            V_RTransferLine.SetRange("Transfer-to Code", P_ToLocationCode);
+        V_RTransferLine.SetRange("Item No.", P_ItemNo);
+        V_RTransferLine.SetRange("Variant Code", P_VariantCode);
     end;
 
     procedure GetRecComponent(var V_ItemNo: Code[20]; var V_VariantCode: Code[10])

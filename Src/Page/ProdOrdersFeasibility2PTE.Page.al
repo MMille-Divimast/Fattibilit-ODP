@@ -24,105 +24,105 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
                 }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
+                    ApplicationArea = All;
                     AssistEdit = false;
                     DrillDown = false;
                     Lookup = false;
-                    ApplicationArea = All;
                 }
                 field("Prod. Order Line No."; Rec."Prod. Order Line No.")
                 {
-                    Visible = false;
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Line No."; Rec."Line No.")
                 {
-                    Visible = false;
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("RTMPSubcFeas.Subcontractor"; RTMPSubcFeas.Subcontractor)
                 {
-                    Caption = 'Subcontractor';
                     ApplicationArea = All;
+                    Caption = 'Subcontractor';
                 }
                 field("RTMPSubcFeas.""Subcontractor Name"""; RTMPSubcFeas."Subcontractor Name")
                 {
-                    Caption = 'Subcontractor Name';
                     ApplicationArea = All;
+                    Caption = 'Subcontractor Name';
                 }
                 field("RTMPSubcFeas.""Item No."""; RTMPSubcFeas."Item No.")
                 {
-                    Caption = 'Item No.';
                     ApplicationArea = All;
+                    Caption = 'Item No.';
                 }
                 field("RTMPSubcFeas.""Variant Code"""; RTMPSubcFeas."Variant Code")
                 {
+                    ApplicationArea = All;
                     Caption = 'Variant Code';
                     Visible = false;
-                    ApplicationArea = All;
                 }
                 field("RTMPSubcFeas.""Item Description"""; RTMPSubcFeas."Item Description")
                 {
-                    Caption = 'Item Description';
                     ApplicationArea = All;
+                    Caption = 'Item Description';
                 }
                 field("RTMPSubcFeas.""Planning Group"""; RTMPSubcFeas."Planning Group")
                 {
+                    ApplicationArea = All;
                     Caption = 'Planning Group';
                     Visible = false;
-                    ApplicationArea = All;
                 }
                 field("RTMPSubcFeas.""Due Date"""; RTMPSubcFeas."Due Date")
                 {
-                    Caption = 'Due Date';
                     ApplicationArea = All;
+                    Caption = 'Due Date';
                 }
                 field("RTMPSubcFeas.""Starting Date"""; RTMPSubcFeas."Starting Date")
                 {
-                    Caption = 'Starting Date';
                     ApplicationArea = All;
+                    Caption = 'Starting Date';
                 }
                 field("RTMPSubcFeas.""Ending Date"""; RTMPSubcFeas."Ending Date")
                 {
-                    Caption = 'Ending Date';
                     ApplicationArea = All;
+                    Caption = 'Ending Date';
                 }
                 field("RTMPSubcFeas.""Unit of Measure Code"""; RTMPSubcFeas."Unit of Measure Code")
                 {
+                    ApplicationArea = All;
                     AssistEdit = false;
                     Caption = 'Unit of Measure Code';
                     DrillDown = false;
                     Lookup = false;
                     Visible = false;
-                    ApplicationArea = All;
                 }
                 field("RTMPSubcFeas.""Quantity (Base)"""; RTMPSubcFeas."Operation Quantity (Base)")
                 {
+                    ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Quantity (Base)';
-                    ApplicationArea = All;
                 }
                 field("RTMPSubcFeas.""Finished Qty. (Base)"""; RTMPSubcFeas."Operation Finished Qty. (Base)")
                 {
+                    ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Finished Qty. (Base)';
-                    ApplicationArea = All;
                 }
                 field("RTMPSubcFeas.""Remaining Qty. (Base)"""; RTMPSubcFeas."Operation Rem. Qty. (Base)")
                 {
+                    ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Remaining Qty. (Base)';
-                    ApplicationArea = All;
                 }
                 field("RTMPSubcFeas.""Feasible Quantity (Base)"""; RTMPSubcFeas."Subc. Feasible Quantity (Base)")
                 {
+                    ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Feasible Quantity (Base)';
-                    ApplicationArea = All;
                 }
                 field("RTMPSubcFeas.""Subcontractor Order"""; RTMPSubcFeas."Subcontractor Order")
                 {
-                    Caption = '1st Subcontractor Order';
                     ApplicationArea = All;
+                    Caption = '1st Subcontractor Order';
                 }
             }
         }
@@ -134,10 +134,10 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
         {
             action(A_ItemCard)
             {
+                ApplicationArea = All;
                 Caption = 'Item Card';
                 Image = EditLines;
                 ShortcutKey = 'Shift+Ctrl+C';
-                ApplicationArea = All;
 
                 trigger OnAction()
                 var
@@ -153,10 +153,10 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
             }
             action(A_Disponibilita)
             {
+                ApplicationArea = All;
                 Caption = 'Availability';
                 Image = Trace;
                 ShortcutKey = 'Return';
-                ApplicationArea = All;
 
                 trigger OnAction()
                 var
@@ -168,11 +168,11 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
             }
             action(ShowComplete)
             {
+                ApplicationArea = All;
                 Caption = 'Show Completed';
                 Enabled = not ShowComplete;
                 Image = ClearFilter;
                 Visible = not ShowComplete;
-                ApplicationArea = All;
 
                 trigger OnAction()
                 begin
@@ -183,11 +183,11 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
             }
             action(HideComplete)
             {
+                ApplicationArea = All;
                 Caption = 'Hide Completed';
                 Enabled = ShowComplete;
                 Image = UseFilters;
                 Visible = ShowComplete;
-                ApplicationArea = All;
 
                 trigger OnAction()
                 begin
@@ -273,7 +273,6 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
         RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary;
         ShowComplete: Boolean;
 
-
     procedure GetTmpRec(var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE"; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE")
     begin
         Rec.Copy(V_RTMPSubcFeas1, true);
@@ -284,7 +283,6 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
     local procedure F_SetFilters()
     begin
     end;
-
 
     procedure F_ShowRecord(): Boolean
     begin
@@ -300,5 +298,3 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
         end;
     end;
 }
-
-

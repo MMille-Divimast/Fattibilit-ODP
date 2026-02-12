@@ -60,23 +60,6 @@ table 50040 "Prod. Order Feasibility PTE"
             Caption = 'Unit of Measure Code';
             TableRelation = "Item Unit of Measure".Code where("Item No." = field("Item No."));
         }
-        field(80081; "Operation Quantity (Base)"; Decimal)
-        {
-            Caption = 'Operation Quantity (Base)';
-            DecimalPlaces = 0 : 5;
-        }
-        field(80082; "Operation Finished Qty. (Base)"; Decimal)
-        {
-            Caption = 'Operation Finished Qty. (Base)';
-            DecimalPlaces = 0 : 5;
-            Editable = false;
-        }
-        field(80083; "Operation Rem. Qty. (Base)"; Decimal)
-        {
-            Caption = 'Operation Remaining Qty. (Base)';
-            DecimalPlaces = 0 : 5;
-            Editable = false;
-        }
         field(1000; "Item Description"; Text[100])
         {
             Caption = 'Item Description';
@@ -158,8 +141,6 @@ table 50040 "Prod. Order Feasibility PTE"
             Description = 'PLA220308C1 numerazione per non creare conflitti con T5406';
 
             trigger OnValidate()
-            var
-                L_TErrNoSubcontracting: label 'Document %1 is not a Subcontractor Order';
             begin
                 if "Starting Expected Date" <> 0D then
                     Rec."Order Date 2" := "Starting Expected Date"
@@ -173,8 +154,6 @@ table 50040 "Prod. Order Feasibility PTE"
             Description = 'PLA220308C1 numerazione per non creare conflitti con T5406';
 
             trigger OnValidate()
-            var
-                L_TErrNoSubcontracting: label 'Document %1 is not a Subcontractor Order';
             begin
                 if "Starting Effective Date" <> 0D then
                     Rec."Order Date 1" := "Starting Effective Date"
@@ -244,6 +223,23 @@ table 50040 "Prod. Order Feasibility PTE"
             Description = 'PLA220308C1 numerazione per non creare conflitti con T5406';
             TableRelation = Item where("No." = field("Pallet Item No."),
                                         "Item Category Code" = const('P'));
+        }
+        field(80081; "Operation Quantity (Base)"; Decimal)
+        {
+            Caption = 'Operation Quantity (Base)';
+            DecimalPlaces = 0 : 5;
+        }
+        field(80082; "Operation Finished Qty. (Base)"; Decimal)
+        {
+            Caption = 'Operation Finished Qty. (Base)';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+        }
+        field(80083; "Operation Rem. Qty. (Base)"; Decimal)
+        {
+            Caption = 'Operation Remaining Qty. (Base)';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
         }
     }
 

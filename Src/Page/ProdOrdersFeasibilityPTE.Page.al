@@ -8,7 +8,6 @@ page 50110 "Prod. Orders Feasibility PTE"
     SourceTableTemporary = true;
     SourceTableView = sorting("Status Order", "Due Date", "Prod. Order No.", "Line No.") order(ascending);
     UsageCategory = Tasks;
-    ApplicationArea = All;
 
     layout
     {
@@ -119,8 +118,8 @@ page 50110 "Prod. Orders Feasibility PTE"
 
                                 trigger OnValidate()
                                 var
-                                    L_RItemVariant: Record "Item Variant";
                                     L_RItem: Record Item;
+                                    L_RItemVariant: Record "Item Variant";
                                 begin
                                     IsComponentFilterSet := ItemNoComponentFilter <> '';
                                     VariantCodeComponentFilter := '';
@@ -141,8 +140,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                             field(VariantCodeComponentFilter; VariantCodeComponentFilter)
                             {
                                 Caption = 'Variant Code';
-                                Enabled = BEnableComponentVariantCodeFilter;
                                 Editable = BEnableComponentVariantCodeFilter;
+                                Enabled = BEnableComponentVariantCodeFilter;
 
                                 trigger OnValidate()
                                 var
@@ -172,25 +171,25 @@ page 50110 "Prod. Orders Feasibility PTE"
                 }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
-                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
+                    Editable = false;
                     Lookup = false;
                     StyleExpr = RecStyle;
                 }
                 field("Item No."; Rec."Item No.")
                 {
-                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
+                    Editable = false;
                     Lookup = false;
                     StyleExpr = RecStyle;
                 }
                 field("Variant Code"; Rec."Variant Code")
                 {
                     Editable = false;
-                    Visible = false;
                     StyleExpr = RecStyle;
+                    Visible = false;
                 }
                 field("Item Description"; Rec."Item Description")
                 {
@@ -199,9 +198,9 @@ page 50110 "Prod. Orders Feasibility PTE"
                 }
                 field(Subcontractor; Rec.Subcontractor)
                 {
-                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
+                    Editable = false;
                     Lookup = false;
                     // StyleExpr = RecStyle;
                 }
@@ -263,7 +262,7 @@ page 50110 "Prod. Orders Feasibility PTE"
                 field("Starting Time"; Rec."Starting Time")
                 {
                     Editable = false;
-                    visible = false;
+                    Visible = false;
                 }
                 field("Ending Date"; Rec."Ending Date")
                 {
@@ -273,51 +272,51 @@ page 50110 "Prod. Orders Feasibility PTE"
                 field("Ending Time"; Rec."Starting Time")
                 {
                     Editable = false;
-                    visible = false;
+                    Visible = false;
                 }
                 field("Unit of Measure Code"; Rec."Unit of Measure Code")
                 {
-                    Editable = false;
                     AssistEdit = false;
                     DrillDown = false;
+                    Editable = false;
                     Lookup = false;
                     Visible = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Quantity (Base)"; Rec."Operation Quantity (Base)")
                 {
-                    Editable = false;
                     BlankZero = true;
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Remaining Qty. (Base)"; Rec."Operation Rem. Qty. (Base)")
                 {
-                    Editable = false;
                     BlankZero = true;
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Finished Qty. (Base)"; Rec."Operation Finished Qty. (Base)")
                 {
-                    Editable = false;
                     BlankZero = true;
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Int. Feasible Quantity (Base)"; Rec."Int. Feasible Quantity (Base)")
                 {
-                    Editable = false;
                     BlankZero = true;
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Subc. Feasible Quantity (Base)"; Rec."Subc. Feasible Quantity (Base)")
                 {
-                    Editable = false;
                     BlankZero = true;
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("TS Feasible Quantity (Base)"; Rec."TS Feasible Quantity (Base)")
                 {
-                    Editable = false;
                     BlankZero = true;
+                    Editable = false;
                     // StyleExpr = RecStyle;
                 }
                 field("Subcontractor Order"; Rec."Subcontractor Order")
@@ -385,7 +384,7 @@ page 50110 "Prod. Orders Feasibility PTE"
 
                 trigger OnAction()
                 var
-                    L_LoadPageConfirm: label 'Load the page?';
+                    L_LoadPageConfirm: Label 'Load the page?';
                 begin
                     if not CConfirmManagement.GetResponseOrDefault(L_LoadPageConfirm, false) then
                         exit;
@@ -399,8 +398,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                 {
                     Caption = 'All Orders';
                     Enabled = BFeasibleOnly and BFeasibleFilterEnabled;
-                    Visible = BFeasibleOnly;
                     Image = OrderList;
+                    Visible = BFeasibleOnly;
 
                     trigger OnAction()
                     begin
@@ -413,8 +412,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                 {
                     Caption = 'Only Feasible Orders';
                     Enabled = not BFeasibleOnly and BFeasibleFilterEnabled;
-                    Visible = not BFeasibleOnly;
                     Image = RegisterPick;
+                    Visible = not BFeasibleOnly;
 
                     trigger OnAction()
                     begin
@@ -430,10 +429,10 @@ page 50110 "Prod. Orders Feasibility PTE"
                     {
                         ApplicationArea = All;
                         Caption = 'Filter Prod. Ord. For Component Using Internal Inventory';
-                        Image = FilterLines;
                         Enabled = BInternalInventoryComponentsFilterEnabled;
-                        visible = (not BComponentUsingInventoryFilterApplied);
+                        Image = FilterLines;
                         ToolTip = 'Allows you to identify the production orders that use the internal inventory related to the currently selected component.';
+                        Visible = (not BComponentUsingInventoryFilterApplied);
                         //! Tooltip in italiano: Consente di individuare gli ordini di produzione che impiegano la giacenza interna relativa al componente attualmente selezionato.
 
                         trigger OnAction()
@@ -453,8 +452,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                         Caption = 'Filter Prod. Ord. For Component Using External Inventory';
                         Enabled = BExternalInventoryComponentsFilterEnabled;
                         Image = FilterLines;
-                        Visible = (not BComponentUsingInventoryFilterApplied);
                         ToolTip = 'Allows you to identify the production orders that use the external inventory related to the currently selected component.';
+                        Visible = (not BComponentUsingInventoryFilterApplied);
                         //! Tooltip in italiano: Consente di individuare gli ordini di produzione che impiegano la giacenza esterna relativa al componente attualmente selezionato.
 
                         trigger OnAction()
@@ -473,8 +472,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                         ApplicationArea = All;
                         Caption = 'Remove Filter on Prod. Ord. Component';
                         Image = ClearFilter;
-                        Visible = BComponentUsingInventoryFilterApplied;
                         ToolTip = 'Removes the filters currently applied that limit the view to production orders using the internal or external inventory of the selected component, in order to display all production orders.';
+                        Visible = BComponentUsingInventoryFilterApplied;
                         //! Tooltip in italiano: Rimuove i filtri attualmente applicati che limitano la visualizzazione agli ordini di produzione che utilizzano la giacenza interna o esterna del componente selezionato, in modo da mostrare tutti gli ordini di produzione.
 
                         trigger OnAction()
@@ -496,9 +495,9 @@ page 50110 "Prod. Orders Feasibility PTE"
                 {
                     ApplicationArea = All;
                     Caption = 'Create Transfer Order For Selected Components';
-                    ToolTip = 'It allows you to create a transfer order from the internal location to the subcontractor''s location for selected components.';
-                    Image = NewTransferOrder;
                     Enabled = BTransferOrderActionEnabled;
+                    Image = NewTransferOrder;
+                    ToolTip = 'It allows you to create a transfer order from the internal location to the subcontractor''s location for selected components.';
 
                     trigger OnAction()
                     var
@@ -514,9 +513,9 @@ page 50110 "Prod. Orders Feasibility PTE"
                 {
                     ApplicationArea = All;
                     Caption = 'Create Transfer Order for Missing Components';
-                    ToolTip = 'It allows you to create a transfer order from the internal location to the subcontractor''s location for components with external stock that is insufficient to cover the remaining quantity.';
-                    Image = NewTransferOrder;
                     Enabled = BTransferOrderActionEnabled;
+                    Image = NewTransferOrder;
+                    ToolTip = 'It allows you to create a transfer order from the internal location to the subcontractor''s location for components with external stock that is insufficient to cover the remaining quantity.';
 
                     trigger OnAction()
                     var
@@ -537,9 +536,9 @@ page 50110 "Prod. Orders Feasibility PTE"
             action(QtyUpdateDate)
             {
                 Caption = 'Change Quantity and Date';
+                Enabled = false;
                 Image = EditLines;
                 Visible = false;
-                Enabled = false;
 
                 trigger OnAction()
                 var
@@ -655,16 +654,12 @@ page 50110 "Prod. Orders Feasibility PTE"
                                                 TempRSubcFeas1."Expected Qty. (Base)" := L_RProdOrdComp."Expected Qty. (Base)";
                                                 TempRSubcFeas1.Modify(false);
                                             end;
-
                                         until TempRSubcFeas1.Next() = 0;
                                     Commit();
                                     //  CSubcontractor.SubcontractorOrderFeasibility(Rec, TempRSubcFeas1, TempRSubcFeas2);
 
-
                                     //TODO commentata perché andava in errore, da sostiture con le procedure F_SetQtyOnSubcFeas1 e F_FillDictionary
                                     // SubcontractorOrderFeasibility(Rec, TempRSubcFeas1, TempRSubcFeas2);
-
-
 
                                     Commit();
                                     // Aggiorno l'ordine di conto lavoro
@@ -703,11 +698,10 @@ page 50110 "Prod. Orders Feasibility PTE"
 
                 trigger OnAction()
                 var
+                    TempL_RSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary;
                     L_RProdOrdL: Record "Prod. Order Line";
                     TempL_RProdOrdL: Record "Prod. Order Line" temporary;
                     L_RProdOrd: Record "Production Order";
-                    TempL_RSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary;
-                    TempL_RSubcFeas: Record "Prod. Order Feasibility PTE" temporary;
                     L_CUProdOrdStatusMgt: Codeunit "Prod. Order Status Management";
                     L_CUProduction: Codeunit "Production Codeunit FLE";
                 begin
@@ -772,10 +766,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                         //                                 if TempL_RSubcFeas.Get(TempL_RProdOrdL."Prod. Order No.", TempL_RProdOrdL."Line No.") then
                         // CSubcontractor.SubcontractorOrderFeasibility(TempL_RSubcFeas, TempRSubcFeas1, TempRSubcFeas2);
 
-
                         //TODO commentata perché andava in errore, da sostiture con le procedure F_SetQtyOnSubcFeas1 e F_FillDictionary
                         // SubcontractorOrderFeasibility(TempL_RSubcFeas, TempRSubcFeas1, TempRSubcFeas2);
-
 
                         //                           until TempL_RProdOrdL.Next() = 0
                         //                         end;
@@ -792,33 +784,31 @@ page 50110 "Prod. Orders Feasibility PTE"
                 action(ViewItem)
                 {
                     Caption = 'Item';
+                    Enabled = BViewItemActionEnabled;
                     Image = EditLines;
                     RunObject = page "Item Card";
                     RunPageLink = "No." = field("Item No.");
                     RunPageMode = View;
                     RunPageOnRec = false;
                     ShortcutKey = 'Shift+Ctrl+C';
-                    Enabled = BViewItemActionEnabled;
                 }
                 action(ViewProdOrder)
                 {
                     Caption = 'Prod. Order';
+                    Enabled = BViewProdOrderActionEnabled;
                     Image = SetupList;
                     ShortcutKey = 'Return';
-                    Enabled = BViewProdOrderActionEnabled;
 
                     trigger OnAction()
-                    var
-                        L_RProdOrd: Record "Production Order";
                     begin
                         CProduction.ShowProductionOrder(Rec."Prod. Order No.", true, false);
                     end;
                 }
                 action(ViewSubcontractorOrders)
                 {
-                    caption = 'Subcontractor Orders';
-                    Image = OrderTracking;
+                    Caption = 'Subcontractor Orders';
                     Enabled = BViewSubcontractorOrderActionEnabled;
+                    Image = OrderTracking;
                     ToolTip = 'Shows all subcontracting orders that have not yet been completed.';
 
                     trigger OnAction()
@@ -845,9 +835,9 @@ page 50110 "Prod. Orders Feasibility PTE"
             action(Availability)
             {
                 Caption = 'Availability';
+                Enabled = BAvailabilityActionEnabled;
                 Image = Trace;
                 ShortcutKey = 'Return';
-                Enabled = BAvailabilityActionEnabled;
 
                 trigger OnAction()
                 var
@@ -864,8 +854,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                 action(BinContentInternalLocation)
                 {
                     Caption = 'Bin Content Internal Location';
-                    Image = BinContent;
                     Enabled = BBinContentInternalLocationEnabled;
+                    Image = BinContent;
 
                     trigger OnAction()
                     begin
@@ -875,8 +865,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                 action(BinContentExternalLocation)
                 {
                     Caption = 'Bin Content External Location';
-                    Image = GetBinContent;
                     Enabled = BBinContentExternalLocationEnabled;
+                    Image = GetBinContent;
 
                     trigger OnAction()
                     begin
@@ -976,45 +966,43 @@ page 50110 "Prod. Orders Feasibility PTE"
     end;
 
     trigger OnAfterGetCurrRecord()
-    var
-        L_RLocation: Record Location;
     begin
         F_SetControls();
     end;
 
     var
-        CConfirmManagement: Codeunit "Confirm Management";
         TempRSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary;
         TempRSubcFeas1_2: Record "Prod. Order Feasibility 1 PTE" temporary;
         TempRSubcFeas2: Record "TMP Subc. Feasibility 2 FLE" temporary;
-        CSubcontractor: Codeunit "Subcontractor Codeunit FLE";
+        CConfirmManagement: Codeunit "Confirm Management";
         CGeneralManufacturing: Codeunit "General Manufacturing FLE";
         CProduction: Codeunit "Production Codeunit FLE";
         CSelectionFilterMgt: Codeunit SelectionFilterManagement;
-        BFeasibleOnly: Boolean;
-        BIncludeFirmPlanned: Boolean;
-        ShowComplete_S: Boolean;
-        SubOrders: Boolean;
-        SubcontractorNoFilter, ItemNoFilter, StandardTaskCodeFilter : Text;
-        ItemNoComponentFilter: Code[20];
-        VariantCodeComponentFilter: Code[10];
-        DueDateToFilter: Date;
-        InternalLocationFilter: Text;
-        RecStyle: Text;
-        BEnableComponentVariantCodeFilter: Boolean;
-        IsComponentFilterSet: Boolean;
+        BAvailabilityActionEnabled, BViewItemActionEnabled, BViewProdOrderActionEnabled, BViewSubcontractorOrderActionEnabled : Boolean;
+        BBinContentExternalLocationEnabled, BBinContentInternalLocationEnabled, BExternalInventoryComponentsFilterEnabled, BFeasibleFilterEnabled, BInternalInventoryComponentsFilterEnabled, BTransferOrderActionEnabled : Boolean;
         BCalcReservationBasedOnMaxFeasibleQty: Boolean;
         BComponentUsingInventoryFilterApplied: Boolean;
-        BBinContentInternalLocationEnabled, BBinContentExternalLocationEnabled, BTransferOrderActionEnabled, BFeasibleFilterEnabled, BInternalInventoryComponentsFilterEnabled, BExternalInventoryComponentsFilterEnabled : Boolean;
-        BViewItemActionEnabled, BViewProdOrderActionEnabled, BViewSubcontractorOrderActionEnabled, BAvailabilityActionEnabled : Boolean;
         BDisableActionAndDrillDownAtDueDateChange: Boolean;
-        ExpectedReceiptQtyForComponent: Dictionary of [Code[30], Decimal]; // Nr. articolo + Cod. variante, Qtà
-        GlobalQtyInTransferOrderPerInternalLocationAndComponent: Dictionary of [Code[10], Dictionary of [Code[30], Decimal]]; // Cod. ubicazione interna, Nr. articolo + Cod. variante, Qtà in ordine di trasferimento
+        BEnableComponentVariantCodeFilter: Boolean;
+        BFeasibleOnly: Boolean;
+        BIncludeFirmPlanned: Boolean;
+        IsComponentFilterSet: Boolean;
+        ShowComplete_S: Boolean;
+        SubOrders: Boolean;
+        VariantCodeComponentFilter: Code[10];
+        ItemNoComponentFilter: Code[20];
+        DueDateToFilter: Date;
         TransferredQtyPerComponent: Dictionary of [Code[10], Dictionary of [Code[10], Dictionary of [Code[30], Decimal]]]; // Cod. ubicazione interna, Cod. ubicazione esterna, Nr. articolo + Cod. variante, Qtà in ordine di trasferimento
+        GlobalQtyInTransferOrderPerInternalLocationAndComponent: Dictionary of [Code[10], Dictionary of [Code[30], Decimal]]; // Cod. ubicazione interna, Nr. articolo + Cod. variante, Qtà in ordine di trasferimento
         TotalInternalInventoryAlreadyUsed: Dictionary of [Code[10], Dictionary of [Code[30], Decimal]]; // Cod. ubicazione, Nr. articolo + Cod. variante, Giacenza esterna già utilizzata
         TotalExternalInventoryAlreadyUsed: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; // Nr. terzista, Nr. articolo + Cod. variante, Giacenza esterna già utilizzata
-        ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; // Nr. ODP, Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
-        ProdOrderNoForDrillDownInternalQtyUsedByOther, ProdOrderNoForDrillDownExternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
+        ExpectedReceiptQtyForComponent: Dictionary of [Code[30], Decimal]; // Nr. articolo + Cod. variante, Qtà
+        ProdOrderNoForDrillDownExternalQtyUsedByOther, ProdOrderNoForDrillDownInternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
+
+        ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; // Nr. ODP, Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
+        InternalLocationFilter: Text;
+        ItemNoFilter, StandardTaskCodeFilter, SubcontractorNoFilter : Text;
+        RecStyle: Text;
 
     local procedure F_LoadData()
     begin
@@ -1080,7 +1068,6 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_SetControls()
     var
-        L_RLocation: Record Location;
         L_BIsProdOrderExternal: Boolean;
     begin
         F_SetStyle();
@@ -1108,7 +1095,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         end;
         BFeasibleFilterEnabled := true;
 
-        TempRSubcFeas1_2.reset;
+        TempRSubcFeas1_2.Reset();
         TempRSubcFeas1_2.FilterComponentByProdOrder(Rec);
         if not TempRSubcFeas1_2.IsEmpty then begin
             BInternalInventoryComponentsFilterEnabled := true;
@@ -1161,34 +1148,8 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_FillTable()
     var
-        L_RItem: Record Item;
-        L_RItem2: Record Item;
         L_RProdOrdL: Record "Prod. Order Line";
-        L_RProdOrdRoutL: Record "Prod. Order Routing Line";
-        L_RWorkCenter: Record "Work Center";
-        L_RVendor: Record Vendor;
-        L_OK: Boolean;
-        L_ProgressWin: Dialog;
-        L_Counter, L_Counter2 : Integer;
-        L_Indentation: Integer;
-        L_NoOfRecords: Integer;
-        L_TextProg01: Label 'Work in progress...';
-        L_TextProg01a: Label 'Feasibility Production Orders Processing...\\';
-        L_TextProg02: Label 'Progress';
-        L_TextProg03: Label 'Processed';
-        L_TextProg04: Label 'Of';
-        L_TextProg05: Label 'Production Orders';
-        L_ConfirmLoadProdOrderWithoutDateFilter: Label 'The "Up To Starting Date" filter has not been set. Are you sure you want to load production orders? %1 production orders will be loaded.';
-        L_Filter1: Text;
-        L_Filter2: Text;
-        L_RLocation: Record Location;
-        L_CSelectionFilterMgt: Codeunit SelectionFilterManagement;
-        L_CConfigProgressBar: Codeunit "Config. Progress Bar";
-        L_WindowsUpdateCount: Integer;
-        L_ProdOrderNoFilter: Text;
-        L_ProdOrderNoListFilter: List of [Code[20]];
         L_IsHandled: Boolean;
-        L_DateTime: DateTime;
     begin
         F_ClearGlobalVar();
 
@@ -1229,7 +1190,6 @@ page 50110 "Prod. Orders Feasibility PTE"
         //Capire se lasciare comunque qua il passaggio dei dizionari alla subpage oppure spostarlo
         //Nel caso sarebbe da passare per ogni ordine di produzione che viene calcolato. Quindi sono un botto di chiamate in più
 
-
         //Se blocco il caricamento prima che finisca non vanno i drilldown
         CurrPage.ComponentsPart.Page.GetProdOrderDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder);
         //Abilito il drill down qui in modo che siano disattivati se il caricamento viene bloccato prima
@@ -1240,37 +1200,25 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     procedure F_CalcFeasibility(var V_RProdOrderLine: Record "Prod. Order Line"; var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE" temporary)
     var
+        L_RCapacityLedgerEntry: Record "Capacity Ledger Entry";
         L_RItem: Record Item;
-        L_RItem2: Record Item;
         L_RProdOrdComp: Record "Prod. Order Component";
         L_RProdOrdRoutL: Record "Prod. Order Routing Line";
         L_RWorkCenter: Record "Work Center";
-        L_RVendor: Record Vendor;
-        L_RCapacityLedgerEntry: Record "Capacity Ledger Entry";
-        L_OK: Boolean;
-        L_ProgressWin: Dialog;
-        L_Counter, L_Counter2 : Integer;
-        L_Indentation: Integer;
-        L_NoOfRecords: Integer;
-        L_TextProg01: Label 'Work in progress...';
-        L_TextProg01a: Label 'Feasibility Production Orders Processing...\\';
-        L_TextProg02: Label 'Progress';
-        L_TextProg03: Label 'Processed %1 of %2';
-        L_TextProg04: Label 'Of';
-        L_TextProg05: Label '%1 Production Orders';
-        L_ReleasedLbl: Label 'Released';
-        L_FirmPlannedLbl: Label 'Firm Planned';
-        L_Filter1: Text;
-        L_Filter2: Text;
-        L_RLocation: Record Location;
-        L_CSelectionFilterMgt: Codeunit SelectionFilterManagement;
         L_CConfigProgressBar: Codeunit "Config. Progress Bar";
-        L_WindowsUpdateCount: Integer;
-        L_OrderStatusText: Text;
         L_SubcontractorLocationCode: Code[20];
-        L_ProdOrderSubcontractorFeasableQty, L_ProdOrderInternalFeasableQty : Decimal;
-        L_ComponentSubcontractorFeasableQty, L_ComponentInternalFeasableQty : Decimal;
+        L_ComponentInternalFeasableQty, L_ComponentSubcontractorFeasableQty : Decimal;
+        L_ProdOrderInternalFeasableQty, L_ProdOrderSubcontractorFeasableQty : Decimal;
         L_TotalComponentFeasableQty: Decimal;
+        L_Counter, L_Counter2 : Integer;
+        L_NoOfRecords: Integer;
+        L_WindowsUpdateCount: Integer;
+        L_FirmPlannedLbl: Label 'Firm Planned';
+        L_ReleasedLbl: Label 'Released';
+        L_TextProg01: Label 'Work in progress...';
+        L_TextProg03: Label 'Processed %1 of %2';
+        L_TextProg05: Label '%1 Production Orders';
+        L_OrderStatusText: Text;
     begin
         if V_RProdOrderLine.FindSet() then begin
             if GuiAllowed then begin
@@ -1367,7 +1315,7 @@ page 50110 "Prod. Orders Feasibility PTE"
                                     V_RTMPSubcFeas1."External Location" := V_RTMPSubcFeas."Subcontracting Location Code";
                                     V_RTMPSubcFeas1."Expected Receipt Qty. (Base)" := F_GetExpectedReceiptQty(V_RTMPSubcFeas1."Item No.", V_RTMPSubcFeas1."Variant Code", V_RTMPSubcFeas1."Internal Location");
                                     F_CalcTotalInternalAndExternalComponentInventory(V_RTMPSubcFeas, V_RTMPSubcFeas1);
-                                    //Trovo la fase di prelievo del componente. 
+                                    //Trovo la fase di prelievo del componente.
                                     if (L_RProdOrdRoutL."Prod. Order No." <> V_RProdOrderLine."Prod. Order No.") or
                                        (L_RProdOrdRoutL."Routing Link Code" <> L_RProdOrdComp."Routing Link Code") then begin
                                         L_RProdOrdRoutL.SetRange("Routing Link Code", V_RTMPSubcFeas1."Routing Link Code");
@@ -1404,11 +1352,10 @@ page 50110 "Prod. Orders Feasibility PTE"
                                             end;
                                         //Questa opzione serve solo per gestire i casi di conto lavoro: se 2 o più componenti hanno la stessa quantità fattibile totale, scelgo quello che ha la quantità fattibile in conto lavoro minore (quindi più qtà da trasferire).
                                         (L_ComponentInternalFeasableQty + L_ComponentSubcontractorFeasableQty) = L_TotalComponentFeasableQty:
-                                            begin
-                                                if L_ComponentSubcontractorFeasableQty < L_ProdOrderSubcontractorFeasableQty then begin
-                                                    L_ProdOrderSubcontractorFeasableQty := L_ComponentSubcontractorFeasableQty;
-                                                    L_ProdOrderInternalFeasableQty := L_ComponentInternalFeasableQty;
-                                                end;
+
+                                            if L_ComponentSubcontractorFeasableQty < L_ProdOrderSubcontractorFeasableQty then begin
+                                                L_ProdOrderSubcontractorFeasableQty := L_ComponentSubcontractorFeasableQty;
+                                                L_ProdOrderInternalFeasableQty := L_ComponentInternalFeasableQty;
                                             end;
                                     end;
                                 end;
@@ -1463,19 +1410,16 @@ page 50110 "Prod. Orders Feasibility PTE"
     /// </summary>
     local procedure F_CalculateUsedAndUsableQuantitiesForComponent(var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"; var V_RProdOrderComponent: Record "Prod. Order Component")
     var
+        L_VendorNo: Code[20];
+        L_ComponentKey: Code[30];
         L_ExternalInventoryAlreadyUsed: Decimal;
         L_ExternalInventoryCanBeUsed: Decimal;
         L_InternalInventoryAlreadyUsed: Decimal;
         L_InternalInventoryCanBeUsed: Decimal;
+        L_OriginalRemainingQty: Decimal;
         L_QuantityOverExternalInventory: Decimal; //Conterrà la quantità rimanente che la giacenza esterna non riuscirà a coprire e dovrà essere coperta da quella interna (se presente)
-        L_ComponentKey: Code[30];
-        L_VendorNo: Code[20];
-        L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
-        L_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[20], Dictionary of [Code[10], List of [Code[20]]]];
+        L_ExternalComponentInventoryAlreadyUsed, L_InternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
         L_ProdOrderString: Text;
-        L_OriginalRemainingQty, L_ComponentQtyInTransferOrder : Decimal;
-        L_QtyInTransferOrderPerComponent: Dictionary of [Code[30], Decimal];
-        L_MaxProdOrderFeasibleQty: Decimal;
     begin
         L_ExternalInventoryAlreadyUsed := 0;
         L_ExternalInventoryCanBeUsed := 0;
@@ -1495,7 +1439,7 @@ page 50110 "Prod. Orders Feasibility PTE"
                     //Controllo se la giacenza esterna GIÀ UTILIZZATA + la qtà rimanente è superiore della giacenza esterna TOTALE in modo da sapere se devo utilizzare la giacenza interna
                     if (L_ExternalInventoryAlreadyUsed + V_RTempSubcFeasibility1."Remaining Qty. (Base)") > V_RTempSubcFeasibility1."External Inventory" then begin
                         L_ExternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, V_RTempSubcFeasibility1."External Inventory");
-                        //Calcolo quanta qtà rimanente deve essere coperta dalla giacenza interna in quanto quella esterna TOTALE non copre la totalità della qtà rimanente 
+                        //Calcolo quanta qtà rimanente deve essere coperta dalla giacenza interna in quanto quella esterna TOTALE non copre la totalità della qtà rimanente
                         if L_ExternalInventoryAlreadyUsed < V_RTempSubcFeasibility1."External Inventory" then
                             //Se la giacenza esterna GIÀ UTILIZZATA è minore della giacenza esterna TOTALE vuol dire che una parte di qtà rimanente può essere coperta dalla giacenza esterna, il restante da quella interna
                             L_QuantityOverExternalInventory := (L_ExternalInventoryAlreadyUsed + V_RTempSubcFeasibility1."Remaining Qty. (Base)") - V_RTempSubcFeasibility1."External Inventory"
@@ -1504,15 +1448,14 @@ page 50110 "Prod. Orders Feasibility PTE"
                             L_QuantityOverExternalInventory := V_RTempSubcFeasibility1."Remaining Qty. (Base)";
                     end else
                         L_ExternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, (L_ExternalInventoryAlreadyUsed + V_RTempSubcFeasibility1."Remaining Qty. (Base)"));
-                end else begin
+                end else
                     //! parte uguale a quella sotto, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
                     if V_RTempSubcFeasibility1."Remaining Qty. (Base)" > V_RTempSubcFeasibility1."External Inventory" then begin
                         L_ExternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempSubcFeasibility1."External Inventory");
                         L_QuantityOverExternalInventory := V_RTempSubcFeasibility1."Remaining Qty. (Base)" - V_RTempSubcFeasibility1."External Inventory";
                     end else
                         L_ExternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempSubcFeasibility1."Remaining Qty. (Base)");
-                    //! fino a qui
-                end;
+                //! fino a qui
                 TotalExternalInventoryAlreadyUsed.Set(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed);
             end else begin
                 //! parte uguale a quella sopra, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
@@ -1556,14 +1499,13 @@ page 50110 "Prod. Orders Feasibility PTE"
                     L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, V_RTempSubcFeasibility1."Internal Inventory")
                 else
                     L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, (L_InternalInventoryAlreadyUsed + V_RTempSubcFeasibility1."Remaining Qty. (Base)"));
-            end else begin
+            end else
                 //! parte uguale a quella sopra, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
                 if V_RTempSubcFeasibility1."Remaining Qty. (Base)" > V_RTempSubcFeasibility1."Internal Inventory" then
                     L_InternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempSubcFeasibility1."Internal Inventory")
                 else
                     L_InternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempSubcFeasibility1."Remaining Qty. (Base)");
-                //! fino a qui
-            end;
+            //! fino a qui
             TotalInternalInventoryAlreadyUsed.Set(V_RTempSubcFeasibility1."Internal Location", L_InternalComponentInventoryAlreadyUsed);
         end else begin
             //! parte uguale a quella sopra, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
@@ -1597,7 +1539,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         V_RTempSubcFeasibility1."Remaining Qty. (Base)" := L_OriginalRemainingQty;
     end;
 
-    local procedure F_GetInternalQtyAlreadyUsedForComponent(var V_InternalQty: Decimal; L_InternalLocationCode: Code[10]; P_ComponentKey: code[30]): Boolean
+    local procedure F_GetInternalQtyAlreadyUsedForComponent(var V_InternalQty: Decimal; L_InternalLocationCode: Code[10]; P_ComponentKey: Code[30]): Boolean
     var
         L_InternalComponentInventoryAlreadyUsed: Dictionary of [Code[30], Decimal];
     begin
@@ -1609,7 +1551,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         exit(true);
     end;
 
-    local procedure F_GetExternalQtyAlreadyUsedForComponent(var V_ExternalQty: Decimal; L_VendorNo: Code[20]; P_ComponentKey: code[30]): Boolean
+    local procedure F_GetExternalQtyAlreadyUsedForComponent(var V_ExternalQty: Decimal; L_VendorNo: Code[20]; P_ComponentKey: Code[30]): Boolean
     var
         L_ExternalComponentInventoryAlreadyUsed: Dictionary of [Code[30], Decimal];
     begin
@@ -1640,14 +1582,12 @@ page 50110 "Prod. Orders Feasibility PTE"
     local procedure F_RecalcUsedAndUsableQuantitiesForComponentForNotFullyFeasbleOrder(P_RProdOrderLine: Record "Prod. Order Line"; var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary)
     var
         L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
-        L_FeasibleQty: Decimal;
-        L_ComponentFeasibleQty: Decimal;
-        L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
         L_RProdOrderRoutingLine: Record "Prod. Order Routing Line";
-        L_VendorNo: Code[20];
         L_ComponentKey: Code[30];
-        L_InternalQtyToRemove, L_ExternalQtyToRemove : Decimal;
-        L_OriginalReservedInternalQty, L_OriginalReservedExternalQty : Decimal;
+        L_ComponentFeasibleQty: Decimal;
+        L_ExternalQtyToRemove, L_InternalQtyToRemove : Decimal;
+        L_FeasibleQty: Decimal;
+        L_OriginalReservedExternalQty, L_OriginalReservedInternalQty : Decimal;
     begin
         L_FeasibleQty := P_RTMPSubcFeas."Int. Feasible Quantity (Base)" + P_RTMPSubcFeas."Subc. Feasible Quantity (Base)";
         L_RTempSubcFeasibility1.Copy(V_RTempSubcFeasibility1, true);
@@ -1723,8 +1663,6 @@ page 50110 "Prod. Orders Feasibility PTE"
     var
         L_RProdOrderRoutingLine: Record "Prod. Order Routing Line";
         L_VendorNo: Code[20];
-        L_ExternalInventoryAlreadyUsed, L_InternalInventoryAlreadyUsed : Decimal;
-        L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
     begin
         if P_ExternalLocation <> '' then begin
             CGeneralManufacturing.FilterProdOrderRoutingLineFromProdOrderLine(L_RProdOrderRoutingLine, P_RProdOrderLine);
@@ -1737,19 +1675,17 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_UpdateInventoryAlreadyUsedDictionary(P_ExternalLocation: Code[10]; P_InternalLocation: Code[10]; P_VendorNo: Code[20]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_InternalQtyToRemove: Decimal; P_ExternalQtyToRemove: Decimal)
     var
-        L_RProdOrderRoutingLine: Record "Prod. Order Routing Line";
         L_ComponentKey: Code[30];
         L_ExternalInventoryAlreadyUsed, L_InternalInventoryAlreadyUsed : Decimal;
-        L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
+        L_ExternalComponentInventoryAlreadyUsed, L_InternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
     begin
         L_ComponentKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
-        if P_ExternalLocation <> '' then begin
+        if P_ExternalLocation <> '' then
             if TotalExternalInventoryAlreadyUsed.Get(P_VendorNo, L_ExternalComponentInventoryAlreadyUsed) then
                 if L_ExternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_ExternalInventoryAlreadyUsed) then begin
                     L_ExternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, L_ExternalInventoryAlreadyUsed - P_ExternalQtyToRemove);
                     TotalExternalInventoryAlreadyUsed.Set(P_VendorNo, L_ExternalComponentInventoryAlreadyUsed);
                 end;
-        end;
         if TotalInternalInventoryAlreadyUsed.Get(P_InternalLocation, L_InternalComponentInventoryAlreadyUsed) then
             if L_InternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_InternalInventoryAlreadyUsed) then begin
                 L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, L_InternalInventoryAlreadyUsed - P_InternalQtyToRemove);
@@ -1766,11 +1702,11 @@ page 50110 "Prod. Orders Feasibility PTE"
     //TODO rivedere nome
     local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_ParentProdOrderNo: Code[20]; P_ParentProdOrderLineNo: Integer; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
     var
-        L_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
+        L_ComponentDictionaryKey: Code[30];
         L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation: Dictionary of [Code[10], Text];
+        L_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
         L_DummyProdOrderNoList: Text; //Usata solo per fare la GET
         L_ProdOrderKey: Text;
-        L_ComponentDictionaryKey: Code[30];
     begin
         L_ProdOrderKey := P_ParentProdOrderNo + Format(P_ParentProdOrderLineNo);
         L_ComponentDictionaryKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
@@ -1778,11 +1714,10 @@ page 50110 "Prod. Orders Feasibility PTE"
         //TODO Vedere se questa funzione serve: funzione che serve per riempire il dizionario ProdOrderNoForDrillDownIntQtyUsedByOtherPerProdOrder
         if V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder.Get(L_ProdOrderKey, L_ProdOrderNoForDrillDownIntQtyUsedByOther) then begin
             if L_ProdOrderNoForDrillDownIntQtyUsedByOther.Get(L_ComponentDictionaryKey, L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation) then begin
-                if L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Get(P_LocationCode, L_DummyProdOrderNoList) then begin
-                    L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Set(P_LocationCode, P_ProdOrderNoList);
-                end else begin
+                if L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Get(P_LocationCode, L_DummyProdOrderNoList) then
+                    L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Set(P_LocationCode, P_ProdOrderNoList)
+                else
                     L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Add(P_LocationCode, P_ProdOrderNoList);
-                end;
                 L_ProdOrderNoForDrillDownIntQtyUsedByOther.Set(L_ComponentDictionaryKey, L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation);
             end else begin
                 L_ProdOrderNoForDrillDownIntQtyUsedByOtherByLocation.Add(P_LocationCode, P_ProdOrderNoList);
@@ -1805,10 +1740,9 @@ page 50110 "Prod. Orders Feasibility PTE"
     //TODO rivedere nome
     local procedure F_AddEntryInProdOrderDictionary(var V_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_ProdOrderNo: Code[20]; P_LocationCode: Code[10])
     var
-        L_ListOfProdOrderNo: Text;
-        L_ProdOrderNo: Code[20];
         L_ComponentDictionaryKey: Code[30];
         L_LocationCodeDictionary: Dictionary of [Code[10], Text];
+        L_ListOfProdOrderNo: Text;
     begin
         L_ComponentDictionaryKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
 
@@ -1842,8 +1776,8 @@ page 50110 "Prod. Orders Feasibility PTE"
     //TODO rivedere nome
     local procedure F_GetEntryFromProdOrderDictionary(var V_ListOfProdOrder: Text; P_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_LocationCode: Code[10]): Boolean
     var
-        L_LocationCodeDictionary: Dictionary of [Code[10], Text];
         L_ComponentDictionaryKey: Code[30];
+        L_LocationCodeDictionary: Dictionary of [Code[10], Text];
     begin
         Clear(V_ListOfProdOrder);
         L_ComponentDictionaryKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
@@ -1919,9 +1853,9 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_AddEntryInDictionary(var V_ProdOrderDictionary: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; P_ProdOrderNo: Code[20]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_Qty: Decimal)
     var
-        L_ProdOrderComponentDictionary: Dictionary of [Code[30], Decimal];
-        L_Qty: Decimal;
         L_ProdOrderComponentKey: Code[30];
+        L_Qty: Decimal;
+        L_ProdOrderComponentDictionary: Dictionary of [Code[30], Decimal];
     begin
         //Uso il codice articolo concatenato con la variante come chiave del dizionario in modo che il calcolo delle qtà comprenda anche la variante
         L_ProdOrderComponentKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
@@ -1932,9 +1866,8 @@ page 50110 "Prod. Orders Feasibility PTE"
                 L_Qty := L_ProdOrderComponentDictionary.Get(L_ProdOrderComponentKey);
                 P_Qty += L_Qty;
                 L_ProdOrderComponentDictionary.Set(L_ProdOrderComponentKey, P_Qty);
-            end else begin
+            end else
                 L_ProdOrderComponentDictionary.Add(L_ProdOrderComponentKey, P_Qty);
-            end;
             V_ProdOrderDictionary.Set(P_ProdOrderNo, L_ProdOrderComponentDictionary);
         end else begin
             L_ProdOrderComponentDictionary.Add(L_ProdOrderComponentKey, P_Qty);
@@ -1949,8 +1882,8 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_GetEntryFromDictionary(P_ProdOrderDictionary: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; P_ProdOrderNo: Code[20]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; var V_Qty: Decimal): Boolean
     var
-        L_ProdOrderComponentDictionary: Dictionary of [Code[30], Decimal];
         L_ProdOrderComponentKey: Code[30];
+        L_ProdOrderComponentDictionary: Dictionary of [Code[30], Decimal];
     begin
         V_Qty := 0;
         L_ProdOrderComponentKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
@@ -1971,12 +1904,10 @@ page 50110 "Prod. Orders Feasibility PTE"
     local procedure F_CalcTotalInternalAndExternalComponentInventory(var V_RTMPSubcFeasibility: Record "Prod. Order Feasibility PTE"; var V_RTMPSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE")
     var
         L_RItem: Record Item;
-        L_RLocation: Record Location;
-        L_RTransferLine: Record "Transfer Line";
         L_RProdOrderComponent: Record "Prod. Order Component";
-        L_OtherLocationInventory, L_ComponentQtyInTransferOrder : Decimal;
+        L_RTransferLine: Record "Transfer Line";
         L_ComponentKey: Code[30];
-        L_ComponentInventoryByInternalLocation, L_ComponentInventoryByInternalAndExternalLocation : Decimal;
+        L_ComponentInventoryByInternalAndExternalLocation, L_ComponentInventoryByInternalLocation : Decimal;
     begin
         L_ComponentKey := F_GetComponentKey(V_RTMPSubcFeasibility1."Item No.", V_RTMPSubcFeasibility1."Variant Code");
 
@@ -1992,7 +1923,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         if not L_RTransferLine.IsEmpty then begin
             L_RTransferLine.CalcSums("Quantity (Base)", "Qty. Received (Base)", "Qty. in Transit (Base)");
             V_RTMPSubcFeasibility."Comp. Trans. Order Exists" := true;
-            V_RTMPSubcFeasibility.Modify;
+            V_RTMPSubcFeasibility.Modify();
             V_RTMPSubcFeasibility1."Qty. in Transfer Order" := Round(L_RTransferLine."Quantity (Base)" + L_RTransferLine."Qty. in Transit (Base)" - L_RTransferLine."Qty. Received (Base)", L_RItem."Rounding Precision", '>');
         end;
 
@@ -2049,10 +1980,10 @@ page 50110 "Prod. Orders Feasibility PTE"
     //DUPLICATED c'è anche in page "FLEXSubcontactorFeasibility1PTE"
     local procedure F_GetProdOrderFilterFromDictionaryForQty(P_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; var V_ProdNoFilter: Text; P_ProdOrerNo: Code[20]; P_ProdOrderLineNo: Integer; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_LocationCode: Code[10]): Boolean
     var
-        L_ProdOrderDictionaryKey: Text;
         L_ItemVariantDictionaryKey: Code[30];
-        L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
         L_LocationDictionary: Dictionary of [Code[10], Text];
+        L_ComponentsDictionary: Dictionary of [Code[30], Dictionary of [Code[10], Text]];
+        L_ProdOrderDictionaryKey: Text;
     begin
         V_ProdNoFilter := '';
         L_ProdOrderDictionaryKey := P_ProdOrerNo + Format(P_ProdOrderLineNo);
@@ -2073,9 +2004,9 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_FilterProdOrdersForComponentUsingInventory(P_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_LocationType: Option Int,Ext): Boolean
     var
-        L_ProdOrderFilter: Text;
+        L_ExternalLocation, L_InternalLocation, L_LocationCode, L_VariantCode : Code[10];
         L_ItemNo: Code[20];
-        L_VariantCode, L_InternalLocation, L_ExternalLocation, L_LocationCode : Code[10];
+        L_ProdOrderFilter: Text;
     begin
         CurrPage.ComponentsPart.Page.GetRecComponent(L_ItemNo, L_VariantCode);
         CurrPage.ComponentsPart.Page.GetRecLocation(L_InternalLocation, L_ExternalLocation);
@@ -2126,18 +2057,17 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_CreateTransferOrder(var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary)
     var
-        L_InternalLocationList: List of [Code[10]];
-        L_ExternalLocationList: List of [Code[10]];
-        L_RTransferHeader: Record "Transfer Header";
-        L_LineNo: Integer;
-        L_RTransferLine: Record "Transfer Line";
         L_RLocation: Record Location;
-        L_InTransitLocationCode: Code[10];
         L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
-        L_ExternalInventoryCanBeUsed, L_InternalInventoryCanBeUsed : Decimal;
-        L_TransferOrderCreationConfirm: Label 'Do you confirm transfer order creation?';
-        L_PartialTransferOrderLineInsertConfirm: Label 'For one or more selected components, available internal inventory is insufficient to fully cover the remaining quantity. Do you still want to create the transfer order?';
+        L_RTransferHeader: Record "Transfer Header";
+        L_RTransferLine: Record "Transfer Line";
+        L_InTransitLocationCode: Code[10];
+        L_LineNo: Integer;
         L_NoComponentForTransferOrderErr: Label 'No suitable components are available in production order %1 to create a transfer order.';
+        L_PartialTransferOrderLineInsertConfirm: Label 'For one or more selected components, available internal inventory is insufficient to fully cover the remaining quantity. Do you still want to create the transfer order?';
+        L_TransferOrderCreationConfirm: Label 'Do you confirm transfer order creation?';
+        L_ExternalLocationList: List of [Code[10]];
+        L_InternalLocationList: List of [Code[10]];
     begin
         if V_RTempSubcFeasibility1.IsEmpty then
             Error(L_NoComponentForTransferOrderErr, Rec."Prod. Order No.");
@@ -2147,7 +2077,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         if not Confirm(L_TransferOrderCreationConfirm, false) then
             exit;
 
-        //Chiedo conferma se si vuole continuare con la creazione dell'ordine di transferimento anche se ci sono componenti con giacenza interna che copre solo parzialmente il fabbisogno 
+        //Chiedo conferma se si vuole continuare con la creazione dell'ordine di transferimento anche se ci sono componenti con giacenza interna che copre solo parzialmente il fabbisogno
         L_RTempSubcFeasibility1.Copy(V_RTempSubcFeasibility1, true);
         if L_RTempSubcFeasibility1.FindSet() then
             repeat
@@ -2170,7 +2100,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         end;
 
         L_RTempSubcFeasibility1.Copy(V_RTempSubcFeasibility1, true);
-        if L_RTempSubcFeasibility1.FindSet() then begin
+        if L_RTempSubcFeasibility1.FindSet() then
             repeat
                 if (not L_InternalLocationList.Contains(L_RTempSubcFeasibility1."Internal Location")) or
                    (not L_ExternalLocationList.Contains(L_RTempSubcFeasibility1."External Location")) then begin
@@ -2186,7 +2116,7 @@ page 50110 "Prod. Orders Feasibility PTE"
                     L_LineNo := 0;
                 end;
                 L_LineNo += 10000;
-                L_RTransferLine.Init;
+                L_RTransferLine.Init();
                 L_RTransferLine."Document No." := L_RTransferHeader."No.";
                 L_RTransferLine."Line No." := L_LineNo;
                 L_RTransferLine.Validate("Item No.", L_RTempSubcFeasibility1."Item No.");
@@ -2195,20 +2125,19 @@ page 50110 "Prod. Orders Feasibility PTE"
                 L_RTransferLine.Validate("Qty. to Ship (Base)", L_RTempSubcFeasibility1."Int. Reserved Quantity (Base)");
                 L_RTransferLine.Insert(true);
             until L_RTempSubcFeasibility1.Next() = 0;
-        end;
 
         Page.Run(Page::"Transfer Order", L_RTransferHeader);
     end;
 
     local procedure F_DoCheckForTransferLine(var V_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary)
     var
-        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
         L_RTempErrorMessage: Record "Error Message" temporary;
-        L_NoSubcontractorErr: Label 'Component %1 must not be processed by a subcontractor. Unable to proceed with transfer order creation.';
-        L_NoTransferRequiredErr: Label 'No transfer is required for component %1, as the external inventory covers the required quantity.';
+        L_RLocation: Record Location;
+        L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
         L_NoInternalInventoryErr: Label 'No internal inventory is available for component %1. It is not possible to create the transfer order.';
         L_NoInTransitLocation: Label 'There are no locations to use for the transit. The transfer order cannot be created.';
-        L_RLocation: Record Location;
+        L_NoSubcontractorErr: Label 'Component %1 must not be processed by a subcontractor. Unable to proceed with transfer order creation.';
+        L_NoTransferRequiredErr: Label 'No transfer is required for component %1, as the external inventory covers the required quantity.';
     begin
         L_RLocation.SetRange("Use As In-Transit", true);
         if not L_RLocation.FindFirst() then
@@ -2233,13 +2162,13 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     /// <summary>
     /// Recupera la quantità totale del componente presente nelle righe degli ordini di trasferimento, filtrando per ubicazione di partenza e ubicazione di destinazione.
-    /// </summary>    
+    /// </summary>
     local procedure F_GetQtyInTransferOrder(P_FromLocationCode: Code[10]; P_ToLocationCode: Code[10]; P_ItemNo: Code[20]; P_VariantCode: Code[10]): Decimal
     var
-        L_QtyInTransferOrder: Decimal;
         L_ComponentKey: Code[30];
-        L_QtyInTransferOrderPerComponent: Dictionary of [Code[30], Decimal];
+        L_QtyInTransferOrder: Decimal;
         L_QtyInTransferOrderPerExternalLocationAndComponent: Dictionary of [Code[10], Dictionary of [Code[30], Decimal]];
+        L_QtyInTransferOrderPerComponent: Dictionary of [Code[30], Decimal];
     begin
         L_ComponentKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
         if TransferredQtyPerComponent.Get(P_FromLocationCode, L_QtyInTransferOrderPerExternalLocationAndComponent) then begin
@@ -2272,11 +2201,11 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     /// <summary>
     /// Recupera la quantità totale del componente presente nelle righe degli ordini di trasferimento, filtrando per ubicazione di partenza.
-    /// </summary>    
+    /// </summary>
     local procedure F_GetQtyInTransferOrder(P_FromLocationCode: Code[10]; P_ItemNo: Code[20]; P_VariantCode: Code[10]): Decimal
     var
-        L_QtyInTransferOrder: Decimal;
         L_ComponentKey: Code[30];
+        L_QtyInTransferOrder: Decimal;
         L_QtyInTransferOrderPerComponent: Dictionary of [Code[30], Decimal];
     begin
         L_ComponentKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
@@ -2321,7 +2250,7 @@ page 50110 "Prod. Orders Feasibility PTE"
     local procedure F_ReloadPageToApplyOption()
     var
         L_RTempRec: Record "Prod. Order Feasibility PTE" temporary;
-        L_ReloadToApplyOptionConfirm: label 'The page must be reloaded to apply the selected option; you can do this later, but the option will not be active until the page is reloaded. Do you want to proceed?';
+        L_ReloadToApplyOptionConfirm: Label 'The page must be reloaded to apply the selected option; you can do this later, but the option will not be active until the page is reloaded. Do you want to proceed?';
     //!IN italiano: È necessario ricaricare la pagina per applicare l’opzione impostata; in alternativa puoi farlo più tardi, ma l’opzione non sarà attiva fino al ricaricamento. Confermi?
     begin
         L_RTempRec.Copy(Rec, true);
@@ -2336,8 +2265,8 @@ page 50110 "Prod. Orders Feasibility PTE"
     //TODO Procedure che sarà da spostare in Flex_Manufacturing_Interface perché la pagina è nella starter
     local procedure F_ShowBinContent(P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_LocationCode: Code[10])
     var
-        L_RLocation: Record Location;
         L_RBinContentTracking: Record "Bin Content Tracking FLE";
+        L_RLocation: Record Location;
     begin
         L_RLocation.Get(P_LocationCode);
         L_RLocation.TestField("Bin Mandatory", true);
@@ -2401,8 +2330,8 @@ page 50110 "Prod. Orders Feasibility PTE"
     var
         L_RWorkCenter: Record "Work Center";
         L_FWorkCenterList: Page "Work Center List";
-        L_BIsHandled: Boolean;
         L_RecRef: RecordRef;
+        L_BIsHandled: Boolean;
     begin
         L_RWorkCenter.FilterGroup(20);
         L_RWorkCenter.SetFilter("Subcontractor No.", '<>%1', '');
@@ -2427,8 +2356,8 @@ page 50110 "Prod. Orders Feasibility PTE"
     var
         L_RStandardTask: Record "Standard Task";
         L_FStandardTaskList: Page "Standard Tasks";
-        L_BIsHandled: Boolean;
         L_RecRef: RecordRef;
+        L_BIsHandled: Boolean;
     begin
         L_RStandardTask.Code := CopyStr(V_Text, 1, MaxStrLen(L_RStandardTask.Code));
         L_BIsHandled := false;
@@ -2472,7 +2401,6 @@ page 50110 "Prod. Orders Feasibility PTE"
     var
         L_RItemVariant: Record "Item Variant";
         L_BIsHandled: Boolean;
-        L_RecRef: RecordRef;
     begin
         if P_ItemNo = '' then
             exit(false);
@@ -2495,7 +2423,6 @@ page 50110 "Prod. Orders Feasibility PTE"
     local procedure F_CreateProdOrderFilterFromComponentFilter(var V_ProdOrderNoFilter: Text)
     var
         L_RProdOrdComp: Record "Prod. Order Component";
-        L_RecRef: RecordRef;
     begin
         V_ProdOrderNoFilter := '';
         if BIncludeFirmPlanned then
@@ -2550,9 +2477,9 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     local procedure F_GetExpectedReceiptQty(P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_InternalLocatioCode: Code[10]) O_Qty: Decimal
     var
+        L_RAssemblyHeader: Record "Assembly Header";
         L_RProdOrderLine: Record "Prod. Order Line";
         L_RPurchaseLine: Record "Purchase Line";
-        L_RAssemblyHeader: Record "Assembly Header";
         L_ComponentKey: Code[30];
     begin
         L_ComponentKey := F_GetComponentKey(P_ItemNo, P_VariantCode);

@@ -97,8 +97,8 @@ table 50041 "Prod. Order Feasibility 1 PTE"
         field(1025; "External Location"; Code[10])
         {
             Caption = 'External Location';
-            TableRelation = Location where("Use As In-Transit" = const(false));
             Editable = false;
+            TableRelation = Location where("Use As In-Transit" = const(false));
         }
         field(1030; "External Inventory"; Decimal)
         {
@@ -110,8 +110,8 @@ table 50041 "Prod. Order Feasibility 1 PTE"
         field(1035; "Internal Location"; Code[10])
         {
             Caption = 'Internal Location';
-            TableRelation = Location where("Use As In-Transit" = const(false));
             Editable = false;
+            TableRelation = Location where("Use As In-Transit" = const(false));
         }
         field(1040; "Internal Inventory"; Decimal)
         {
