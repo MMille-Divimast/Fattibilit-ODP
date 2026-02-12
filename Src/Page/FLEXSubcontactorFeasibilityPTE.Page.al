@@ -1,27 +1,14 @@
 page 50110 "Subcontactor Feasibility PTE"
 {
-
-    //TODO Utilizzare CConfirmManagement al posto dei vari confirm
-
-    // TODO: Implementare azione  QtyUpdateDate Modifica Quantità e Data
-    //          (azione resa per ora Visible FALSE)
-    // 
-    //          Considerare anche articoli WIP
-
     Caption = 'Subcontactor Global Feasibility';
     DeleteAllowed = false;
     InsertAllowed = false;
     PageType = ListPlus;
-    // SaveValues = true;
     SourceTable = "TMP Subc. Feasibility PTE";
     SourceTableTemporary = true;
     SourceTableView = sorting("Status Order", "Due Date", "Prod. Order No.", "Line No.") order(ascending);
     UsageCategory = Tasks;
     ApplicationArea = All;
-
-    //TODO Fabio ha chiesto di fare una funzionalità dove per i fornitori gestiti a progetto, che quindi hanno sotto altri fornitori tipo Newmont
-    // far si che loro vedano solo i fornitori figli e che quindi il calcolo della giacenza sia fatta solo su quelli.
-    // e non possano vedere le altre giacenze e neanche tutte le azioni.
 
     layout
     {
@@ -408,34 +395,6 @@ page 50110 "Subcontactor Feasibility PTE"
             group(Filters)
             {
                 Caption = 'Filters';
-                // action(ShowComplete)
-                // {
-                //     Caption = 'Show Completed';
-                //     Enabled = not ShowComplete_S;
-                //     Image = ClearFilter;
-                //     Visible = not ShowComplete_S;
-
-                //     trigger OnAction()
-                //     begin
-                //         ShowComplete_S := true;
-                //         F_SetFilters();
-                //         CurrPage.Update();
-                //     end;
-                // }
-                // action(HideComplete)
-                // {
-                //     Caption = 'Hide Completed';
-                //     Enabled = ShowComplete_S;
-                //     Image = UseFilters;
-                //     Visible = ShowComplete_S;
-
-                //     trigger OnAction()
-                //     begin
-                //         ShowComplete_S := false;
-                //         F_SetFilters();
-                //         CurrPage.Update();
-                //     end;
-                // }
                 action(AllOrders)
                 {
                     Caption = 'All Orders';
@@ -1704,22 +1663,6 @@ page 50110 "Subcontactor Feasibility PTE"
                 L_OriginalReservedInternalQty := L_RTempSubcFeasibility1."Int. Reserved Quantity (Base)";
                 L_OriginalReservedExternalQty := L_RTempSubcFeasibility1."Subc. Reserved Quantity (Base)";
                 if L_FeasibleQty = 0 then begin
-                    // if L_RTempSubcFeasibility1."External Location" <> '' then begin
-                    //     L_RProdOrderRoutingLine.SetRange("Routing Link Code", L_RTempSubcFeasibility1."Routing Link Code");
-                    //     if L_RProdOrderRoutingLine.FindFirst() then begin
-                    //         L_VendorNo := F_GetVendorFromProdOrderRoutingLine(L_RProdOrderRoutingLine);
-                    //         if TotalExternalInventoryAlreadyUsed.Get(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed) then
-                    //             if L_ExternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_ExternalInventoryAlreadyUsed) then begin
-                    //                 L_ExternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, 0);
-                    //                 TotalExternalInventoryAlreadyUsed.Set(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed);
-                    //             end;
-                    //     end;
-                    // end;
-                    // if TotalInternalInventoryAlreadyUsed.Get(L_RTempSubcFeasibility1."Internal Location", L_InternalComponentInventoryAlreadyUsed) then
-                    //     if L_InternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_ExternalInventoryAlreadyUsed) then begin
-                    //         L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, 0);
-                    //         TotalInternalInventoryAlreadyUsed.Set(L_VendorNo, L_InternalComponentInventoryAlreadyUsed);
-                    //     end;
                     F_UpdateInventoryAlreadyUsedDictionary(P_RProdOrderLine,
                                                            L_RTempSubcFeasibility1."External Location",
                                                            L_RTempSubcFeasibility1."Internal Location",
@@ -1731,11 +1674,6 @@ page 50110 "Subcontactor Feasibility PTE"
                     L_RTempSubcFeasibility1."Subc. Reserved Quantity (Base)" := 0;
                     L_RTempSubcFeasibility1."Int. Reserved Quantity (Base)" := 0;
                 end else begin
-
-                    //TODO Teoricamente ora funziona tutto, fare prove ma dovrebbe essere ok (ODP WO24023073) (fatto un pò di controlli e sembra andare bene)
-                    //TODO Fare come in plastiape che si può inserire una data sull'ordine di produzione e te lo sposta o prima o dopo
-                    //TODO sistemare campo nella sezione filtri + vedi altre azioni e campi da sistemare + TODO sotto
-
                     L_ComponentFeasibleQty := F_ConvertProdOrderFinishedQtyToComponentQty(L_FeasibleQty,
                                                                                           L_RTempSubcFeasibility1."Quantity per",
                                                                                           L_RTempSubcFeasibility1."Qty. per Unit of Measure");
@@ -1818,56 +1756,6 @@ page 50110 "Subcontactor Feasibility PTE"
                 TotalInternalInventoryAlreadyUsed.Set(P_InternalLocation, L_InternalComponentInventoryAlreadyUsed);
             end;
     end;
-
-    // // local procedure F_CalcFeasibleQtyForProdOrder(P_ProdOrderRemainingQty: Decimal; P_VendorNo: Code[20]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE" temporary; var V_RProdOrderComponent: Record "Prod. Order Component") O_ComponentQty: Decimal
-    // local procedure F_CalcFeasibleQtyForProdOrder(P_ProdOrderRemainingQty: Decimal; P_VendorNo: Code[20]; var V_RProdOrderComponent: Record "Prod. Order Component") O_ComponentQty: Decimal
-    // var
-    //     L_InternalInventoryAlreadyUsed, L_ExternalInventoryAlreadyUsed : Decimal;
-    //     L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
-    //     L_ComponentKey: Code[30];
-    //     L_RProdOrderComponent: Record "Prod. Order Component";
-    //     L_TotProdOrderFeasibleQty, L_TotComponentFeasibleQty, L_ExternalFeasibleQty, L_InternalFeasibleQty : Decimal;
-    // begin
-    //     L_TotProdOrderFeasibleQty := P_ProdOrderRemainingQty;
-    //     L_RProdOrderComponent.Copy(V_RProdOrderComponent);
-    //     if L_RProdOrderComponent.FindSet() then
-    //         repeat
-    //             L_TotComponentFeasibleQty := 0;
-    //             L_ExternalFeasibleQty := 0;
-    //             L_InternalFeasibleQty := 0;
-    //             L_InternalInventoryAlreadyUsed := 0;
-    //             L_ExternalInventoryAlreadyUsed := 0;
-    //             L_ComponentKey := F_GetComponentKey(L_RProdOrderComponent."Item No.", L_RProdOrderComponent."Variant Code");
-    //             if P_VendorNo <> '' then begin
-    //                 if F_GetExternalQtyAlreadyUsedForComponent(L_ExternalInventoryAlreadyUsed, P_VendorNo, L_ComponentKey) then
-    //                     L_ExternalInventoryAlreadyUsed := F_ConvertComponentQtyToProdOrderFinishedQty(L_ExternalInventoryAlreadyUsed, L_RProdOrderComponent."Quantity per", L_RProdOrderComponent."Qty. per Unit of Measure");
-    //                 if (P_RTempSubcFeasibility1."External Inventory" - L_ExternalInventoryAlreadyUsed) >= L_RProdOrderComponent."Remaining Qty. (Base)" then
-    //                     L_ExternalFeasibleQty := L_RProdOrderComponent."Remaining Qty. (Base)"
-    //                 else
-    //                     L_ExternalFeasibleQty := (P_RTempSubcFeasibility1."External Inventory" - L_ExternalInventoryAlreadyUsed);
-    //             end;
-    //             if F_GetInternalQtyAlreadyUsedForComponent(L_InternalInventoryAlreadyUsed, P_RTempSubcFeasibility1."Internal Location", L_ComponentKey) then
-    //                 L_InternalInventoryAlreadyUsed := F_ConvertComponentQtyToProdOrderFinishedQty(L_InternalInventoryAlreadyUsed, L_RProdOrderComponent."Quantity per", L_RProdOrderComponent."Qty. per Unit of Measure");
-    //             if L_ExternalFeasibleQty < L_RProdOrderComponent."Remaining Qty. (Base)" then begin
-    //                 if (P_RTempSubcFeasibility1."Internal Inventory" - L_InternalInventoryAlreadyUsed) >= (L_RProdOrderComponent."Remaining Qty. (Base)" - L_ExternalFeasibleQty) then
-    //                     L_InternalFeasibleQty := (L_RProdOrderComponent."Remaining Qty. (Base)" - L_ExternalFeasibleQty)
-    //                 else
-    //                     L_InternalFeasibleQty := (P_RTempSubcFeasibility1."Internal Inventory" - L_InternalInventoryAlreadyUsed);
-    //             end;
-    //             L_TotComponentFeasibleQty := L_ExternalFeasibleQty + L_InternalFeasibleQty;
-    //             L_TotComponentFeasibleQty := F_ConvertComponentQtyToProdOrderFinishedQty(L_TotComponentFeasibleQty,
-    //                                                                                      L_RProdOrderComponent."Quantity per",
-    //                                                                                      L_RProdOrderComponent."Qty. per Unit of Measure");
-    //             if (L_TotComponentFeasibleQty < L_TotProdOrderFeasibleQty) then
-    //                 L_TotProdOrderFeasibleQty := L_TotComponentFeasibleQty;
-    //         until L_RProdOrderComponent.Next() = 0;
-
-    //     //TODO Fare che invece di calcolare qui dentro la qtà già convertita qui calcoli solo la qtà fattibile per l'ordine di produzione e ti calcoli fuori i componenti
-    //     //TODO In modo che così puoi fare un dizionario per immagazzinare la qtà fattibile per ordine di produzione in modo da non doverla calcolare per tutti i componennti ma solo per il primo
-    //     //TODO vedere se funziona
-    //     // exit(F_ConvertProdOrderFinishedQtyToComponentQty(L_FeasibleQty, L_QtyPer, L_QtyPerUnitOfMeasure));
-    //     exit(L_TotProdOrderFeasibleQty);
-    // end;
 
     //TODO rivedere nome
     local procedure F_AddEntryInProdOrderDictionaryPerProdOrder(var V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; P_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE"; P_ProdOrderNoList: Text; P_LocationCode: Code[10])
@@ -1966,31 +1854,6 @@ page 50110 "Subcontactor Feasibility PTE"
             exit(false);
         exit(true);
     end;
-
-    //TODO funzione inutile e non utilizzata, intanto commentata ma poi sarà da rimuovere
-    // local procedure F_SetQtyOnSubcFeas1(var V_RTempSubcFeasibility1: Record "TMP Subc. Feasibility 1 PTE")
-    // var
-    //     L_RTempSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary;
-    //     L_ExternalInventoryAlreadyUsed: Decimal;
-    //     L_ExternalInventoryCanBeUsed: Decimal;
-    //     L_InternalInventoryAlreadyUsed: Decimal;
-    //     L_InternalInventoryCanBeUsed: Decimal;
-    // begin
-    //     L_RTempSubcFeas1.Copy(V_RTempSubcFeasibility1, true);
-    //     L_RTempSubcFeas1.Reset();
-    //     if L_RTempSubcFeas1.FindSet(true) then
-    //         repeat
-    //             if F_GetEntryFromDictionary(InternalInventoryCanBeUsedDictionary, L_RTempSubcFeas1."Prod. Order No.", L_RTempSubcFeas1."Item No.", L_RTempSubcFeas1."Variant Code", L_InternalInventoryCanBeUsed) then
-    //                 L_RTempSubcFeas1."Int. Reserved Quantity (Base)" := L_InternalInventoryCanBeUsed;
-    //             if F_GetEntryFromDictionary(InternalInventoryAlreadyUsedDictionary, L_RTempSubcFeas1."Prod. Order No.", L_RTempSubcFeas1."Item No.", L_RTempSubcFeas1."Variant Code", L_InternalInventoryAlreadyUsed) then
-    //                 L_RTempSubcFeas1."Int. Qty. used Other (Base)" := L_InternalInventoryAlreadyUsed;
-    //             if F_GetEntryFromDictionary(ExternalInventoryCanBeUsedDictionary, L_RTempSubcFeas1."Prod. Order No.", L_RTempSubcFeas1."Item No.", L_RTempSubcFeas1."Variant Code", L_ExternalInventoryCanBeUsed) then
-    //                 L_RTempSubcFeas1."Subc. Reserved Quantity (Base)" := L_ExternalInventoryCanBeUsed;
-    //             if F_GetEntryFromDictionary(ExternalInventoryAlreadyUsedDictionary, L_RTempSubcFeas1."Prod. Order No.", L_RTempSubcFeas1."Item No.", L_RTempSubcFeas1."Variant Code", L_ExternalInventoryAlreadyUsed) then
-    //                 L_RTempSubcFeas1."Subc. Qty. used Other (Base)" := L_ExternalInventoryAlreadyUsed;
-    //             L_RTempSubcFeas1.Modify(false);
-    //         until L_RTempSubcFeas1.Next() = 0;
-    // end;
 
     local procedure F_GetVendorFromProdOrderRoutingLine(P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"): Code[20]
     var
@@ -2131,15 +1994,6 @@ page 50110 "Subcontactor Feasibility PTE"
             V_RTMPSubcFeasibility."Comp. Trans. Order Exists" := true;
             V_RTMPSubcFeasibility.Modify;
             V_RTMPSubcFeasibility1."Qty. in Transfer Order" := Round(L_RTransferLine."Quantity (Base)" + L_RTransferLine."Qty. in Transit (Base)" - L_RTransferLine."Qty. Received (Base)", L_RItem."Rounding Precision", '>');
-            // //Calcolo il dizionario che contiene la qtà globale negli ordini di trasferimento per ogni componente
-            // if V_RTMPSubcFeasibility1."Qty. in Transfer Order" > 0 then
-            //     if QtyInTransferOrderPerLocationAndComponent.Get(L_ComponentKey, L_ComponentQtyInTransferOrder) then begin
-            //         L_ComponentQtyInTransferOrder += V_RTMPSubcFeasibility1."Qty. in Transfer Order";
-            //         QtyInTransferOrderPerLocationAndComponent.Set(L_ComponentKey, L_ComponentQtyInTransferOrder)
-            //     end else begin
-            //         L_ComponentQtyInTransferOrder := V_RTMPSubcFeasibility1."Qty. in Transfer Order";
-            //         QtyInTransferOrderPerLocationAndComponent.Add(L_ComponentKey, L_ComponentQtyInTransferOrder);
-            //     end;
         end;
 
         //Trovo la giacenza in ordine di transferimento del componente che successivamente andrò a togliere in quanto questa verrà trasferita in un'altra ubicazione.
@@ -2464,35 +2318,6 @@ page 50110 "Subcontactor Feasibility PTE"
         exit(L_RTransferLine."Quantity (Base)" + L_RTransferLine."Qty. in Transit (Base)" - L_RTransferLine."Qty. Received (Base)");
     end;
 
-    // local procedure F_ReloadPageToApplyOption() BReloaded: Boolean
-    // var
-    //     L_ReloadToApplyOptionConfirm: label 'The page must be reloaded to apply the selected option; you can do this later, but the option will not be active until the page is reloaded. Do you want to proceed?';
-    // //!IN italiano: È necessario ricaricare la pagina per applicare l’opzione impostata; in alternativa puoi farlo più tardi, ma l’opzione non sarà attiva fino al ricaricamento. Confermi?
-    // begin
-    //     exit(F_ReloadPage(L_ReloadToApplyOptionConfirm));
-    // end;
-
-    // local procedure F_ReloadPageToApplyDueDateChange() BReloaded: Boolean
-    // var
-    //     L_ReloadToDueDateChangesConfirm: Label 'The page must be reloaded to recalculate the feasibility of production orders. Alternatively, you can do it later, but component inventory commitments may be incorrect and some features may be disabled. Do you want to continue?';
-    // //! In italiano È necessario ricaricare la pagina per ricalcolare la fattibilità degli ordini di produzione. In alternativa puoi farlo più tardi, ma gli impegni sulle giacenze dei componenti potrebbero non essere corretti e alcune funzionalità potrebbero risultare disattivate. Vuoi continuare?
-    // begin
-    //     exit(F_ReloadPage(L_ReloadToDueDateChangesConfirm));
-    // end;
-
-    // local procedure F_ReloadPage(P_ConfirmTxt: Text) BReloaded: Boolean
-    // var
-    //     L_RTempRec: Record "TMP Subc. Feasibility PTE" temporary;
-    // begin
-    //     L_RTempRec.Copy(Rec, true);
-    //     L_RTempRec.Reset();
-    //     if L_RTempRec.IsEmpty then
-    //         exit(false);
-    //     if not CConfirmManagement.GetResponseOrDefault(P_ConfirmTxt, true) then
-    //         exit(false);
-    //     F_LoadData();
-    // end;
-
     local procedure F_ReloadPageToApplyOption()
     var
         L_RTempRec: Record "TMP Subc. Feasibility PTE" temporary;
@@ -2543,241 +2368,6 @@ page 50110 "Subcontactor Feasibility PTE"
         BDisableActionAndDrillDownAtDueDateChange := true;
         CurrPage.ComponentsPart.Page.DisableDrillDownOnInventoryUsedByOther();
     end;
-
-    // /// <summary>
-    // /// Procedure che ricalcola la fattibilità per gli ordini di produzione interessati dal cambio di data di scadenza.
-    // /// Gli ordini interessati sono quelli compresi tra la data di scadenza originale e quella nuova.
-    // /// </summary>
-    // local procedure F_RecalcProdOrderFeasibilityForDueDateChanges(P_OriginalDueDate: Date; P_NewDueDate: Date)
-    // var
-    //     L_FromDate, L_ToDate : Date;
-    //     L_RProdOrderLine: Record "Prod. Order Line";
-    //     L_RTempRec, L_RTempRec2 : Record "TMP Subc. Feasibility PTE" temporary;
-    //     L_RTempRSubcFeas1, L_RTempRSubcFeas1_2 : Record "TMP Subc. Feasibility 1 PTE" temporary;
-    //     L_ComponentKey: Code[30];
-    //     L_InternalInventoryAlreadyUsed, L_ExternalInventoryAlreadyUsed : Decimal;
-    //     L_InternalComponentInventoryAlreadyUsed, L_ExternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
-    //     L_RProdOrderRoutingLine: Record "Prod. Order Routing Line";
-    //     L_VendorNo: Code[20];
-
-
-    //     L_ProdOrderListDrillDown: List of [Text];
-    //     L_ProdOrderDrillDown: Text;
-    //     L_ProdOrderNoForDrillDownInternalQtyUsedByOther, L_ProdOrderNoForDrillDownExternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Copiati dalle variabili globali
-    //     L_ProdOrder: Text;
-    //     L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation: Dictionary of [Code[10], Text];
-    //     L_BMyOrder: Boolean;//TODO cambiare nome a questa variabile
-
-
-    //     L_ProdOrderListBefore, L_ProdOrderListAfter : List of [Text];
-    //     L_ProdOrderNoForDrillDownExternalBefore, L_ProdOrderNoForDrillDownExternalAfter : Dictionary of [Code[30], Dictionary of [Code[10], Text]];
-    //     L_ProdOrderNoForDrillDownExternalByLocationBefore, L_ProdOrderNoForDrillDownExternalByLocationAfter : Dictionary of [Code[10], Text];
-    //     L_ProdOrderString: Text;
-    // begin
-    //     case true of
-    //         P_OriginalDueDate = P_NewDueDate:
-    //             exit;
-    //         P_OriginalDueDate < P_NewDueDate:
-    //             begin
-    //                 L_FromDate := P_OriginalDueDate;
-    //                 L_ToDate := P_NewDueDate;
-    //             end;
-    //         P_NewDueDate < P_OriginalDueDate:
-    //             begin
-    //                 L_FromDate := P_NewDueDate;
-    //                 L_ToDate := P_OriginalDueDate;
-    //             end;
-    //     end;
-
-    //     L_RTempRec2.Copy(Rec, true);
-    //     L_RTempRec2.Reset;
-    //     L_RTempRSubcFeas1_2.Copy(TempRSubcFeas1, true);
-    //     L_RTempRSubcFeas1_2.Reset;
-
-    //     //Filtro gli ordini di produzione da ricalcolare
-    //     F_CreateLocationFilter();
-    //     F_FilterProdOrderLineToCalcFeasibility(L_RProdOrderLine, false, false);
-    //     L_RProdOrderLine.SetRange("Due Date", L_FromDate, L_ToDate);
-
-    //     //Elimino quali sono gli ordini di produzione che devo ricalcolare
-    //     L_RTempRec2.SetRange("Due Date", L_FromDate, L_ToDate);
-    //     if L_RTempRec2.FindSet() then
-    //         repeat
-    //             //Elimino la giacenza interna ed esterna impegnata dai componenti contenuta nei dizionari di totalizzazione
-    //             L_RTempRSubcFeas1_2.FilterComponentByProdOrder(L_RTempRec2);
-    //             if L_RTempRSubcFeas1_2.FindSet() then
-    //                 repeat
-
-    //                     //TODO capire anche se il ricalcolo parziale ha senso farlo (più veloce ma "pericoloso") oppure a sto punto fanculo ricalcolo tutto (più lento ma sicuro)
-
-    //                     //TODO C'è qualcosa che non funziona capire cos'è, nel senso che il ricalcolo non calcola la qtà impegnata da altri in maniera corretta. Debuggare per capire perché. IN più fare poi anche dizionari Drilldown (TODO qui sotto)
-
-    //                     //Rimuovo la giacenza interna impegnata da ogni compenente dell'ordine di produzione, in modo che al ricalcolo della fattibilità  non sia già impegnata.
-    //                     L_ComponentKey := F_GetComponentKey(L_RTempRSubcFeas1_2."Item No.", L_RTempRSubcFeas1_2."Variant Code");
-    //                     if L_RTempRSubcFeas1_2."Int. Reserved Quantity (Base)" > 0 then begin
-    //                         if TotalInternalInventoryAlreadyUsed.Get(L_RTempRSubcFeas1_2."Internal Location", L_InternalComponentInventoryAlreadyUsed) then
-    //                             if L_InternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_InternalInventoryAlreadyUsed) then begin
-    //                                 L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, L_InternalInventoryAlreadyUsed - L_RTempRSubcFeas1_2."Int. Reserved Quantity (Base)");
-    //                                 TotalInternalInventoryAlreadyUsed.Set(L_RTempRSubcFeas1_2."Internal Location", L_InternalComponentInventoryAlreadyUsed);
-    //                             end;
-    //                     end;
-    //                     //Rimuovo giacenza esterna impegnata da ogni compenente dell'ordine di produzione, in modo che al ricalcolo della fattibilità non sia già impegnata.
-    //                     if L_RTempRSubcFeas1_2."Subc. Reserved Quantity (Base)" > 0 then begin
-    //                         L_RProdOrderLine.get(L_RTempRec2.Status, L_RTempRec2."Prod. Order No.", L_RTempRec2."Line No.");
-    //                         CGeneralManufacturing.FilterProdOrderRoutingLineFromProdOrderLine(L_RProdOrderRoutingLine, L_RProdOrderLine);
-    //                         L_RProdOrderRoutingLine.SetRange("Routing Link Code", L_RTempRSubcFeas1_2."Routing Link Code");
-    //                         if L_RProdOrderRoutingLine.FindFirst() then begin
-    //                             L_VendorNo := F_GetVendorFromProdOrderRoutingLine(L_RProdOrderRoutingLine);
-    //                             if TotalExternalInventoryAlreadyUsed.Get(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed) then
-    //                                 if L_ExternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_ExternalInventoryAlreadyUsed) then begin
-    //                                     L_ExternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, L_ExternalInventoryAlreadyUsed - L_RTempRSubcFeas1_2."Subc. Reserved Quantity (Base)");
-    //                                     TotalExternalInventoryAlreadyUsed.Set(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed);
-    //                                 end;
-    //                         end;
-    //                     end;
-    //                 until L_RTempRSubcFeas1_2.next = 0;
-    //             //Elimino i componenti dell'ordine di produzione
-    //             CurrPage.ComponentsPart.Page.DeleteComponentForProdOrder(L_RTempRec2);
-    //             L_RTempRec2.Delete(false);
-    //         until L_RTempRec2.Next() = 0;
-
-
-    //     L_RProdOrderLine.SetRange(Status, L_RProdOrderLine.Status::Released);
-    //     F_CalcFeasibility(L_RProdOrderLine, L_RTempRec, L_RTempRSubcFeas1);
-
-    //     if BIncludeFirmPlanned then begin
-    //         L_RProdOrderLine.SetRange(Status, L_RProdOrderLine.Status::"Firm Planned");
-    //         F_CalcFeasibility(L_RProdOrderLine, L_RTempRec, L_RTempRSubcFeas1);
-    //     end;
-
-    //     //Inserisco gli ordini di produzione che ho ricalcolato
-    //     L_RTempRec.Reset();
-    //     if L_RTempRec.FindSet() then
-    //         repeat
-    //             L_RTempRec2 := L_RTempRec;
-    //             L_RTempRec2.Insert();
-    //             //Inserisco i componenti dell'ordine di produzione
-    //             L_RTempRSubcFeas1.FilterComponentByProdOrder(L_RTempRec);
-    //             if L_RTempRSubcFeas1.FindSet() then
-    //                 repeat
-    //                     L_RTempRSubcFeas1_2 := L_RTempRSubcFeas1;
-    //                     L_RTempRSubcFeas1_2.Insert();
-    //                 until L_RTempRSubcFeas1.Next() = 0;
-    //         until L_RTempRec.Next() = 0;
-
-    //     //TODO fare eliminazione delle informazioni contenute dei dizionari di drill down
-    //     // ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; // Nr. ODP, Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
-    //     // ProdOrderNoForDrillDownInternalQtyUsedByOther, ProdOrderNoForDrillDownExternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
-
-    //     Clear(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder);
-    //     Clear(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder);
-    //     Clear(ProdOrderNoForDrillDownInternalQtyUsedByOther);
-    //     Clear(ProdOrderNoForDrillDownExternalQtyUsedByOther);
-    //     L_RTempRec2.Reset();
-    //     L_RTempRSubcFeas1_2.reset;
-    //     L_RTempRec2.SetCurrentKey("Status Order", "Due Date", "Prod. Order No.", "Line No.");
-    //     if L_RTempRec2.FindSet() then
-    //         repeat
-    //             L_RTempRSubcFeas1_2.FilterComponentByProdOrder(L_RTempRec2);
-    //             if L_RTempRSubcFeas1_2.FindSet() then
-    //                 repeat
-    //                     L_ProdOrderString := '';
-    //                     if L_RTempRSubcFeas1_2."Subc. Qty. used Other (Base)" > 0 then
-    //                         if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownExternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."External Location") then
-    //                             F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, L_RTempRSubcFeas1_2, L_ProdOrderString, L_RTempRSubcFeas1_2."External Location");
-    //                     if (L_RTempRSubcFeas1_2."Remaining Qty. (Base)" > 0) and (L_RTempRSubcFeas1_2."External Inventory" > L_RTempRSubcFeas1_2."Subc. Qty. used Other (Base)") then
-    //                         F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownExternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."External Location");
-
-    //                     L_ProdOrderString := '';
-    //                     if L_RTempRSubcFeas1_2."Int. Qty. used Other (Base)" > 0 then
-    //                         if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownInternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."Internal Location") then
-    //                             F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, L_RTempRSubcFeas1_2, L_ProdOrderString, L_RTempRSubcFeas1_2."Internal Location");
-    //                     if (L_RTempRSubcFeas1_2."Remaining Qty. (Base)" > 0) and (L_RTempRSubcFeas1_2."Internal Inventory" > L_RTempRSubcFeas1_2."Int. Qty. used Other (Base)") then
-    //                         F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOther, L_RTempRSubcFeas1_2, L_RTempRSubcFeas1_2."Internal Location");
-    //                 until L_RTempRSubcFeas1_2.Next() = 0;
-    //         until L_RTempRec2.Next() = 0;
-
-    //     // L_ProdOrderString := '';
-    //     // if V_RTempSubcFeasibility1."Subc. Qty. used Other (Base)" > 0 then
-    //     //     if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownExternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."External Location") then
-    //     //         F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, V_RTempSubcFeasibility1, L_ProdOrderString, V_RTempSubcFeasibility1."External Location");
-    //     // if (V_RTempSubcFeasibility1."Remaining Qty. (Base)" > 0) and (V_RTempSubcFeasibility1."External Inventory" > V_RTempSubcFeasibility1."Subc. Qty. used Other (Base)") then
-    //     //     F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownExternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."External Location");
-
-
-
-
-    //     // L_ProdOrderString := '';
-    //     // if V_RTempSubcFeasibility1."Int. Qty. used Other (Base)" > 0 then
-    //     //     if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownInternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."Internal Location") then
-    //     //         F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, V_RTempSubcFeasibility1, L_ProdOrderString, V_RTempSubcFeasibility1."Internal Location");
-    //     // if (V_RTempSubcFeasibility1."Remaining Qty. (Base)" > 0) and (V_RTempSubcFeasibility1."Internal Inventory" > V_RTempSubcFeasibility1."Int. Qty. used Other (Base)") then
-    //     //     F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOther, V_RTempSubcFeasibility1, V_RTempSubcFeasibility1."Internal Location");
-
-    //     // L_RTempRec.SetCurrentKey("Status Order", "Due Date", "Prod. Order No.", "Line No.");
-    //     // if L_RTempRec.FindSet() then
-    //     //     repeat
-    //     //         L_RTempRSubcFeas1.FilterComponentByProdOrder(L_RTempRec);
-    //     //         if L_RTempRSubcFeas1.FindSet() then
-    //     //             repeat
-    //     //                 L_ComponentKey := F_GetComponentKey(L_RTempRSubcFeas1."Item No.", L_RTempRSubcFeas1."Variant Code");
-    //     //                 if (L_RTempRec.Status = Rec.Status) and (L_RTempRec."Prod. Order No." = Rec."Prod. Order No.") and (L_RTempRec."Line No." = Rec."Line No.") then begin
-    //     //                     L_BMyOrder := true;
-    //     //                     //Se sono sul record al quale ho cambiato la "Due Date" devo inserire o rimuovere gli ordini che occupano giacenza in base a se la "Due Date" impostata è maggiore o minore della precedente
-    //     //                     L_ProdOrderKey := Rec."Prod. Order No." + Format(Rec."Line No.");
-    //     //                     if ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder.Get(L_ProdOrderKey, L_ProdOrderNoForDrillDownExternalQtyUsedByOther) then
-    //     //                         if L_ProdOrderNoForDrillDownExternalQtyUsedByOther.Get(L_ComponentKey, L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation) then
-    //     //                             if L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation.Get(L_RTempRSubcFeas1."External Location", L_ProdOrderDrillDown) then begin
-    //     //                                 case true of
-    //     //                                     P_OriginalDueDate < P_NewDueDate:
-    //     //                                         //Qui vuol dire che l'ODP è stato spostato avanti
-    //     //                                         ;
-    //     //                                     P_OriginalDueDate > P_NewDueDate:
-    //     //                                         //Qui vuol dire che l'ODP è stato spostato indietro
-    //     //                                         ;
-    //     //                                 end;
-
-
-
-    //     //                             end;
-    //     //                 end else begin
-    //     //                     L_ProdOrderKey := L_RTempRSubcFeas1."Prod. Order No." + Format(L_RTempRSubcFeas1."Prod. Order Line No.");
-    //     //                     //Se NON sono sul record al quale ho cambiato la "Due Date" devo inserire o rimuovere dagli ordini che occupano giacenza l'ordine a cui ho modifica "Due Date".
-    //     //                     if ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder.Get(L_ProdOrderKey, L_ProdOrderNoForDrillDownExternalQtyUsedByOther) then
-    //     //                         if L_ProdOrderNoForDrillDownExternalQtyUsedByOther.Get(L_ComponentKey, L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation) then
-    //     //                             if L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation.Get(L_RTempRSubcFeas1."External Location", L_ProdOrderDrillDown) then begin
-    //     //                                 L_ProdOrderListDrillDown := L_ProdOrderDrillDown.Split('|');
-    //     //                                 if not L_BMyOrder then begin
-    //     //                                     if L_ProdOrderListDrillDown.Contains(Rec."Prod. Order No.") then begin
-    //     //                                         L_ProdOrderListDrillDown.Remove(Rec."Prod. Order No.");
-    //     //                                         L_ProdOrderDrillDown := '';
-    //     //                                         foreach L_ProdOrder in L_ProdOrderListDrillDown do begin
-    //     //                                             if L_ProdOrderDrillDown = '' then
-    //     //                                                 L_ProdOrderDrillDown := L_ProdOrder
-    //     //                                             else
-    //     //                                                 L_ProdOrderDrillDown += '|' + L_ProdOrder;
-    //     //                                         end;
-    //     //                                     end;
-
-
-
-    //     //                                 end else begin
-    //     //                                     if not L_ProdOrderListDrillDown.Contains(Rec."Prod. Order No.") then begin
-    //     //                                         //TODO Qui metto il mio ODP come ultimo, capire se è meglio metterlo nell'ordine giusto
-    //     //                                         if L_ProdOrderDrillDown = '' then
-    //     //                                             L_ProdOrderDrillDown := Rec."Prod. Order No."
-    //     //                                         else
-    //     //                                             L_ProdOrderDrillDown += '|' + Rec."Prod. Order No.";
-    //     //                                     end;
-    //     //                                 end;
-    //     //                                 L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation.Set(L_RTempRSubcFeas1_2."External Location", L_ProdOrderDrillDown);
-    //     //                                 L_ProdOrderNoForDrillDownExternalQtyUsedByOther.Set(L_ComponentKey, L_ProdOrderNoForDrillDownExtQtyUsedByOtherByLocation);
-    //     //                                 ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder.Set(L_ProdOrderKey, L_ProdOrderNoForDrillDownExternalQtyUsedByOther);
-    //     //                             end;
-    //     //                 end;
-    //     //             until L_RTempRSubcFeas1.Next() = 0;
-    //     //     until L_Rtemprec.next = 0;
-    // end;
 
     #region Lookup
     local procedure F_LookupItemNo(var V_Text: Text) O_BResult: Boolean
@@ -3017,14 +2607,4 @@ page 50110 "Subcontactor Feasibility PTE"
     local procedure OnBeforeCalcFeasibilityOnAfterSetFilterOnProdOrderLine(var Rec: Record "TMP Subc. Feasibility PTE" temporary; var ProdOrderLine: Record "Prod. Order Line"; var TempRSubcFeas1: Record "TMP Subc. Feasibility 1 PTE" temporary; IncludeFirmPlannedProdOrder: Boolean; ItemComponentNoFilter: Code[20]; VariantComponentCode: Code[10]; var IsHandled: Boolean)
     begin
     end;
-
-    //TODO da fare per queste page:
-
-    // - Carino da fare il filtro per componente. Quindi carico solo gli ODP con il componente specificato e mostro solo quello
-    // - sistemare anche questa pagina vedendo i campi in plastiape
-    // - da fare una funzionalità che controlla anche le quantità che verranno prodotte in futuro, nel senso che magari mi servono 100 pezzo ma ne ho 80 in magazzino perciò risulta non fattibile, però ho un ordine di acquisto di 100 che arriva tra 5 giorni, perciò li poi sarà fattibile
-    // - capire che azioni mettere nella page
-    // - la page "Subcontactor Feasibility 2 PTE" capire se si riesce a fare un altro modo invece che avere una page part, vedere se fare che quando ti posizioni sull componente ti evidenzia gli ODP in cui è usato, però questa soluzione non so se è la migliore
-    // - Rendere ben visibili quali sono i componenti che impediscono la fattibilità dell'ODP
-    // - I nomi dei campi renderli più capibili
 }

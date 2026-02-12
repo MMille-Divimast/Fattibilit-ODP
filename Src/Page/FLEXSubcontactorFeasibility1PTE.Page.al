@@ -1,13 +1,10 @@
 page 50111 "Subcontactor Feasibility 1 PTE"
 {
-    // PT20130157 20/12/2013 CS Creazione
-
     Caption = 'Subcontactor Global Feasibility 1';
     DeleteAllowed = false;
     InsertAllowed = false;
     ModifyAllowed = false;
     PageType = ListPart;
-    // PromotedActionCategories = 'New,Process,Report,Filters,Cards';
     SourceTable = "TMP Subc. Feasibility 1 PTE";
     SourceTableTemporary = true;
     SourceTableView = sorting(Status, "Prod. Order No.", "Prod. Order Line No.", "Line No.")
@@ -74,88 +71,6 @@ page 50111 "Subcontactor Feasibility 1 PTE"
                     Visible = false;
                     ApplicationArea = All;
                 }
-
-                //Campi vecchi
-
-                // field("Quantity per"; Rec."Quantity per")
-                // {
-                //     BlankZero = true;
-                //     ApplicationArea = All;
-                // }
-                // field("Remaining Qty. (Base)"; Rec."Remaining Qty. (Base)")
-                // {
-                //     BlankZero = true;
-                //     ApplicationArea = All;
-                // }
-                // field("Quantity (Base)"; Rec."Quantity (Base)")
-                // {
-                //     BlankZero = true;
-                //     Visible = false;
-                //     ApplicationArea = All;
-                // }
-                // field("Expected Qty. (Base)"; Rec."Expected Qty. (Base)")
-                // {
-                //     BlankZero = true;
-                //     Visible = false;
-                //     ApplicationArea = All;
-                // }
-                // field("RTMPSubcFeas2.""Available Quantity"""; RTMPSubcFeas2."Available Quantity")
-                // {
-                //     BlankZero = true;
-                //     Caption = 'Available Quantity';
-                //     DecimalPlaces = 0 : 5;
-                //     ApplicationArea = All;
-                // }
-                // field(CompFeas; CompFeas)
-                // {
-                //     BlankZero = true;
-                //     Caption = 'Component Feasibility';
-                //     DecimalPlaces = 0 : 5;
-                //     ApplicationArea = All;
-                // }
-                // field("Location Inventory"; Rec."Location Inventory")
-                // {
-                //     BlankZero = true;
-                //     ApplicationArea = All;
-                // }
-                // field("RTMPSubcFeas2.""External Inventory"""; RTMPSubcFeas2."External Inventory")
-                // {
-                //     BlankZero = true;
-                //     Caption = 'External Inventory';
-                //     DecimalPlaces = 0 : 5;
-                //     ApplicationArea = All;
-                // }
-                // field("RTMPSubcFeas2.""Internal Inventory"""; RTMPSubcFeas2."Internal Inventory")
-                // {
-                //     BlankZero = true;
-                //     Caption = 'Internal Inventory';
-                //     DecimalPlaces = 0 : 5;
-                //     ApplicationArea = All;
-                // }
-                // field("RTMPSubcFeas2.""Global Inventory"""; RTMPSubcFeas2."Global Inventory")
-                // {
-                //     BlankZero = true;
-                //     Caption = 'Global Inventory';
-                //     DecimalPlaces = 0 : 5;
-                //     ApplicationArea = All;
-                // }
-                // field("RTMPSubcFeas2.""Sales Orders Quantity"""; RTMPSubcFeas2."Sales Orders Quantity")
-                // {
-                //     BlankZero = true;
-                //     Caption = 'Sales Orders Quantity';
-                //     DecimalPlaces = 0 : 5;
-                //     ApplicationArea = All;
-                // }
-                // field("RTMPSubcFeas2.""Reserved Quantity"""; RTMPSubcFeas2."Reserved Quantity")
-                // {
-                //     BlankZero = true;
-                //     Caption = 'Reserved Quantity';
-                //     DecimalPlaces = 0 : 5;
-                //     ApplicationArea = All;
-                // }
-
-                //Campi nuovi presi da Plastiape
-
                 field("Remaining Qty. (Base)"; Rec."Remaining Qty. (Base)")
                 {
                     ApplicationArea = Basic;
