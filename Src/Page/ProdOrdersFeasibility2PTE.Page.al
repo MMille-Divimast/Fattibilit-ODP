@@ -1,5 +1,6 @@
 page 50112 "Prod. Orders Feasibility 2 PTE"
 {
+    ApplicationArea = All;
     Caption = 'Prod. Orders Feasibility 2';
     DeleteAllowed = false;
     InsertAllowed = false;
@@ -39,54 +40,54 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field("RTMPSubcFeas.Subcontractor"; RTMPSubcFeas.Subcontractor)
+                field("RTMPSubcFeas.Subcontractor"; RTempProdOrderFeasibility.Subcontractor)
                 {
                     ApplicationArea = All;
                     Caption = 'Subcontractor';
                 }
-                field("RTMPSubcFeas.""Subcontractor Name"""; RTMPSubcFeas."Subcontractor Name")
+                field("Subcontractor Name"; RTempProdOrderFeasibility."Subcontractor Name")
                 {
                     ApplicationArea = All;
                     Caption = 'Subcontractor Name';
                 }
-                field("RTMPSubcFeas.""Item No."""; RTMPSubcFeas."Item No.")
+                field("Item No."; RTempProdOrderFeasibility."Item No.")
                 {
                     ApplicationArea = All;
                     Caption = 'Item No.';
                 }
-                field("RTMPSubcFeas.""Variant Code"""; RTMPSubcFeas."Variant Code")
+                field("Variant Code"; RTempProdOrderFeasibility."Variant Code")
                 {
                     ApplicationArea = All;
                     Caption = 'Variant Code';
                     Visible = false;
                 }
-                field("RTMPSubcFeas.""Item Description"""; RTMPSubcFeas."Item Description")
+                field("Item Description"; RTempProdOrderFeasibility."Item Description")
                 {
                     ApplicationArea = All;
                     Caption = 'Item Description';
                 }
-                field("RTMPSubcFeas.""Planning Group"""; RTMPSubcFeas."Planning Group")
+                field("Planning Group"; RTempProdOrderFeasibility."Planning Group")
                 {
                     ApplicationArea = All;
                     Caption = 'Planning Group';
                     Visible = false;
                 }
-                field("RTMPSubcFeas.""Due Date"""; RTMPSubcFeas."Due Date")
+                field("Due Date"; RTempProdOrderFeasibility."Due Date")
                 {
                     ApplicationArea = All;
                     Caption = 'Due Date';
                 }
-                field("RTMPSubcFeas.""Starting Date"""; RTMPSubcFeas."Starting Date")
+                field("Starting Date"; RTempProdOrderFeasibility."Starting Date")
                 {
                     ApplicationArea = All;
                     Caption = 'Starting Date';
                 }
-                field("RTMPSubcFeas.""Ending Date"""; RTMPSubcFeas."Ending Date")
+                field("Ending Date"; RTempProdOrderFeasibility."Ending Date")
                 {
                     ApplicationArea = All;
                     Caption = 'Ending Date';
                 }
-                field("RTMPSubcFeas.""Unit of Measure Code"""; RTMPSubcFeas."Unit of Measure Code")
+                field("Unit of Measure Code"; RTempProdOrderFeasibility."Unit of Measure Code")
                 {
                     ApplicationArea = All;
                     AssistEdit = false;
@@ -95,35 +96,35 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
                     Lookup = false;
                     Visible = false;
                 }
-                field("RTMPSubcFeas.""Quantity (Base)"""; RTMPSubcFeas."Operation Quantity (Base)")
+                field("Quantity (Base)"; RTempProdOrderFeasibility."Operation Quantity (Base)")
                 {
                     ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Quantity (Base)';
                 }
-                field("RTMPSubcFeas.""Finished Qty. (Base)"""; RTMPSubcFeas."Operation Finished Qty. (Base)")
+                field("Finished Qty. (Base)"; RTempProdOrderFeasibility."Operation Finished Qty. (Base)")
                 {
                     ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Finished Qty. (Base)';
                 }
-                field("RTMPSubcFeas.""Remaining Qty. (Base)"""; RTMPSubcFeas."Operation Rem. Qty. (Base)")
+                field("Remaining Qty. (Base)"; RTempProdOrderFeasibility."Operation Rem. Qty. (Base)")
                 {
                     ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Remaining Qty. (Base)';
                 }
-                field("RTMPSubcFeas.""Feasible Quantity (Base)"""; RTMPSubcFeas."Subc. Feasible Quantity (Base)")
+                field("Feasible Quantity (Base)"; RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)")
                 {
                     ApplicationArea = All;
                     BlankZero = true;
                     Caption = 'Feasible Quantity (Base)';
                 }
-                field("RTMPSubcFeas.""Subcontractor Order"""; RTMPSubcFeas."Subcontractor Order")
-                {
-                    ApplicationArea = All;
-                    Caption = '1st Subcontractor Order';
-                }
+                // field("RTMPSubcFeas.""Subcontractor Order"""; RTMPSubcFeas."Subcontractor Order")
+                // {
+                //     ApplicationArea = All;
+                //     Caption = '1st Subcontractor Order';
+                // }
             }
         }
     }
@@ -144,7 +145,7 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
                     L_RItem: Record Item;
                     L_PGItemCard: Page "Item Card";
                 begin
-                    if L_RItem.Get(RTMPSubcFeas."Item No.") then begin
+                    if L_RItem.Get(RTempProdOrderFeasibility."Item No.") then begin
                         L_PGItemCard.SetRecord(L_RItem);
                         L_PGItemCard.Editable(false);
                         L_PGItemCard.Run();
@@ -163,37 +164,7 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
                     L_CProduction: Codeunit "Production Codeunit FLE";
                 begin
                     if Rec."Item No." <> '' then
-                        L_CProduction.ShowItemAvailability(RTMPSubcFeas."Item No.", '', '');
-                end;
-            }
-            action(ShowComplete)
-            {
-                ApplicationArea = All;
-                Caption = 'Show Completed';
-                Enabled = not ShowComplete;
-                Image = ClearFilter;
-                Visible = not ShowComplete;
-
-                trigger OnAction()
-                begin
-                    ShowComplete := true;
-                    F_SetFilters();
-                    CurrPage.Update();
-                end;
-            }
-            action(HideComplete)
-            {
-                ApplicationArea = All;
-                Caption = 'Hide Completed';
-                Enabled = ShowComplete;
-                Image = UseFilters;
-                Visible = ShowComplete;
-
-                trigger OnAction()
-                begin
-                    ShowComplete := false;
-                    F_SetFilters();
-                    CurrPage.Update();
+                        L_CProduction.ShowItemAvailability(RTempProdOrderFeasibility."Item No.", '', '');
                 end;
             }
             //TODO elimina prima del commit
@@ -202,17 +173,17 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
                 ApplicationArea = All;
                 trigger OnAction()
                 var
-                    L_RTMPSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
+                    L_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
                     L_Message: Text;
                 begin
-                    L_RTMPSubcFeasibility1.Copy(Rec, true);
-                    if L_RTMPSubcFeasibility1.FindSet() then
+                    L_RTempProdOrderFeasibility1.Copy(Rec, true);
+                    if L_RTempProdOrderFeasibility1.FindSet() then
                         repeat
                             if L_Message = '' then
-                                L_Message := L_RTMPSubcFeasibility1."Prod. Order No."
+                                L_Message := L_RTempProdOrderFeasibility1."Prod. Order No."
                             else
-                                L_Message := L_Message + '|' + L_RTMPSubcFeasibility1."Prod. Order No.";
-                        until L_RTMPSubcFeasibility1.Next() = 0;
+                                L_Message := L_Message + '|' + L_RTempProdOrderFeasibility1."Prod. Order No.";
+                        until L_RTempProdOrderFeasibility1.Next() = 0;
 
                     Message(L_Message);
                 end;
@@ -222,79 +193,17 @@ page 50112 "Prod. Orders Feasibility 2 PTE"
 
     trigger OnAfterGetRecord()
     begin
-        if not RTMPSubcFeas.Get(Rec."Prod. Order No.", Rec."Prod. Order Line No.") then
-            Clear(RTMPSubcFeas);
-    end;
-
-    trigger OnFindRecord(Which: Text): Boolean
-    var
-        EOF: Boolean;
-        i: Integer;
-        L_Direction: Integer;
-    begin
-        for i := 1 to StrLen(Which) do begin
-            EOF := false;
-            case CopyStr(Which, i, 1) of
-                '-', '>':
-                    L_Direction := 1;
-                '+', '<':
-                    L_Direction := -1;
-                '=':
-                    L_Direction := 0;
-            end;
-            EOF := not Rec.Find(CopyStr(Which, i, 1));
-            while (not EOF) and (not F_ShowRecord()) do
-                EOF := Rec.Next(L_Direction) = 0;
-            if not EOF then
-                exit(true);
-        end;
-    end;
-
-    trigger OnNextRecord(Steps: Integer): Integer
-    var
-        EOF: Boolean;
-        L_Direction: Integer;
-        L_NoOfSteps: Integer;
-        L_StepsTaken: Integer;
-    begin
-        L_Direction := 1;
-        if Steps < 0 then
-            L_Direction := -1;
-        L_NoOfSteps := Abs(Steps);
-        while (L_StepsTaken < L_NoOfSteps) and (not EOF) do begin
-            EOF := Rec.Next(L_Direction) = 0;
-            if (not EOF) and F_ShowRecord() then
-                L_StepsTaken += 1;
-        end;
-        exit(L_Direction * L_StepsTaken);
+        if not RTempProdOrderFeasibility.Get(Rec."Prod. Order No.", Rec."Prod. Order Line No.") then
+            Clear(RTempProdOrderFeasibility);
     end;
 
     var
-        RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary;
-        ShowComplete: Boolean;
+        RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary;
 
-    procedure GetTmpRec(var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE"; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE")
+    procedure GetTmpRec(var V_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE"; var V_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE")
     begin
-        Rec.Copy(V_RTMPSubcFeas1, true);
-        RTMPSubcFeas.Copy(V_RTMPSubcFeas, true);
+        Rec.Copy(V_RTempProdOrderFeasibility1, true);
+        RTempProdOrderFeasibility.Copy(V_RTempProdOrderFeasibility, true);
         exit;
-    end;
-
-    local procedure F_SetFilters()
-    begin
-    end;
-
-    procedure F_ShowRecord(): Boolean
-    begin
-        if ShowComplete then
-            exit(true)
-        else begin
-            if not RTMPSubcFeas.Get(Rec."Prod. Order No.", Rec."Prod. Order Line No.") then
-                Clear(RTMPSubcFeas);
-            if RTMPSubcFeas."Subcontractor Order" = '' then
-                exit(true)
-            else
-                exit(false);
-        end;
     end;
 }

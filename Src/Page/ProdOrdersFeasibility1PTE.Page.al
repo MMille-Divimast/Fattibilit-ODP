@@ -1,5 +1,6 @@
 page 50111 "Prod. Orders Feasibility 1 PTE"
 {
+    ApplicationArea = All;
     Caption = 'Prod. Orders Feasibility 1';
     DeleteAllowed = false;
     InsertAllowed = false;
@@ -89,6 +90,11 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                     BlankZero = true;
                     Visible = false;
                 }
+                field("Global Inventory"; Rec."Global Inventory")
+                {
+                    ApplicationArea = Basic;
+                    BlankZero = true;
+                }
                 field("Internal Location"; Rec."Internal Location")
                 {
                     ApplicationArea = All;
@@ -109,14 +115,14 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                     ApplicationArea = Basic;
                     BlankZero = true;
                 }
-                field("Int. Qty. used Other (Base)"; Rec."Int. Qty. used Other (Base)")
+                field("Int. Qty. used Other (Base)"; Rec."Int. Quantity Used (Base)")
                 {
                     ApplicationArea = Basic;
                     BlankZero = true;
 
                     trigger OnDrillDown()
                     begin
-                        if Rec."Int. Qty. used Other (Base)" > 0 then
+                        if Rec."Int. Quantity Used (Base)" > 0 then
                             F_DrillDownInternalQtyUsedByOther();
                     end;
                 }
@@ -138,19 +144,19 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                             F_DrillDownExternalInventory();
                     end;
                 }
-                field("Subc. Reserved Quantity (Base)"; Rec."Subc. Reserved Quantity (Base)")
+                field("Subc. Reserved Quantity (Base)"; Rec."Ext. Reserved Quantity (Base)")
                 {
                     ApplicationArea = Basic;
                     BlankZero = true;
                 }
-                field("Subc. Qty. used Other (Base)"; Rec."Subc. Qty. used Other (Base)")
+                field("Subc. Qty. used Other (Base)"; Rec."Ext. Quantity Used (Base)")
                 {
                     ApplicationArea = Basic;
                     BlankZero = true;
 
                     trigger OnDrillDown()
                     begin
-                        if Rec."Subc. Qty. used Other (Base)" > 0 then
+                        if Rec."Ext. Quantity Used (Base)" > 0 then
                             F_DrillDownExternalQtyUsedByOther();
                     end;
                 }
@@ -165,17 +171,11 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                             F_DrillDownQtyInTransferOrder();
                     end;
                 }
-                field("Global Inventory"; Rec."Global Inventory")
-                {
-                    ApplicationArea = Basic;
-                    BlankZero = true;
-                    ToolTip = 'Specifica la somma tra la giacenza interna ed esterna.'; //TODO fare in inglese
-                }
                 field("Internal Inventory Other Loc."; Rec."Internal Inventory Other Loc.")
                 {
                     ApplicationArea = Basic;
                     BlankZero = true;
-                    ToolTip = 'Specifica la quantità interna presente in altre ubicazioni rispetto a quella specificata sulla riga.'; //TODO fare in inglese
+                    // ToolTip = 'Specifica la quantità interna presente in altre ubicazioni rispetto a quella specificata sulla riga.'; //TODO fare in inglese
 
                     trigger OnDrillDown()
                     begin
@@ -183,22 +183,22 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                             F_DrillDownInternalInventoryOtherLoc();
                     end;
                 }
-                field("Total Subc. Rem. Qty. (Base)"; Rec."Total Subc. Rem. Qty. (Base)")
+                field("Total Subc. Rem. Qty. (Base)"; Rec."Total Ext. Rem. Qty. (Base)")
                 {
                     ApplicationArea = Basic;
                     BlankZero = true;
-                    ToolTip = 'Specifica la somma della "quantità rimanente" di tutti i componenti uguali al componente presente sulla riga in tutti gli ordini di produzione RILASCIATI con ubicazione uguale a quella del terzista presente sulla riga.'; //TODO fare in inglese
+                    // ToolTip = 'Specifica la somma della "quantità rimanente" di tutti i componenti uguali al componente presente sulla riga in tutti gli ordini di produzione RILASCIATI con ubicazione uguale a quella del terzista presente sulla riga.'; //TODO fare in inglese
 
                     trigger OnDrillDown()
                     begin
-                        if Rec."Total Subc. Rem. Qty. (Base)" > 0 then
+                        if Rec."Total Ext. Rem. Qty. (Base)" > 0 then
                             F_DrillDownTotalSubcRemQty();
                     end;
                 }
                 field("Qty. on Int. Component Lines"; Rec."Qty. on Int. Component Lines")
                 {
                     ApplicationArea = Basic;
-                    ToolTip = 'Specifica la somma della "quantità rimanente" di tutti i componenti uguali al componente presente sulla riga in tutti gli ordini di produzione RILASCIATI con la stessa ubicazione presente sulla riga.'; //TODO fare in inglese
+                    // ToolTip = 'Specifica la somma della "quantità rimanente" di tutti i componenti uguali al componente presente sulla riga in tutti gli ordini di produzione RILASCIATI con la stessa ubicazione presente sulla riga.'; //TODO fare in inglese
 
                     trigger OnDrillDown()
                     begin
@@ -206,16 +206,14 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                             F_DrillDownQtyOnIntComponentLines();
                     end;
                 }
-                field("Expected Receipt Qty. (Base)"; Rec."Expected Receipt Qty. (Base)")
+                field("Expected Receipt Qty. (Base)"; Rec."Expected Inbound Qty. (Base)")
                 {
                     ApplicationArea = All;
                     BlankZero = true;
-                    ToolTip = 'Specifies the total quantity expected to be received for the item from purchase, production, and assembly orders.';
-                    //in italiano = 'Specifica la quantità totale prevista in entrata per l\'articolo da ordini di acquisto, produzione e assemblaggio.'
 
                     trigger OnDrillDown()
                     begin
-                        if Rec."Expected Receipt Qty. (Base)" > 0 then
+                        if Rec."Expected Inbound Qty. (Base)" > 0 then
                             F_DrillDownExpectedReceiptQty();
                     end;
                 }
@@ -258,6 +256,37 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                         L_CProduction.ShowItemAvailability(Rec."Item No.", '', '');
                 end;
             }
+            //TODO Gruppo che sarà da spostare in Flex_Manufacturing_Interface perché la pagina è nella starter
+            group(BinContent)
+            {
+                Caption = 'Bin Content';
+                action(BinContentInternalLocation)
+                {
+                    Caption = 'Bin Content Internal Location';
+                    Enabled = BBinContentInternalLocationEnabled;
+                    Image = BinContent;
+
+                    trigger OnAction()
+                    var
+                        L_FProdOrderFeasibility: Page "Prod. Orders Feasibility PTE";
+                    begin
+                        L_FProdOrderFeasibility.ShowBinContent(Rec."Item No.", Rec."Variant Code", Rec."Location Code");
+                    end;
+                }
+                action(BinContentExternalLocation)
+                {
+                    Caption = 'Bin Content External Location';
+                    Enabled = BBinContentExternalLocationEnabled;
+                    Image = GetBinContent;
+
+                    trigger OnAction()
+                    var
+                        L_FProdOrderFeasibility: Page "Prod. Orders Feasibility PTE";
+                    begin
+                        L_FProdOrderFeasibility.ShowBinContent(Rec."Item No.", Rec."Variant Code", Rec."External Location");
+                    end;
+                }
+            }
             action(ViewNotFullyFeasibleComponents)
             {
                 ApplicationArea = All;
@@ -266,26 +295,26 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
 
                 trigger OnAction()
                 var
-                    L_RTempSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
+                    L_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
                     L_AllComponentFeasibleMsg: Label 'All components for production order %1 are fully feasible.';
                 begin
-                    L_RTempSubcFeasibility1.Copy(Rec, true);
-                    L_RTempSubcFeasibility1.FilterGroup(-1);
-                    L_RTempSubcFeasibility1.SetRange("Not Feasible", true);
-                    L_RTempSubcFeasibility1.SetRange("Partially Feasible", true);
-                    L_RTempSubcFeasibility1.FilterGroup(0);
-                    if L_RTempSubcFeasibility1.IsEmpty then begin
+                    L_RTempProdOrderFeasibility1.Copy(Rec, true);
+                    L_RTempProdOrderFeasibility1.FilterGroup(-1);
+                    L_RTempProdOrderFeasibility1.SetRange("Not Feasible", true);
+                    L_RTempProdOrderFeasibility1.SetRange("Partially Feasible", true);
+                    L_RTempProdOrderFeasibility1.FilterGroup(0);
+                    if L_RTempProdOrderFeasibility1.IsEmpty then begin
                         Message(L_AllComponentFeasibleMsg, Rec."Prod. Order No.");
                         exit;
                     end;
-                    if L_RTempSubcFeasibility1.FindSet() then
+                    if L_RTempProdOrderFeasibility1.FindSet() then
                         repeat
-                            Rec.Get(L_RTempSubcFeasibility1.Status,
-                                    L_RTempSubcFeasibility1."Prod. Order No.",
-                                    L_RTempSubcFeasibility1."Prod. Order Line No.",
-                                    L_RTempSubcFeasibility1."Line No.");
+                            Rec.Get(L_RTempProdOrderFeasibility1.Status,
+                                    L_RTempProdOrderFeasibility1."Prod. Order No.",
+                                    L_RTempProdOrderFeasibility1."Prod. Order Line No.",
+                                    L_RTempProdOrderFeasibility1."Line No.");
                             Rec.Mark(true);
-                        until L_RTempSubcFeasibility1.Next() = 0;
+                        until L_RTempProdOrderFeasibility1.Next() = 0;
                     Rec.MarkedOnly(true);
                 end;
             }
@@ -306,38 +335,32 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
 
     trigger OnAfterGetRecord()
     begin
-        if not RTMPSubcFeas2.Get(Rec."Item No.", Rec."Variant Code") then
-            Clear(RTMPSubcFeas2);
+        F_SetStyle();
+    end;
 
-        if Rec."Quantity per" > 0 then
-            CompFeas := Round(RTMPSubcFeas2."Available Quantity" / Rec."Quantity per", 1, '<')
-        else
-            CompFeas := 0;
-
+    trigger OnAfterGetCurrRecord()
+    begin
         F_SetControls();
     end;
 
     var
-        RTMPSubcFeas, RTMPSubcFeasSave : Record "Prod. Order Feasibility PTE" temporary;
-        RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE" temporary;
+        RTempProdOrderFeasibility, RTempProdOrderFeasibilitySave : Record "Prod. Order Feasibility PTE" temporary;
         BDrillDownDisabledForDueDateChange: Boolean;
-        CompFeas: Decimal;
         ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]];
         InternalLocationFilter: Text;
         RecStyle: Text;
+        BBinContentExternalLocationEnabled, BBinContentInternalLocationEnabled : Boolean;
 
-    procedure GetTmpRec(var V_RTMPSubcFeas: Record "Prod. Order Feasibility PTE" temporary; var V_RTMPSubcFeas1: Record "Prod. Order Feasibility 1 PTE"; var V_RTMPSubcFeas2: Record "TMP Subc. Feasibility 2 FLE")
+    procedure GetTmpRec(var V_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary; var V_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE")
     begin
-        RTMPSubcFeas.Copy(V_RTMPSubcFeas, true);
-        RTMPSubcFeas.Reset();
-        if RTMPSubcFeas.FindSet() then
+        RTempProdOrderFeasibility.Copy(V_RTempProdOrderFeasibility, true);
+        RTempProdOrderFeasibility.Reset();
+        if RTempProdOrderFeasibility.FindSet() then
             repeat
-                RTMPSubcFeasSave := RTMPSubcFeas;
-                RTMPSubcFeasSave.Insert();
-            until RTMPSubcFeas.Next() = 0;
-        V_RTMPSubcFeas1.Copy(Rec, true);
-        RTMPSubcFeas2.Copy(V_RTMPSubcFeas2, true);
-        exit;
+                RTempProdOrderFeasibilitySave := RTempProdOrderFeasibility;
+                RTempProdOrderFeasibilitySave.Insert();
+            until RTempProdOrderFeasibility.Next() = 0;
+        V_RTempProdOrderFeasibility1.Copy(Rec, true);
     end;
 
     procedure GetProdOrderDictionary(var V_ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; var V_ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]])
@@ -351,7 +374,7 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
         InternalLocationFilter := P_LocationFilter;
     end;
 
-    local procedure F_SetControls()
+    local procedure F_SetStyle()
     begin
         case true of
             Rec."Not Feasible":
@@ -361,6 +384,18 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
             else
                 RecStyle := '';
         end;
+    end;
+
+    local procedure F_SetControls()
+    begin
+        BBinContentInternalLocationEnabled := false;
+        BBinContentExternalLocationEnabled := false;
+
+        if Rec.IsEmpty then
+            exit;
+
+        BBinContentInternalLocationEnabled := Rec."Internal Location" <> '';
+        BBinContentExternalLocationEnabled := Rec."External Location" <> '';
     end;
 
     //DUPLICATED c'è anche in page "FLEXSubcontactorFeasibilityPTE"
@@ -636,15 +671,15 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
         Rec.FilterGroup(0);
     end;
 
-    procedure DeleteComponentForProdOrder(P_RTempSubcFeasibility: Record "Prod. Order Feasibility PTE" temporary)
+    procedure DeleteComponentForProdOrder(P_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary)
     var
-        L_RTempTMPSubcFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
+        L_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary;
     begin
-        L_RTempTMPSubcFeasibility1.Copy(Rec, true);
-        L_RTempTMPSubcFeasibility1.Reset();
-        L_RTempTMPSubcFeasibility1.SetRange(Status, P_RTempSubcFeasibility.Status);
-        L_RTempTMPSubcFeasibility1.SetRange("Prod. Order No.", P_RTempSubcFeasibility."Prod. Order No.");
-        L_RTempTMPSubcFeasibility1.SetRange("Prod. Order Line No.", P_RTempSubcFeasibility."Line No.");
-        L_RTempTMPSubcFeasibility1.DeleteAll(false);
+        L_RTempProdOrderFeasibility1.Copy(Rec, true);
+        L_RTempProdOrderFeasibility1.Reset();
+        L_RTempProdOrderFeasibility1.SetRange(Status, P_RTempProdOrderFeasibility.Status);
+        L_RTempProdOrderFeasibility1.SetRange("Prod. Order No.", P_RTempProdOrderFeasibility."Prod. Order No.");
+        L_RTempProdOrderFeasibility1.SetRange("Prod. Order Line No.", P_RTempProdOrderFeasibility."Line No.");
+        L_RTempProdOrderFeasibility1.DeleteAll(false);
     end;
 }
