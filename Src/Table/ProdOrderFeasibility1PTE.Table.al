@@ -177,16 +177,16 @@ table 50041 "Prod. Order Feasibility 1 PTE"
             Description = 'PLA00';
             ToolTip = 'Specifies how much internal inventory of the component will be reserved to the production order.';
         }
-        field(1080; "Ext. Quantity Used (Base)"; Decimal)
+        field(1080; "Ext. Qty. Already Used (Base)"; Decimal)
         {
-            Caption = 'Ext. Quantity Used (Base)';
+            Caption = 'Ext. Quantity Already Used (Base)';
             DecimalPlaces = 0 : 5;
             Description = 'PLA00';
             ToolTip = 'Specifies how much external inventory of the component is already reserved by other production orders with a due date earlier than the current order.';
         }
-        field(1085; "Int. Quantity Used (Base)"; Decimal)
+        field(1085; "Int. Qty. Already Used (Base)"; Decimal)
         {
-            Caption = 'Int. Quantity Used (Base)';
+            Caption = 'Int. Quantity Already Used (Base)';
             DecimalPlaces = 0 : 5;
             ToolTip = 'Specifies how much internal inventory of the component is already reserved by other production orders with a due date earlier than the current order.';
         }

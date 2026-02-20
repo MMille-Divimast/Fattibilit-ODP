@@ -57,17 +57,17 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Expected Qty. (Base) - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1602216982 - Field 1194053729 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 1602216982 - Field 2328298380 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies how much external inventory of the component is already reserved by other production orders with a due date earlier than the current order.</source>
           <target state="translated">Specifica quanta giacenza esterna del componente è già impegnata da altri ordini di produzione con data di scadenza precedente a quella dell'ordine corrente.</target>
           <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Ext. Quantity Used (Base) - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Ext. Qty. Already Used (Base) - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Table 1602216982 - Field 1194053729 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Ext. Quantity Used (Base)</source>
-          <target state="translated">Qtà. esterna utilizzata (base)</target>
+        <trans-unit id="Table 1602216982 - Field 2328298380 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ext. Quantity Already Used (Base)</source>
+          <target state="translated">Quantità esterna già utilizzata (base)</target>
           <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Ext. Quantity Used (Base) - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Ext. Qty. Already Used (Base) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1602216982 - Field 299121176 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies how much external inventory of the component will be reserved to the production order.</source>
@@ -117,17 +117,17 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Global Inventory - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1602216982 - Field 3342735559 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 1602216982 - Field 3569242854 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies how much internal inventory of the component is already reserved by other production orders with a due date earlier than the current order.</source>
           <target state="translated">Specifica quanta giacenza interna del componente è già impegnata da altri ordini di produzione con data di scadenza precedente a quella dell'ordine corrente.</target>
           <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Int. Quantity Used (Base) - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Int. Qty. Already Used (Base) - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Table 1602216982 - Field 3342735559 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Int. Quantity Used (Base)</source>
-          <target state="translated">Quantità interna utilizzata (base)</target>
+        <trans-unit id="Table 1602216982 - Field 3569242854 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Int. Quantity Already Used (Base)</source>
+          <target state="translated">Quantità interna già utilizzata (base)</target>
           <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Int. Quantity Used (Base) - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Prod. Order Feasibility 1 PTE - Field Int. Qty. Already Used (Base) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1602216982 - Field 4138788866 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies how much internal inventory of the component will be reserved to the production order.</source>
@@ -1252,8 +1252,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Prod. Orders Feasibility PTE - Action FilterProdOrdersForComponentUsingExternalInventory - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3691063044 - Action 2042380403 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter Prod. Ord. Using External Inventory Of The Component</source>
-          <target state="translated">Filtra ord. di prod. che usano giacenza esterna del componente</target>
+          <source>Filter Prod. Ord. Reserving External Inventory Of The Component</source>
+          <target state="translated">Filtra ord. di prod. che impegnano giacenza esterna del componente</target>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page Prod. Orders Feasibility PTE - Action FilterProdOrdersForComponentUsingExternalInventory - Property Caption</note>
         </trans-unit>
@@ -1270,8 +1270,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Prod. Orders Feasibility PTE - Action FilterProdOrdersForComponentUsingInternalInventory - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3691063044 - Action 50198317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter Prod. Ord. Using Internal Inventory Of The Component</source>
-          <target state="translated">Filtra ord. di prod. che usano giacenza interna del componente</target>
+          <source>Filter Prod. Ord. Reserving Internal Inventory Of The Component</source>
+          <target state="translated">Filtra ord. di prod. che impegnano giacenza interna del componente</target>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page Prod. Orders Feasibility PTE - Action FilterProdOrdersForComponentUsingInternalInventory - Property Caption</note>
         </trans-unit>

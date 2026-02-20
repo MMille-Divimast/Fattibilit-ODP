@@ -417,7 +417,7 @@ page 50110 "Prod. Orders Feasibility PTE"
                     action(FilterProdOrdersForComponentUsingInternalInventory)
                     {
                         ApplicationArea = All;
-                        Caption = 'Filter Prod. Ord. Using Internal Inventory Of The Component';
+                        Caption = 'Filter Prod. Ord. Reserving Internal Inventory Of The Component';
                         Enabled = BInternalInventoryComponentsFilterEnabled;
                         Image = FilterLines;
                         ToolTip = 'Allows you to identify the production orders that use the internal inventory related to the currently selected component.';
@@ -437,7 +437,7 @@ page 50110 "Prod. Orders Feasibility PTE"
                     action(FilterProdOrdersForComponentUsingExternalInventory)
                     {
                         ApplicationArea = All;
-                        Caption = 'Filter Prod. Ord. Using External Inventory Of The Component';
+                        Caption = 'Filter Prod. Ord. Reserving External Inventory Of The Component';
                         Enabled = BExternalInventoryComponentsFilterEnabled;
                         Image = FilterLines;
                         ToolTip = 'Allows you to identify the production orders that use the external inventory related to the currently selected component.';
@@ -988,7 +988,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         TotalExternalInventoryAlreadyUsed: Dictionary of [Code[20], Dictionary of [Code[30], Decimal]]; // Nr. terzista, Nr. articolo + Cod. variante, Giacenza esterna già utilizzata
         ExpectedReceiptQtyForComponent: Dictionary of [Code[30], Decimal]; // Nr. articolo + Cod. variante, Qtà
         ProdOrderNoForDrillDownExternalQtyUsedByOther, ProdOrderNoForDrillDownInternalQtyUsedByOther : Dictionary of [Code[30], Dictionary of [Code[10], Text]]; // Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
-        ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; // Nr. ODP, Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
+        ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder : Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; // Nr. ODP + Nr. riga ODP, Nr. articolo + Cod. variante, Cod. ubicazione, lista Nr. ODP
         InternalLocationFilter: Text;
         ItemNoFilter, StandardTaskCodeFilter, SubcontractorNoFilter : Text;
         RecStyle: Text;
@@ -1177,7 +1177,6 @@ page 50110 "Prod. Orders Feasibility PTE"
 
     procedure F_CalcFeasibility(var V_RProdOrderLine: Record "Prod. Order Line"; var V_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary; var V_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary)
     var
-        L_RCapacityLedgerEntry: Record "Capacity Ledger Entry";
         L_RItem: Record Item;
         L_RProdOrdComp: Record "Prod. Order Component";
         L_RProdOrdRoutL: Record "Prod. Order Routing Line";
@@ -1196,8 +1195,10 @@ page 50110 "Prod. Orders Feasibility PTE"
         L_TextProg03: Label 'Processed %1 of %2';
         L_TextProg05: Label '%1 Production Orders';
         L_OrderStatusText: Text;
+        L_ProdOrderRoutingLineCount, L_ProdOrderRoutingLineCounter : integer;
     begin
         if V_RProdOrderLine.FindSet() then begin
+            //Impostazione parametri per finestra di caricamento in corso
             if GuiAllowed then begin
                 L_NoOfRecords := V_RProdOrderLine.Count;
                 L_WindowsUpdateCount := Round(((L_NoOfRecords * 2.5) / 100), 1); //Calcolo il 2,5% del totale. Sarà la frequenza di aggiornamento della finestra
@@ -1230,88 +1231,49 @@ page 50110 "Prod. Orders Feasibility PTE"
 
                 CGeneralManufacturing.FilterProdOrderRoutingLineFromProdOrderLine(L_RProdOrdRoutL, V_RProdOrderLine);
                 L_RProdOrdRoutL.SetFilter("Routing Link Code", '<>%1', '');
-                //TODO sarebbe da fare findset e per ogni routing line dello stesso ODP che trova duplicare la riga
-                //TODO Magari fare visualizzazione ad albero nel caso di ordini che hanno più fasi che prelevano
-                if L_RProdOrdRoutL.FindFirst() then begin
-                    if L_RProdOrdRoutL."External Operation FLE" then begin
-                        if GetSubcontractorLocationFromProdOrderRoutingLine(L_RProdOrdRoutL, L_RWorkCenter, L_SubcontractorLocationCode) then
-                            //TODO può essere che ci siano più di un terzista sul ciclo dell'ODP, quindi questo non può essere segnato sulla riga dell'ordine ma è da spostare
-                            V_RTempProdOrderFeasibility."Subcontracting Location Code" := L_SubcontractorLocationCode;
-                        V_RTempProdOrderFeasibility.Subcontractor := L_RProdOrdRoutL."Work Center No.";
-                        V_RTempProdOrderFeasibility."Subcontractor Name" := L_RWorkCenter.Name;
-                    end;
-                    // end else
-                    //     exit;
+                if L_RProdOrdRoutL.FindSet() then begin
+                    L_ProdOrderRoutingLineCount := L_RProdOrdRoutL.Count();
+                    L_ProdOrderRoutingLineCounter := 0;
+                    repeat
+                        if L_RProdOrdRoutL."External Operation FLE" then begin
+                            if GetSubcontractorLocationFromProdOrderRoutingLine(L_RProdOrdRoutL, L_RWorkCenter, L_SubcontractorLocationCode) then
+                                V_RTempProdOrderFeasibility."Subcontracting Location Code" := L_SubcontractorLocationCode;
+                            V_RTempProdOrderFeasibility.Subcontractor := L_RProdOrdRoutL."Work Center No.";
+                            V_RTempProdOrderFeasibility."Subcontractor Name" := L_RWorkCenter.Name;
+                        end;
 
-                    // Imposto le quantità dell'operazione
-                    V_RTempProdOrderFeasibility."Operation Quantity (Base)" := L_RProdOrdRoutL."Input Quantity";
-                    L_RCapacityLedgerEntry.SetFilterByProdOrderRoutingLine(V_RProdOrderLine."Prod. Order No.", V_RProdOrderLine."Line No.",
-                                                                           L_RProdOrdRoutL."Routing No.", L_RProdOrdRoutL."Routing Reference No.");
-                    L_RCapacityLedgerEntry.CalcSums("Output Quantity", "Scrap Quantity");
-                    V_RTempProdOrderFeasibility."Operation Finished Qty. (Base)" := L_RCapacityLedgerEntry."Output Quantity";
-                    if L_RProdOrdRoutL."Routing Status" = L_RProdOrdRoutL."Routing Status"::Finished then
-                        V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" := 0
-                    else
-                        V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" := V_RTempProdOrderFeasibility."Operation Quantity (Base)" - V_RTempProdOrderFeasibility."Operation Finished Qty. (Base)";
+                        // Se il ciclo ha più di una fase di prelievo componenti devo calcolare il nr. riga da impostare per evitare chiavi duplicate
+                        if L_ProdOrderRoutingLineCount > 1 then begin
+                            if L_ProdOrderRoutingLineCounter > 0 then
+                                V_RTempProdOrderFeasibility."Line No." := F_GetLineNo(V_RTempProdOrderFeasibility, V_RProdOrderLine);
+                            L_ProdOrderRoutingLineCounter += 1;
+                        end;
 
-                    if V_RTempProdOrderFeasibility.Subcontractor <> '' then
-                        L_ProdOrderSubcontractorFeasableQty := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
-                    L_ProdOrderInternalFeasableQty := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
-                    L_TotalComponentFeasableQty := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
+                        // Imposto le quantità dell'operazione
+                        F_SetOperationQuantity(V_RTempProdOrderFeasibility, V_RProdOrderLine, L_RProdOrdRoutL);
 
-                    // Solo se ho del residuo
-                    if V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" > 0 then begin
-                        // L_RProdOrdRoutL.SetRange("External Operation FLE");
+                        //Imposto le variabili che mi servono per calcolare la quantità fattibili
+                        if V_RTempProdOrderFeasibility.Subcontractor <> '' then
+                            L_ProdOrderSubcontractorFeasableQty := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
+                        L_ProdOrderInternalFeasableQty := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
+                        L_TotalComponentFeasableQty := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
 
-                        V_RTempProdOrderFeasibility."Order Status" := Format(9 - V_RProdOrderLine.Status.AsInteger());
+                        // Procedo con il calcolo della fattibilità solo se c'è della quantità rimanente
+                        if V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" > 0 then begin
+                            V_RTempProdOrderFeasibility."Order Status" := Format(9 - V_RProdOrderLine.Status.AsInteger());
+                            V_RTempProdOrderFeasibility.Insert(false);
 
-                        V_RTempProdOrderFeasibility.Insert(false);
-
-                        // Inserisco i componenti
-                        L_RProdOrdComp.SetRange(Status, V_RProdOrderLine.Status);
-                        L_RProdOrdComp.SetRange("Prod. Order No.", V_RProdOrderLine."Prod. Order No.");
-                        L_RProdOrdComp.SetRange("Prod. Order Line No.", V_RProdOrderLine."Line No.");
-                        if L_RProdOrdComp.FindSet() then
-                            repeat
-                                // Escludo Item Category:
-                                //      IMBALLO
-                                if not L_RItem.Get(L_RProdOrdComp."Item No.") then
-                                    Clear(L_RItem);
-                                //TODO capire se escludere comunque l'Item category code IMBALLO e nel caso mettere un campo a Setup
-                                if not (L_RItem."Item Category Code" in ['IMBALLO']) then begin
-                                    V_RTempProdOrderFeasibility1.Init();
-                                    V_RTempProdOrderFeasibility1.TransferFields(L_RProdOrdComp);
-                                    V_RTempProdOrderFeasibility1."Component Description" := L_RItem.Description;
-                                    V_RTempProdOrderFeasibility1."Planning Group" := L_RItem."Planning Group FLE";
-                                    V_RTempProdOrderFeasibility1."Internal Location" := V_RProdOrderLine."Location Code";
-                                    //TODO External location potrebbe cambiare se i componenti vengono consumanti su 2 fasi del ciclo diverse e queste fasi sono esterne da terzisti diversi
-                                    //TODO perciò questo campo valorizzato qui non va bene e di conseguenza anche il campo in testata non va bene  V_RTMPSubcFeas."Subcontracting Location Code"
-                                    V_RTempProdOrderFeasibility1."External Location" := V_RTempProdOrderFeasibility."Subcontracting Location Code";
-                                    V_RTempProdOrderFeasibility1."Expected Inbound Qty. (Base)" := F_GetExpectedReceiptQty(V_RTempProdOrderFeasibility1."Item No.", V_RTempProdOrderFeasibility1."Variant Code", V_RTempProdOrderFeasibility1."Internal Location");
-                                    F_CalcTotalInternalAndExternalComponentInventory(V_RTempProdOrderFeasibility, V_RTempProdOrderFeasibility1);
-                                    //Trovo la fase di prelievo del componente.
-                                    if (L_RProdOrdRoutL."Prod. Order No." <> V_RProdOrderLine."Prod. Order No.") or
-                                       (L_RProdOrdRoutL."Routing Link Code" <> L_RProdOrdComp."Routing Link Code") then begin
-                                        L_RProdOrdRoutL.SetRange("Routing Link Code", V_RTempProdOrderFeasibility1."Routing Link Code");
-                                        if not L_RProdOrdRoutL.FindFirst() then
-                                            Clear(L_RProdOrdRoutL);
-                                    end;
-                                    // Calcolo le qtà di giacenza interna ed esterna già utilizzate e utilizzabili dal componente per l'ordine di produzione in modo da capire se le giacenze sono sufficienti per la realizzazione dell'ODP
-                                    F_CalculateUsedAndUsableQuantitiesForComponent(V_RTempProdOrderFeasibility1, L_RProdOrdRoutL, L_RProdOrdComp);
-
-                                    if (V_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" = 0) and (V_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" = 0) then
-                                        V_RTempProdOrderFeasibility1."Not Feasible" := true;
-                                    if ((V_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" > 0) and (V_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" < V_RTempProdOrderFeasibility1."Remaining Qty. (Base)")) or
-                                       ((V_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" > 0) and (V_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" < V_RTempProdOrderFeasibility1."Remaining Qty. (Base)")) then
-                                        V_RTempProdOrderFeasibility1."Partially Feasible" := true;
-                                    V_RTempProdOrderFeasibility1.Insert(false);
+                            // Inserisco i componenti
+                            F_FilterProdOrderComponentByRoutingLine(L_RProdOrdComp, V_RProdOrderLine, L_RProdOrdRoutL."Routing Link Code");
+                            if L_RProdOrdComp.FindSet() then
+                                repeat
+                                    F_InsertProdOrderComponentPerRoutingLine(V_RTempProdOrderFeasibility, V_RTempProdOrderFeasibility1, L_RProdOrdComp, L_RProdOrdRoutL, V_RProdOrderLine."Location Code");
 
                                     //Calcolo quantità fattibile dell'articolo finito da mostrare in testata
                                     //L_ProdOrderComponentInternalFeasableQty contiene quanti articoli finiti riesco a fare con il componente in base alla giacenza interna
                                     L_ComponentInternalFeasableQty := F_ConvertComponentQtyToProdOrderFinishedQty(V_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)",
                                                                                                                   V_RTempProdOrderFeasibility1."Quantity per",
                                                                                                                   V_RTempProdOrderFeasibility1."Qty. per Unit of Measure");
-
                                     //L_ProdOrderComponentSubcontractorFeasableQty contiene quanti articoli finiti riesco a fare con il componente in base alla giacenza esterna
                                     L_ComponentSubcontractorFeasableQty := F_ConvertComponentQtyToProdOrderFinishedQty(V_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)",
                                                                                                                        V_RTempProdOrderFeasibility1."Quantity per",
@@ -1332,48 +1294,137 @@ page 50110 "Prod. Orders Feasibility PTE"
                                                 L_ProdOrderInternalFeasableQty := L_ComponentInternalFeasableQty;
                                             end;
                                     end;
-                                end;
-                            until L_RProdOrdComp.Next() = 0;
+                                until L_RProdOrdComp.Next() = 0;
+                            F_SetFeasibleQuantitiesOnProdOrder(V_RTempProdOrderFeasibility, L_ProdOrderInternalFeasableQty, L_ProdOrderSubcontractorFeasableQty);
+                            V_RTempProdOrderFeasibility.Modify(false);
 
-                        //Quantità fattibile in conto lavoro
-                        V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" := L_ProdOrderSubcontractorFeasableQty;
-                        //Quantità fattibile internamente
-                        V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" := L_ProdOrderInternalFeasableQty;
-                        //Booleano che dice se fattibile completamente esternamente
-                        V_RTempProdOrderFeasibility."Full Feasible Externally" := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" <= V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)";
-                        //Se "TS Feasible Quantity (Base)" è maggiore della Remaining qty allora pareggio le qtà diminuendo la qtà fattibile interna
-                        //Questo può essere dovuto dai tassi di conversione sui componenti che potrebbero far differire le qtà di qualche decimale
-                        if (V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" + V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)") > V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" then
-                            V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" -= (V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" + V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)") - V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
-                        if (V_RTempProdOrderFeasibility.Subcontractor <> '') and
-                           (not V_RTempProdOrderFeasibility."Full Feasible Externally") and
-                           (V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" > 0) then
-                            //Indica la qtà totale fattibile tra quantità fattibile esternamente e internamente
-                            V_RTempProdOrderFeasibility."TS Feasible Quantity (Base)" := V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" + V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)";
-                        if V_RTempProdOrderFeasibility."TS Feasible Quantity (Base)" > 0 then
-                            //Indica se conto lavoro è completamente fattibile tramite trasferimento di giacenza interna
-                            V_RTempProdOrderFeasibility."Full Feasible Transfer" := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" <= V_RTempProdOrderFeasibility."TS Feasible Quantity (Base)";
-                        //Indica se completamente fattibile
-                        V_RTempProdOrderFeasibility."Full Feasible" := (V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" <= V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)") or
-                                                          (V_RTempProdOrderFeasibility."Full Feasible Externally") or
-                                                          (V_RTempProdOrderFeasibility."Full Feasible Transfer");
-                        //Mi salvo se l'ordine di produzione è parzialmente fattibile
-                        if (not V_RTempProdOrderFeasibility."Full Feasible") and (not V_RTempProdOrderFeasibility."Full Feasible Externally") and (not V_RTempProdOrderFeasibility."Full Feasible Transfer") then
-                            if (V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" > 0) or (V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" > 0) then
-                                V_RTempProdOrderFeasibility."Partially Feasible" := true;
-                        V_RTempProdOrderFeasibility.Modify(false);//TODO vedere se qui fare il modify oppure spostare l'insert che c'è sopra e metterlo qui
-
-                        if (V_RTempProdOrderFeasibility."Partially Feasible") or (not V_RTempProdOrderFeasibility."Full Feasible") then
-                            if BCalcReservationBasedOnMaxFeasibleQty then
-                                F_RecalcUsedAndUsableQuantitiesForComponentForNotFullyFeasbleOrder(V_RProdOrderLine,
-                                                                                                   V_RTempProdOrderFeasibility1,
-                                                                                                   V_RTempProdOrderFeasibility);
-                    end;
+                            if (V_RTempProdOrderFeasibility."Partially Feasible") or (not V_RTempProdOrderFeasibility."Full Feasible") then
+                                if BCalcReservationBasedOnMaxFeasibleQty then
+                                    F_RecalcUsedAndUsableQuantitiesForComponentForNotFullyFeasbleOrder(V_RProdOrderLine,
+                                                                                                       V_RTempProdOrderFeasibility1,
+                                                                                                       V_RTempProdOrderFeasibility);
+                        end;
+                    Until L_RProdOrdRoutL.Next() = 0;
                 end;
             until V_RProdOrderLine.Next() = 0;
             if GuiAllowed then
                 L_CConfigProgressBar.Close();
         end;
+    end;
+
+    local procedure F_GetLineNo(var V_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary; P_RProdOrderLine: Record "Prod. Order Line"): Integer
+    var
+        L_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary;
+    begin
+        L_RTempProdOrderFeasibility.copy(V_RTempProdOrderFeasibility, true);
+        L_RTempProdOrderFeasibility.reset;
+        L_RTempProdOrderFeasibility.SetRange(Status, V_RTempProdOrderFeasibility.Status);
+        L_RTempProdOrderFeasibility.SetRange("Prod. Order No.", V_RTempProdOrderFeasibility."Prod. Order No.");
+        if L_RTempProdOrderFeasibility.FindLast() then
+            exit(L_RTempProdOrderFeasibility."Line No." + 1);
+        exit(P_RProdOrderLine."Line No.");
+    end;
+
+    ///<summary>Imposta le quantità sulle quali si basano i calcoli della fattibilità</summary>
+    local procedure F_SetOperationQuantity(var V_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary; P_ProdOrderLine: Record "Prod. Order Line"; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line")
+    var
+        L_RCapacityLedgerEntry: Record "Capacity Ledger Entry";
+    begin
+        V_RTempProdOrderFeasibility."Operation Quantity (Base)" := P_RProdOrderRoutingLine."Input Quantity";
+        L_RCapacityLedgerEntry.SetFilterByProdOrderRoutingLine(P_ProdOrderLine."Prod. Order No.", P_ProdOrderLine."Line No.",
+                                                               P_RProdOrderRoutingLine."Routing No.", P_RProdOrderRoutingLine."Routing Reference No.");
+        L_RCapacityLedgerEntry.CalcSums("Output Quantity", "Scrap Quantity");
+        V_RTempProdOrderFeasibility."Operation Finished Qty. (Base)" := L_RCapacityLedgerEntry."Output Quantity";
+        if P_RProdOrderRoutingLine."Routing Status" = P_RProdOrderRoutingLine."Routing Status"::Finished then
+            V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" := 0
+        else
+            V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" := V_RTempProdOrderFeasibility."Operation Quantity (Base)" - V_RTempProdOrderFeasibility."Operation Finished Qty. (Base)";
+    end;
+
+    local procedure F_FilterProdOrderComponentByRoutingLine(var V_RProdOrderComponent: Record "Prod. Order Component"; P_RProdOrderLine: Record "Prod. Order Line"; P_RoutingLinkCode: Code[10])
+    begin
+        V_RProdOrderComponent.SetRange(Status, P_RProdOrderLine.Status);
+        V_RProdOrderComponent.SetRange("Prod. Order No.", P_RProdOrderLine."Prod. Order No.");
+        V_RProdOrderComponent.SetRange("Prod. Order Line No.", P_RProdOrderLine."Line No.");
+        V_RProdOrderComponent.SetRange("Routing Link Code", P_RoutingLinkCode);
+    end;
+
+    ///<summary>
+    ///Inserisce i componenti e ne calcola la quantità utilizzabile per la fattibilità dell'ordine di produzione.
+    ///</summary>
+    local procedure F_InsertProdOrderComponentPerRoutingLine(var V_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary; var V_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; var V_RProdOrderComponent: Record "Prod. Order Component"; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"; P_ProdOrderLineLocationCode: Code[10])
+    var
+        L_RItem: Record Item;
+    begin
+        if not L_RItem.Get(V_RProdOrderComponent."Item No.") then
+            Clear(L_RItem);
+        V_RTempProdOrderFeasibility1.Init();
+        V_RTempProdOrderFeasibility1.TransferFields(V_RProdOrderComponent);
+        //Assegno il "Prod. Order Line No." nonostante il trasferfield in modo che se ci sono più fasi di ciclo che prelevano componenti il nr. riga sia lo stesso
+        V_RTempProdOrderFeasibility1."Prod. Order Line No." := V_RTempProdOrderFeasibility."Line No.";
+        V_RTempProdOrderFeasibility1."Component Description" := L_RItem.Description;
+        V_RTempProdOrderFeasibility1."Planning Group" := L_RItem."Planning Group FLE";
+        V_RTempProdOrderFeasibility1."Internal Location" := P_ProdOrderLineLocationCode;
+        V_RTempProdOrderFeasibility1."External Location" := V_RTempProdOrderFeasibility."Subcontracting Location Code";
+        V_RTempProdOrderFeasibility1."Expected Inbound Qty. (Base)" := F_GetExpectedInboundQty(V_RTempProdOrderFeasibility1."Item No.", V_RTempProdOrderFeasibility1."Variant Code", V_RTempProdOrderFeasibility1."Internal Location");
+
+        // Calcolo la giacenza interna ed esterna per il componente
+        F_CalcTotalInternalAndExternalComponentInventory(V_RTempProdOrderFeasibility, V_RTempProdOrderFeasibility1);
+        // Calcolo le qtà di giacenza interna ed esterna già utilizzate e utilizzabili dal componente per l'ordine di produzione in modo da capire se le giacenze sono sufficienti per la realizzazione dell'ODP
+        F_CalculateUsedAndUsableQuantitiesForComponent(V_RTempProdOrderFeasibility1, P_RProdOrderRoutingLine);
+
+        V_RTempProdOrderFeasibility1."Not Feasible" := F_IsComponentReservedQtyZero(V_RTempProdOrderFeasibility1);
+        if not V_RTempProdOrderFeasibility1."Not Feasible" then
+            V_RTempProdOrderFeasibility1."Partially Feasible" := F_IsComponentReservedQtyPartial(V_RTempProdOrderFeasibility1);
+        V_RTempProdOrderFeasibility1.Insert(false);
+    end;
+
+    ///<summary>Specifica se il componente non ha ne quantità interna riservata e ne quantità esterna riservata, questo indica che l'ordine di produzione non sarà fattibile in quanto la gianceza presente è già stata impegnata completamente.</summary>
+    local procedure F_IsComponentReservedQtyZero(P_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary): Boolean
+    begin
+        exit((P_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" = 0) and (P_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" = 0));
+    end;
+
+    ///<summary>Specifica se il componente ha quantità interna o esterna riservata minore della quantità necessaria, questo indica che per questo componente l'ordine di produzione è parzialmente fattibile.</summary>
+    local procedure F_IsComponentReservedQtyPartial(P_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary): Boolean
+    begin
+        // Controllo che almeno la quantità interna o esterna riservate siano maggiori di zero ma minori della quantità rimanente
+        // e che anche la somma delle quantità interna ed esterna riservate siano minori della quantità rimanente.
+        exit((((P_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" > 0) and
+               (P_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" < P_RTempProdOrderFeasibility1."Remaining Qty. (Base)")) or
+              ((P_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" > 0) and
+               (P_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" < P_RTempProdOrderFeasibility1."Remaining Qty. (Base)"))) and
+             ((P_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" + P_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)") < P_RTempProdOrderFeasibility1."Remaining Qty. (Base)"));
+    end;
+
+    local procedure F_SetFeasibleQuantitiesOnProdOrder(var V_RTempProdOrderFeasibility: Record "Prod. Order Feasibility PTE" temporary; P_ProdOrderInternalFeasibleQty: Decimal; P_ProdOrderExternalFeasibleQty: Decimal)
+    begin
+        //Quantità fattibile internamente
+        V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" := P_ProdOrderInternalFeasibleQty;
+        //Quantità fattibile in conto lavoro
+        V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" := P_ProdOrderExternalFeasibleQty;
+        //Booleano che dice se fattibile completamente esternamente
+        V_RTempProdOrderFeasibility."Full Feasible Externally" := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" <= V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)";
+        //Se "TS Feasible Quantity (Base)" è maggiore della Remaining qty allora pareggio le qtà diminuendo la qtà fattibile interna
+        //Questo può essere dovuto dai tassi di conversione sui componenti che potrebbero far differire le qtà di qualche decimale
+        if (V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" + V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)") > V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" then
+            V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" -= (V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" + V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)") - V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)";
+        if (V_RTempProdOrderFeasibility.Subcontractor <> '') and
+           (not V_RTempProdOrderFeasibility."Full Feasible Externally") and
+           (V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" > 0) then
+            //Indica la qtà totale fattibile tra quantità fattibile esternamente e internamente
+            V_RTempProdOrderFeasibility."TS Feasible Quantity (Base)" := V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" + V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)";
+        if V_RTempProdOrderFeasibility."TS Feasible Quantity (Base)" > 0 then
+            //Indica se conto lavoro è completamente fattibile tramite trasferimento di giacenza interna
+            V_RTempProdOrderFeasibility."Full Feasible Transfer" := V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" <= V_RTempProdOrderFeasibility."TS Feasible Quantity (Base)";
+        //Indica se completamente fattibile
+        V_RTempProdOrderFeasibility."Full Feasible" := (V_RTempProdOrderFeasibility."Operation Rem. Qty. (Base)" <= V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)") or
+                                                       (V_RTempProdOrderFeasibility."Full Feasible Externally") or
+                                                       (V_RTempProdOrderFeasibility."Full Feasible Transfer");
+        //Mi salvo se l'ordine di produzione è parzialmente fattibile
+        if (not V_RTempProdOrderFeasibility."Full Feasible") and (not V_RTempProdOrderFeasibility."Full Feasible Externally") and (not V_RTempProdOrderFeasibility."Full Feasible Transfer") then
+            if (V_RTempProdOrderFeasibility."Int. Feasible Quantity (Base)" > 0) or (V_RTempProdOrderFeasibility."Ext. Feasible Quantity (Base)" > 0) then
+                V_RTempProdOrderFeasibility."Partially Feasible" := true;
     end;
 
     /// <summary>
@@ -1382,7 +1433,7 @@ page 50110 "Prod. Orders Feasibility PTE"
     /// - la quantità già utilizzata (interna ed esterna) (impegnata in altri ordini),
     /// - la quantità ancora utilizzabile (interna ed esterna) (disponibile a magazzino o presso fornitori).
     /// </summary>
-    local procedure F_CalculateUsedAndUsableQuantitiesForComponent(var V_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line"; var V_RProdOrderComponent: Record "Prod. Order Component")
+    local procedure F_CalculateUsedAndUsableQuantitiesForComponent(var V_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_RProdOrderRoutingLine: Record "Prod. Order Routing Line")
     var
         L_VendorNo: Code[20];
         L_ComponentKey: Code[30];
@@ -1392,8 +1443,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         L_InternalInventoryCanBeUsed: Decimal;
         L_OriginalRemainingQty: Decimal;
         L_QuantityOverExternalInventory: Decimal; //Conterrà la quantità rimanente che la giacenza esterna non riuscirà a coprire e dovrà essere coperta da quella interna (se presente)
-        L_ExternalComponentInventoryAlreadyUsed, L_InternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal];
-        L_ProdOrderString: Text;
+        L_ExternalComponentInventoryAlreadyUsed, L_InternalComponentInventoryAlreadyUsed : Dictionary of [Code[30], Decimal]; //Contengono la giacenza interna o esterna del componente già impegnata dagli ordini di produzione precedenti (ovvero con data di scadenza minore a quello corrente)
     begin
         L_ExternalInventoryAlreadyUsed := 0;
         L_ExternalInventoryCanBeUsed := 0;
@@ -1424,19 +1474,27 @@ page 50110 "Prod. Orders Feasibility PTE"
                         L_ExternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, (L_ExternalInventoryAlreadyUsed + V_RTempProdOrderFeasibility1."Remaining Qty. (Base)"));
                 end else
                     //! parte uguale a quella sotto, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
+                    //Se entra in questa parte di codice vuol dire che non c'è giacenza estrna impegnata per il componente
                     if V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" > V_RTempProdOrderFeasibility1."External Inventory" then begin
+                        //Se la qtà rimanente è maggiore della della giacenza esterna del componente impegno la qtà massima, ovvero tutta la giancenza esterna del componente
                         L_ExternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."External Inventory");
+                        //Imposto anche la qtà che va oltre la giacenza esterna. Per questa verrà utilizzata la giacenza interna (se presente)
                         L_QuantityOverExternalInventory := V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" - V_RTempProdOrderFeasibility1."External Inventory";
                     end else
+                        //Se la qtà rimanente è minore o uguale della della giacenza esterna del componente impegno tutta la qtà. rimenente
                         L_ExternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."Remaining Qty. (Base)");
                 //! fino a qui
                 TotalExternalInventoryAlreadyUsed.Set(L_VendorNo, L_ExternalComponentInventoryAlreadyUsed);
             end else begin
                 //! parte uguale a quella sopra, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
+                //Se entra in questa parte di codice vuol dire che non c'è giacenza estrna impegnata per il componente
                 if V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" > V_RTempProdOrderFeasibility1."External Inventory" then begin
+                    //Se la qtà rimanente è maggiore della della giacenza esterna del componente impegno la qtà massima, ovvero tutta la giancenza esterna del componente
                     L_ExternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."External Inventory");
+                    //Imposto anche la qtà che va oltre la giacenza esterna. Per questa verrà utilizzata la giacenza interna (se presente)
                     L_QuantityOverExternalInventory := V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" - V_RTempProdOrderFeasibility1."External Inventory";
                 end else
+                    //Se la qtà rimanente è minore o uguale della della giacenza esterna del componente impegno tutta la qtà. rimenente
                     L_ExternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."Remaining Qty. (Base)");
                 //! fino a qui
 
@@ -1451,16 +1509,16 @@ page 50110 "Prod. Orders Feasibility PTE"
             end else
                 L_ExternalInventoryCanBeUsed := 0;
 
-            V_RTempProdOrderFeasibility1."Ext. Quantity Used (Base)" := L_ExternalInventoryAlreadyUsed;
+            V_RTempProdOrderFeasibility1."Ext. Qty. Already Used (Base)" := L_ExternalInventoryAlreadyUsed;
             V_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" := L_ExternalInventoryCanBeUsed;
 
-            //Calcolo il dizionario che serve per drill down sulla qtà ESTERNA del componente già usata da altri (page "Subcontactor Feasibility 1 PTE")
-            L_ProdOrderString := '';
-            if V_RTempProdOrderFeasibility1."Ext. Quantity Used (Base)" > 0 then
-                if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownExternalQtyUsedByOther, V_RTempProdOrderFeasibility1, V_RTempProdOrderFeasibility1."External Location") then
-                    F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder, V_RTempProdOrderFeasibility1, L_ProdOrderString, V_RTempProdOrderFeasibility1."External Location");
-            if (V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" > 0) and (V_RTempProdOrderFeasibility1."External Inventory" > V_RTempProdOrderFeasibility1."Ext. Quantity Used (Base)") then
-                F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownExternalQtyUsedByOther, V_RTempProdOrderFeasibility1, V_RTempProdOrderFeasibility1."External Location");
+            //Calcolo il dizionario che serve per drill down sulla qtà ESTERNA del componente già impegnata da altri (page "Subcontactor Feasibility 1 PTE")
+            F_CalcQtyUsedByOtherDrillDownDictionary(ProdOrderNoForDrillDownExternalQtyUsedByOtherPerProdOrder,
+                                                    ProdOrderNoForDrillDownExternalQtyUsedByOther,
+                                                    V_RTempProdOrderFeasibility1,
+                                                    V_RTempProdOrderFeasibility1."External Location",
+                                                    V_RTempProdOrderFeasibility1."Ext. Qty. Already Used (Base)",
+                                                    V_RTempProdOrderFeasibility1."External Inventory");
 
             //Sostituisco la qtà rimanente con la qtà che la giacenza esterna non riesce a coprire perchè sarà la qtà che deve essere coperta dalla qtà interna
             V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" := L_QuantityOverExternalInventory;
@@ -1469,23 +1527,32 @@ page 50110 "Prod. Orders Feasibility PTE"
         //Calcolo la giacenza interna già utilizzata per il componente suddivsa per ubicazione
         if TotalInternalInventoryAlreadyUsed.Get(V_RTempProdOrderFeasibility1."Internal Location", L_InternalComponentInventoryAlreadyUsed) then begin
             if L_InternalComponentInventoryAlreadyUsed.Get(L_ComponentKey, L_InternalInventoryAlreadyUsed) then begin
+                //Se parte della giacenza interna è già stata utilizzata verifico che la giacenza rimanente mi basti per coprire il fabbisogno dell'ODP
                 if (L_InternalInventoryAlreadyUsed + V_RTempProdOrderFeasibility1."Remaining Qty. (Base)") > V_RTempProdOrderFeasibility1."Internal Inventory" then
+                    //Se la somma tra la giacenza interna già utilizzata e la qtà. rimanente è maggiore della giacenza interna del componente significa che quest'ultima non sarà sufficiente a coprire il fabbisogno dell'ordine di produzione.
                     L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, V_RTempProdOrderFeasibility1."Internal Inventory")
                 else
+                    //Se la somma tra la giacenza interna già utilizzata e la qtà. rimanente è minore della giacenza interna del componente significa che quest'ultima sarà sufficiente a coprire il fabbisogno dell'ordine di produzione.
                     L_InternalComponentInventoryAlreadyUsed.Set(L_ComponentKey, (L_InternalInventoryAlreadyUsed + V_RTempProdOrderFeasibility1."Remaining Qty. (Base)"));
             end else
                 //! parte uguale a quella sopra, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
+                //Se entra in questa parte di codice vuol dire che la giacenza interna del componente non è ancora stata utilizzata
                 if V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" > V_RTempProdOrderFeasibility1."Internal Inventory" then
+                    //Se la qtà rimanente è maggiore della giacenza interna vuol dire che non riuscirò a coprire l'intero fabbisogno del componente per realizzare l'ODP
                     L_InternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."Internal Inventory")
                 else
+                    //Se la qtà rimanente è minore o uguale della giacenza interna vuol dire che riuscirò a coprire l'intero fabbisogno del componente per realizzare l'ODP
                     L_InternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."Remaining Qty. (Base)");
             //! fino a qui
             TotalInternalInventoryAlreadyUsed.Set(V_RTempProdOrderFeasibility1."Internal Location", L_InternalComponentInventoryAlreadyUsed);
         end else begin
             //! parte uguale a quella sopra, vedere se si riesce a cambiare in modo da non avere codice duplicato. Da qui
+            //Se entra in questa parte di codice vuol dire che la giacenza interna del componente non è ancora stata utilizzata
             if V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" > V_RTempProdOrderFeasibility1."Internal Inventory" then
+                //Se la qtà rimanente è maggiore della giacenza interna vuol dire che non riuscirò a coprire l'intero fabbisogno del componente per realizzare l'ODP
                 L_InternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."Internal Inventory")
             else
+                //Se la qtà rimanente è minore o uguale della giacenza interna vuol dire che riuscirò a coprire l'intero fabbisogno del componente per realizzare l'ODP
                 L_InternalComponentInventoryAlreadyUsed.Add(L_ComponentKey, V_RTempProdOrderFeasibility1."Remaining Qty. (Base)");
             //! fino a qui
             TotalInternalInventoryAlreadyUsed.Add(V_RTempProdOrderFeasibility1."Internal Location", L_InternalComponentInventoryAlreadyUsed);
@@ -1498,19 +1565,30 @@ page 50110 "Prod. Orders Feasibility PTE"
                 L_InternalInventoryCanBeUsed := V_RTempProdOrderFeasibility1."Remaining Qty. (Base)";
         end else
             L_InternalInventoryCanBeUsed := 0;
-        V_RTempProdOrderFeasibility1."Int. Quantity Used (Base)" := L_InternalInventoryAlreadyUsed;
+        V_RTempProdOrderFeasibility1."Int. Qty. Already Used (Base)" := L_InternalInventoryAlreadyUsed;
         V_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" := L_InternalInventoryCanBeUsed;
 
-        //Calcolo il dizionario che serve per drill down sulla qtà INTERNA del componente già usata da altri (page "Subcontactor Feasibility 1 PTE")
-        L_ProdOrderString := '';
-        if V_RTempProdOrderFeasibility1."Int. Quantity Used (Base)" > 0 then
-            if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, ProdOrderNoForDrillDownInternalQtyUsedByOther, V_RTempProdOrderFeasibility1, V_RTempProdOrderFeasibility1."Internal Location") then
-                F_AddEntryInProdOrderDictionaryPerProdOrder(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder, V_RTempProdOrderFeasibility1, L_ProdOrderString, V_RTempProdOrderFeasibility1."Internal Location");
-        if (V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" > 0) and (V_RTempProdOrderFeasibility1."Internal Inventory" > V_RTempProdOrderFeasibility1."Int. Quantity Used (Base)") then
-            F_AddEntryInProdOrderDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOther, V_RTempProdOrderFeasibility1, V_RTempProdOrderFeasibility1."Internal Location");
+        //Calcolo il dizionario che serve per drill down sulla qtà INTERNA del componente già impegnata da altri (page "Subcontactor Feasibility 1 PTE")
+        F_CalcQtyUsedByOtherDrillDownDictionary(ProdOrderNoForDrillDownInternalQtyUsedByOtherPerProdOrder,
+                                                ProdOrderNoForDrillDownInternalQtyUsedByOther,
+                                                V_RTempProdOrderFeasibility1,
+                                                V_RTempProdOrderFeasibility1."Internal Location",
+                                                V_RTempProdOrderFeasibility1."Int. Qty. Already Used (Base)",
+                                                V_RTempProdOrderFeasibility1."Internal Inventory");
 
         //Imposto nuovamente la qtà rimanente originale
         V_RTempProdOrderFeasibility1."Remaining Qty. (Base)" := L_OriginalRemainingQty;
+    end;
+
+    local procedure F_CalcQtyUsedByOtherDrillDownDictionary(var V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder: Dictionary of [Text, Dictionary of [Code[30], Dictionary of [Code[10], Text]]]; var V_ProdOrderNoForDrillDownQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE" temporary; P_LocationCode: Code[10]; P_QuantityUsed: Decimal; P_Inventory: Decimal)
+    var
+        L_ProdOrderString: Text;
+    begin
+        if P_QuantityUsed > 0 then
+            if F_GetEntryFromProdOrderDictionary(L_ProdOrderString, V_ProdOrderNoForDrillDownQtyUsedByOther, P_RTempProdOrderFeasibility1, P_LocationCode) then
+                F_AddEntryInProdOrderDictionaryPerProdOrder(V_ProdOrderNoForDrillDownQtyUsedByOtherPerProdOrder, P_RTempProdOrderFeasibility1, L_ProdOrderString, P_LocationCode);
+        if (P_RTempProdOrderFeasibility1."Remaining Qty. (Base)" > 0) and (P_Inventory > P_QuantityUsed) then
+            F_AddEntryInProdOrderDictionary(V_ProdOrderNoForDrillDownQtyUsedByOther, P_RTempProdOrderFeasibility1, P_LocationCode);
     end;
 
     local procedure F_GetInternalQtyAlreadyUsedForComponent(var V_InternalQty: Decimal; L_InternalLocationCode: Code[10]; P_ComponentKey: Code[30]): Boolean
@@ -1592,23 +1670,23 @@ page 50110 "Prod. Orders Feasibility PTE"
                                                                                           L_RTempProdOrderFeasibility1."Quantity per",
                                                                                           L_RTempProdOrderFeasibility1."Qty. per Unit of Measure");
                     if L_RTempProdOrderFeasibility1."External Location" <> '' then begin
-                        if (L_RTempProdOrderFeasibility1."External Inventory" - L_RTempProdOrderFeasibility1."Ext. Quantity Used (Base)") > L_ComponentFeasibleQty then begin
+                        if (L_RTempProdOrderFeasibility1."External Inventory" - L_RTempProdOrderFeasibility1."Ext. Qty. Already Used (Base)") > L_ComponentFeasibleQty then begin
                             L_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" := L_ComponentFeasibleQty;
                             L_ComponentFeasibleQty := 0;
                         end else begin
-                            L_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" := (L_RTempProdOrderFeasibility1."External Inventory" - L_RTempProdOrderFeasibility1."Ext. Quantity Used (Base)");
-                            L_ComponentFeasibleQty -= (L_RTempProdOrderFeasibility1."External Inventory" - L_RTempProdOrderFeasibility1."Ext. Quantity Used (Base)");
+                            L_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" := (L_RTempProdOrderFeasibility1."External Inventory" - L_RTempProdOrderFeasibility1."Ext. Qty. Already Used (Base)");
+                            L_ComponentFeasibleQty -= (L_RTempProdOrderFeasibility1."External Inventory" - L_RTempProdOrderFeasibility1."Ext. Qty. Already Used (Base)");
                         end;
                         L_ExternalQtyToRemove := L_RTempProdOrderFeasibility1."Ext. Reserved Quantity (Base)" - (L_OriginalReservedExternalQty - L_ComponentFeasibleQty);
                         if L_ExternalQtyToRemove < 0 then
                             L_ExternalQtyToRemove := 0;
                     end;
                     if L_ComponentFeasibleQty > 0 then
-                        if (L_RTempProdOrderFeasibility1."Internal Inventory" - L_RTempProdOrderFeasibility1."Int. Quantity Used (Base)") > L_ComponentFeasibleQty then
+                        if (L_RTempProdOrderFeasibility1."Internal Inventory" - L_RTempProdOrderFeasibility1."Int. Qty. Already Used (Base)") > L_ComponentFeasibleQty then
                             L_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" := L_ComponentFeasibleQty
                         else
                             //Teoricamente L_ComponentFeasibleQty non può esser maggiore di L_RTempSubcFeasibility1."Int. Reserved Quantity (Base)"
-                            L_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" := (L_RTempProdOrderFeasibility1."Internal Inventory" - L_RTempProdOrderFeasibility1."Int. Quantity Used (Base)");
+                            L_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" := (L_RTempProdOrderFeasibility1."Internal Inventory" - L_RTempProdOrderFeasibility1."Int. Qty. Already Used (Base)");
                     L_InternalQtyToRemove := L_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" - (L_OriginalReservedInternalQty - L_ComponentFeasibleQty);
                     if L_InternalQtyToRemove < 0 then
                         L_InternalQtyToRemove := 0;
@@ -1706,13 +1784,13 @@ page 50110 "Prod. Orders Feasibility PTE"
     end;
 
     //TODO rivedere nome
-    local procedure F_AddEntryInProdOrderDictionary(var V_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE"; P_LocationCode: Code[10])
+    local procedure F_AddEntryInProdOrderDictionary(var V_ProdOrderNoForDrillDownQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE"; P_LocationCode: Code[10])
     begin
-        F_AddEntryInProdOrderDictionary(V_ProdOrderNoForDrillDownIntQtyUsedByOther, P_RTempProdOrderFeasibility1."Item No.", P_RTempProdOrderFeasibility1."Variant Code", P_RTempProdOrderFeasibility1."Prod. Order No.", P_LocationCode);
+        F_AddEntryInProdOrderDictionary(V_ProdOrderNoForDrillDownQtyUsedByOther, P_RTempProdOrderFeasibility1."Item No.", P_RTempProdOrderFeasibility1."Variant Code", P_RTempProdOrderFeasibility1."Prod. Order No.", P_LocationCode);
     end;
 
     //TODO rivedere nome
-    local procedure F_AddEntryInProdOrderDictionary(var V_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_ProdOrderNo: Code[20]; P_LocationCode: Code[10])
+    local procedure F_AddEntryInProdOrderDictionary(var V_ProdOrderNoForDrillDownQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_ProdOrderNo: Code[20]; P_LocationCode: Code[10])
     var
         L_ComponentDictionaryKey: Code[30];
         L_LocationCodeDictionary: Dictionary of [Code[10], Text];
@@ -1720,7 +1798,7 @@ page 50110 "Prod. Orders Feasibility PTE"
     begin
         L_ComponentDictionaryKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
 
-        if V_ProdOrderNoForDrillDownIntQtyUsedByOther.Get(L_ComponentDictionaryKey, L_LocationCodeDictionary) then begin
+        if V_ProdOrderNoForDrillDownQtyUsedByOther.Get(L_ComponentDictionaryKey, L_LocationCodeDictionary) then begin
             if L_LocationCodeDictionary.Get(P_LocationCode, L_ListOfProdOrderNo) then begin
                 if L_ListOfProdOrderNo = '' then
                     L_ListOfProdOrderNo := P_ProdOrderNo
@@ -1734,21 +1812,21 @@ page 50110 "Prod. Orders Feasibility PTE"
                     L_ListOfProdOrderNo += '|' + P_ProdOrderNo;
                 L_LocationCodeDictionary.Add(P_LocationCode, L_ListOfProdOrderNo);
             end;
-            V_ProdOrderNoForDrillDownIntQtyUsedByOther.Set(L_ComponentDictionaryKey, L_LocationCodeDictionary);
+            V_ProdOrderNoForDrillDownQtyUsedByOther.Set(L_ComponentDictionaryKey, L_LocationCodeDictionary);
         end else begin
             L_LocationCodeDictionary.Add(P_LocationCode, P_ProdOrderNo);
-            V_ProdOrderNoForDrillDownIntQtyUsedByOther.Add(L_ComponentDictionaryKey, L_LocationCodeDictionary);
+            V_ProdOrderNoForDrillDownQtyUsedByOther.Add(L_ComponentDictionaryKey, L_LocationCodeDictionary);
         end;
     end;
 
     //TODO rivedere nome
-    local procedure F_GetEntryFromProdOrderDictionary(var V_ListOfProdOrder: Text; P_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE"; P_LocationCode: Code[10]): Boolean
+    local procedure F_GetEntryFromProdOrderDictionary(var V_ListOfProdOrder: Text; P_ProdOrderNoForDrillDownQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_RTempProdOrderFeasibility1: Record "Prod. Order Feasibility 1 PTE"; P_LocationCode: Code[10]): Boolean
     begin
-        exit(F_GetEntryFromProdOrderDictionary(V_ListOfProdOrder, P_ProdOrderNoForDrillDownIntQtyUsedByOther, P_RTempProdOrderFeasibility1."Item No.", P_RTempProdOrderFeasibility1."Variant Code", P_LocationCode));
+        exit(F_GetEntryFromProdOrderDictionary(V_ListOfProdOrder, P_ProdOrderNoForDrillDownQtyUsedByOther, P_RTempProdOrderFeasibility1."Item No.", P_RTempProdOrderFeasibility1."Variant Code", P_LocationCode));
     end;
 
     //TODO rivedere nome
-    local procedure F_GetEntryFromProdOrderDictionary(var V_ListOfProdOrder: Text; P_ProdOrderNoForDrillDownIntQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_LocationCode: Code[10]): Boolean
+    local procedure F_GetEntryFromProdOrderDictionary(var V_ListOfProdOrder: Text; P_ProdOrderNoForDrillDownQtyUsedByOther: Dictionary of [Code[30], Dictionary of [Code[10], Text]]; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_LocationCode: Code[10]): Boolean
     var
         L_ComponentDictionaryKey: Code[30];
         L_LocationCodeDictionary: Dictionary of [Code[10], Text];
@@ -1756,7 +1834,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         Clear(V_ListOfProdOrder);
         L_ComponentDictionaryKey := F_GetComponentKey(P_ItemNo, P_VariantCode);
 
-        if not P_ProdOrderNoForDrillDownIntQtyUsedByOther.Get(L_ComponentDictionaryKey, L_LocationCodeDictionary) then
+        if not P_ProdOrderNoForDrillDownQtyUsedByOther.Get(L_ComponentDictionaryKey, L_LocationCodeDictionary) then
             exit(false);
         if not L_LocationCodeDictionary.Get(P_LocationCode, V_ListOfProdOrder) then
             exit(false);
@@ -2052,7 +2130,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         L_RTempProdOrderFeasibility1.Copy(V_RTempProdOrderFeasibility1, true);
         if L_RTempProdOrderFeasibility1.FindSet() then
             repeat
-                if (L_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" + L_RTempProdOrderFeasibility1."Ext. Quantity Used (Base)") < L_RTempProdOrderFeasibility1."Remaining Qty. (Base)" then begin
+                if (L_RTempProdOrderFeasibility1."Int. Reserved Quantity (Base)" + L_RTempProdOrderFeasibility1."Ext. Qty. Already Used (Base)") < L_RTempProdOrderFeasibility1."Remaining Qty. (Base)" then begin
                     if not Confirm(L_PartialTransferOrderLineInsertConfirm, false, L_RTempProdOrderFeasibility1."Item No." + ' ' + L_RTempProdOrderFeasibility1."Component Description") then
                         exit;
                     break;
@@ -2446,7 +2524,8 @@ page 50110 "Prod. Orders Feasibility PTE"
         V_RAssemblyHeader.SetFilter("Remaining Quantity (Base)", '>%1', 0);
     end;
 
-    local procedure F_GetExpectedReceiptQty(P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_InternalLocatioCode: Code[10]) O_Qty: Decimal
+    ///<summary>Calcola la quantità prevista in entrata per il componente specificato. È la somma degli ordini di acquisto, di produzione e di assemblaggio che verseranno giacenza nell'ubicazione specificata.</summary>
+    local procedure F_GetExpectedInboundQty(P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_InternalLocatioCode: Code[10]) O_Qty: Decimal
     var
         L_RAssemblyHeader: Record "Assembly Header";
         L_RProdOrderLine: Record "Prod. Order Line";

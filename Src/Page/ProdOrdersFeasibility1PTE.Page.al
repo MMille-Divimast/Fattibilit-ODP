@@ -115,14 +115,14 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                     ApplicationArea = Basic;
                     BlankZero = true;
                 }
-                field("Int. Qty. used Other (Base)"; Rec."Int. Quantity Used (Base)")
+                field("Int. Qty. used Other (Base)"; Rec."Int. Qty. Already Used (Base)")
                 {
                     ApplicationArea = Basic;
                     BlankZero = true;
 
                     trigger OnDrillDown()
                     begin
-                        if Rec."Int. Quantity Used (Base)" > 0 then
+                        if Rec."Int. Qty. Already Used (Base)" > 0 then
                             F_DrillDownInternalQtyUsedByOther();
                     end;
                 }
@@ -149,14 +149,14 @@ page 50111 "Prod. Orders Feasibility 1 PTE"
                     ApplicationArea = Basic;
                     BlankZero = true;
                 }
-                field("Subc. Qty. used Other (Base)"; Rec."Ext. Quantity Used (Base)")
+                field("Subc. Qty. used Other (Base)"; Rec."Ext. Qty. Already Used (Base)")
                 {
                     ApplicationArea = Basic;
                     BlankZero = true;
 
                     trigger OnDrillDown()
                     begin
-                        if Rec."Ext. Quantity Used (Base)" > 0 then
+                        if Rec."Ext. Qty. Already Used (Base)" > 0 then
                             F_DrillDownExternalQtyUsedByOther();
                     end;
                 }
