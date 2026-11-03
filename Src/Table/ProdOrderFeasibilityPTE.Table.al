@@ -153,6 +153,25 @@ table 50040 "Prod. Order Feasibility PTE"
             Caption = 'Partially Feasible';
             ToolTip = 'Specifies whether the production order can be produced only partially.';
         }
+        field(2050; "Customer No."; Code[20])
+        {
+            Caption = 'Customer No.';
+            TableRelation = Customer;
+            ToolTip = 'Specifies the customer no. for whom the production order was created. If the field is blank, the order was not created for a sales order.';
+
+            trigger OnValidate()
+            var
+                L_RCustomer: Record Customer;
+            begin
+                if L_RCustomer.Get(Rec."Customer No.") then
+                    Rec."Customer Name" := L_RCustomer.Name;
+            end;
+        }
+        field(2051; "Customer Name"; Text[100])
+        {
+            Caption = 'Customer Name';
+            ToolTip = 'Specifies the customer name for whom the production order was created. If the field is blank, the order was not created for a sales order.';
+        }
         //TODO campi che iniziano per 50... capire se tenerli o no
         field(50905; "Purchase Order No."; Code[20])
         {
@@ -188,13 +207,6 @@ table 50040 "Prod. Order Feasibility PTE"
                                                 "Document No." = field("Sales Order No."),
                                                 "Line No." = field("Sales Order Line No."));
             ToolTip = 'Specifies the sales order line no. linked to the production order.';
-        }
-        field(50913; "Customer No."; Code[20])
-        {
-            Caption = 'Customer No.';
-            Description = 'PLA220308C1 numerazione per non creare conflitti con T5406';
-            TableRelation = Customer;
-            ToolTip = 'Specifies the customer for whom the production order was created. If the field is blank, the order was not created for a sales order.';
         }
         field(80081; "Operation Quantity (Base)"; Decimal)
         {

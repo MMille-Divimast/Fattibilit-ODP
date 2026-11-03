@@ -2511,6 +2511,7 @@ page 50110 "Prod. Orders Feasibility PTE"
         V_RPurchaseLine.SetRange("Variant Code", P_VariantCode);
         V_RPurchaseLine.SetRange("Location Code", P_InternalLocatioCode);
         V_RPurchaseLine.SetFilter("Outstanding Qty. (Base)", '>%1', 0);
+        V_RPurchaseLine.SetFilter("Prod. Order No.", '%1', '');
     end;
 
     procedure FilterProdOrderLineForExpectedReceiptQty(var V_RAssemblyHeader: Record "Assembly Header"; P_ItemNo: Code[20]; P_VariantCode: Code[10]; P_InternalLocatioCode: Code[10])
